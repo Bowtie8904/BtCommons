@@ -1,6 +1,8 @@
 package bt.runtime.evnt;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -70,5 +72,22 @@ public class Dispatcher
         }
         var dispatcher = (SubDispatcher<T>)this.subDispatchers.get(data.getClass());
         dispatcher.dispatch(data);
+    }
+
+    /**
+     * Gets all listeners that are subscribed to the given data type.
+     * 
+     * @param type
+     * @return
+     */
+    public <T> List<Listener<T>> getSubscribers(Class<T> type)
+    {
+        if (!this.subDispatchers.containsKey(type))
+        {
+            return new ArrayList<>();
+        }
+
+        var dispatcher = (SubDispatcher<T>)this.subDispatchers.get(type);
+        return dispatcher.getSubscribers();
     }
 }

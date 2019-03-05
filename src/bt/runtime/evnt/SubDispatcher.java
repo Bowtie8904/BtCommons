@@ -34,4 +34,9 @@ public class SubDispatcher<T>
             listener.receive(data);
         }
     }
+
+    public List<Listener<T>> getSubscribers()
+    {
+        return this.subscribers;
+    }
 }
