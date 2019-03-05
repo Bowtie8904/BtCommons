@@ -15,14 +15,14 @@ import java.util.UUID;
 public final class StringID
 {
     private static char[] availableChars;
-    private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
+    private static final Charset DEFAULT_CHARSET = StandardCharsets.US_ASCII;
     private static final SplittableRandom random = new SplittableRandom();
 
     /**
      * Loads all letters from the given charset, so that they can be used by {@link #randomID(int)}.
      * 
      * <p>
-     * If this method is not called explicitly, it will be called with the argument {@link StandardCharsets#UTF_8}.
+     * If this method is not called explicitly, it will be called with the argument {@link StandardCharsets#US_ASCII}.
      * </p>
      * 
      * @param charset
