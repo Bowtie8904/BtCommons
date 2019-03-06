@@ -61,11 +61,11 @@ public class Dispatcher
     }
 
     /**
-     * Subscribes the given consumer implementation to the given data type.
+     * Subscribes the given runnable implementation to the given data type.
      * 
      * <p>
-     * If the given data type is {@link #dispatch}ed by this instance, all consumers that are subscribed to the given
-     * type are executed and the dispatched data is passed.
+     * If the given data type is {@link #dispatch}ed by this instance, all subscribers of the given type are executed
+     * and the dispatched data is passed.
      * </p>
      * 
      * @param type
@@ -83,7 +83,7 @@ public class Dispatcher
     }
 
     /**
-     * Unsubscribes the given comsumer from receiving data of the given type.
+     * Unsubscribes the given runnable from receiving data of the given type.
      * 
      * @param type
      * @param listener
@@ -100,7 +100,7 @@ public class Dispatcher
     }
 
     /**
-     * Dispatches the given data to all comsumers that are subscribed to that specific data type.
+     * Dispatches the given data to all subscribers of that specific data type.
      * 
      * @param data
      */
@@ -115,7 +115,7 @@ public class Dispatcher
     }
 
     /**
-     * Gets all consumers that are subscribed to the given data type.
+     * Gets all subscribers of the given data type.
      * 
      * @param type
      * @return
