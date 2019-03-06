@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * A basic data dispatcher for generic dispatching of i.e. events to listeners.
@@ -21,17 +22,17 @@ public class Dispatcher
     }
 
     /**
-     * Subscribes the given listener implementation to the given data type.
+     * Subscribes the given consumer implementation to the given data type.
      * 
      * <p>
-     * If the given data type is {@link #dispatch}ed by this instance, the {@link Listener#receive} method of all
-     * listeners that are subscribed to the given type is called and the dispatched data is passed.
+     * If the given data type is {@link #dispatch}ed by this instance, all consumers that are subscribed to the given
+     * type are executed and the dispatched data is passed.
      * </p>
      * 
      * @param type
      * @param listener
      */
-    public <T> void subscribeTo(Class<T> type, Listener<T> listener)
+    public <T> void subscribeTo(Class<T> type, Consumer<T> consumer)
     {
         if (!this.subDispatchers.containsKey(type))
         {
@@ -39,16 +40,16 @@ public class Dispatcher
         }
 
         var dispatcher = (SubDispatcher<T>)this.subDispatchers.get(type);
-        dispatcher.subscribe(listener);
+        dispatcher.subscribe(consumer);
     }
 
     /**
-     * Unsubscribes the given listener from receiving data of the given type.
+     * Unsubscribes the given comsumer from receiving data of the given type.
      * 
      * @param type
      * @param listener
      */
-    public <T> void unsubscribeFrom(Class<T> type, Listener<T> listener)
+    public <T> void unsubscribeFrom(Class<T> type, Consumer<T> consumer)
     {
         if (!this.subDispatchers.containsKey(type))
         {
@@ -56,11 +57,50 @@ public class Dispatcher
         }
 
         var dispatcher = (SubDispatcher<T>)this.subDispatchers.get(type);
-        dispatcher.unsubscribe(listener);
+        dispatcher.unsubscribe(consumer);
     }
 
     /**
-     * Dispatches the given data to all listeners that are subscribed to that specific data type.
+     * Subscribes the given consumer implementation to the given data type.
+     * 
+     * <p>
+     * If the given data type is {@link #dispatch}ed by this instance, all consumers that are subscribed to the given
+     * type are executed and the dispatched data is passed.
+     * </p>
+     * 
+     * @param type
+     * @param listener
+     */
+    public <T> void subscribeTo(Class<T> type, Runnable runnable)
+    {
+        if (!this.subDispatchers.containsKey(type))
+        {
+            this.subDispatchers.put(type, new SubDispatcher<T>());
+        }
+
+        var dispatcher = (SubDispatcher<T>)this.subDispatchers.get(type);
+        dispatcher.subscribe(runnable);
+    }
+
+    /**
+     * Unsubscribes the given comsumer from receiving data of the given type.
+     * 
+     * @param type
+     * @param listener
+     */
+    public <T> void unsubscribeFrom(Class<T> type, Runnable runnable)
+    {
+        if (!this.subDispatchers.containsKey(type))
+        {
+            return;
+        }
+
+        var dispatcher = (SubDispatcher<T>)this.subDispatchers.get(type);
+        dispatcher.unsubscribe(runnable);
+    }
+
+    /**
+     * Dispatches the given data to all comsumers that are subscribed to that specific data type.
      * 
      * @param data
      */
@@ -75,12 +115,12 @@ public class Dispatcher
     }
 
     /**
-     * Gets all listeners that are subscribed to the given data type.
+     * Gets all consumers that are subscribed to the given data type.
      * 
      * @param type
      * @return
      */
-    public <T> List<Listener<T>> getSubscribers(Class<T> type)
+    public <T> List<Consumer<T>> getSubscribers(Class<T> type)
     {
         if (!this.subDispatchers.containsKey(type))
         {

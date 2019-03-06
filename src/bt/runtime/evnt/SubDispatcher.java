@@ -2,6 +2,7 @@ package bt.runtime.evnt;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * @author &#8904
@@ -10,33 +11,54 @@ import java.util.List;
  */
 public class SubDispatcher<T>
 {
-    private List<Listener<T>> subscribers;
+    private List<Consumer<T>> consumers;
+    private List<Runnable> runnables;
 
     protected SubDispatcher()
     {
-        this.subscribers = new ArrayList<>();
+        this.consumers = new ArrayList<>();
+        this.runnables = new ArrayList<>();
     }
 
-    protected void subscribe(Listener<T> listener)
+    protected void subscribe(Consumer<T> consumer)
     {
-        this.subscribers.add(listener);
+        this.consumers.add(consumer);
     }
 
-    protected void unsubscribe(Listener<T> listener)
+    protected void unsubscribe(Consumer<T> consumer)
     {
-        this.subscribers.remove(listener);
+        this.consumers.remove(consumer);
+    }
+
+    protected void subscribe(Runnable runnable)
+    {
+        this.runnables.add(runnable);
+    }
+
+    protected void unsubscribe(Runnable runnable)
+    {
+        this.runnables.remove(runnable);
     }
 
     protected void dispatch(T data)
     {
-        for (var listener : this.subscribers)
+        for (var consumer : this.consumers)
         {
-            listener.receive(data);
+            consumer.accept(data);
+        }
+
+        for (var runnable : this.runnables)
+        {
+            runnable.run();
         }
     }
 
-    public List<Listener<T>> getSubscribers()
+    public List<Consumer<T>> getSubscribers()
     {
-        return this.subscribers;
+        var list = new ArrayList<Consumer<T>>();
+        list.addAll(this.consumers);
+        this.runnables.forEach(r -> list.add((d) -> r.run()));
+
+        return list;
     }
 }
