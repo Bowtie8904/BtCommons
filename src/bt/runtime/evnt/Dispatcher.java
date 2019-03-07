@@ -119,10 +119,14 @@ public class Dispatcher
     }
 
     /**
-     * Gets all subscribers of the given data type.
+     * Gets a list containing all subscribers of this instance that are subscribed to the given data type.
      * 
-     * @param type
-     * @return
+     * <p>
+     * All elements in the list will be {@link Consumer}s. Any {@link Runnable} subscriber will be wrapped in a new
+     * Consumer.
+     * </p>
+     * 
+     * @return The list of subscribers.
      */
     public <T> List<Consumer<T>> getSubscribers(Class<T> type)
     {
