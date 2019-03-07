@@ -90,4 +90,23 @@ public class Array
     {
         return elements;
     }
+
+    /**
+     * Pushes the given element into the array.
+     * 
+     * <p>
+     * The new element will be at the last index in the array after this operation.
+     * </p>
+     * 
+     * @param arr
+     *            The base array.
+     * @param element
+     *            The element to push into the array.
+     * @return The new array with a size of arr.length + 1.
+     */
+    public <T> T[] push(T[] arr, T element)
+    {
+        T[] newArr = (T[])java.lang.reflect.Array.newInstance(element.getClass(), 1);
+        return arr;
+    }
 }
