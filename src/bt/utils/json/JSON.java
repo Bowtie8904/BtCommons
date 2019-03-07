@@ -1,14 +1,17 @@
 package bt.utils.json;
 
+import java.io.File;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+
+import bt.utils.files.FileUtils;
 
 /**
  * A utility class to perform JSON operations.
  * 
  * @author &#8904
- *
  */
 public final class JSON
 {
@@ -27,6 +30,34 @@ public final class JSON
         }
 
         JSONTokener tokener = new JSONTokener(json);
+        JSONObject object = null;
+
+        try
+        {
+            object = new JSONObject(tokener);
+        }
+        catch (JSONException e)
+        {
+            return null;
+        }
+        return object;
+    }
+
+    /**
+     * Parses the given JSON file to a valid JSONObject.
+     * 
+     * @param json
+     *            The json file to parse.
+     * @return The parsed JSONObject or null if the file was null, does not exist or is incorrectly formatted.
+     */
+    public static JSONObject parse(File json)
+    {
+        if (json == null || !json.exists())
+        {
+            return null;
+        }
+
+        JSONTokener tokener = new JSONTokener(FileUtils.readFile(json));
         JSONObject object = null;
 
         try

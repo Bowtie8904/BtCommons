@@ -9,8 +9,9 @@ import java.util.SplittableRandom;
 import java.util.UUID;
 
 /**
+ * Utilities for String IDs.
+ * 
  * @author &#8904
- *
  */
 public final class StringID
 {

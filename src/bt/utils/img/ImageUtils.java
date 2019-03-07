@@ -13,8 +13,9 @@ import javax.imageio.ImageIO;
 import bt.utils.log.Logger;
 
 /**
+ * Utilities for simple image converting/scaling.
+ * 
  * @author &#8904
- *
  */
 public class ImageUtils
 {

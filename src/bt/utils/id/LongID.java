@@ -5,11 +5,17 @@ import java.nio.ByteBuffer;
 import java.util.UUID;
 
 /**
+ * Utilities for Long IDs.
+ * 
  * @author &#8904
- *
  */
 public final class LongID
 {
+    /**
+     * Generates a pseudo random unique ID.
+     * 
+     * @return
+     */
     public static long uniqueID()
     {
         long val = -1;
