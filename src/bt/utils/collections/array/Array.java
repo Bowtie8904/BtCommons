@@ -5,7 +5,7 @@ package bt.utils.collections.array;
  * 
  * @author &#8904
  */
-public class Array
+public final class Array
 {
     /**
      * Creates an array of the given elements.
@@ -14,7 +14,7 @@ public class Array
      *            The elements for the array.
      * @return The array.
      */
-    public <T> T[] of(T... elements)
+    public static <T> T[] of(T... elements)
     {
         return elements;
     }
@@ -26,7 +26,7 @@ public class Array
      *            The elements for the array.
      * @return The array.
      */
-    public boolean[] of(boolean... elements)
+    public static boolean[] of(boolean... elements)
     {
         return elements;
     }
@@ -38,7 +38,7 @@ public class Array
      *            The elements for the array.
      * @return The array.
      */
-    public short[] of(short... elements)
+    public static short[] of(short... elements)
     {
         return elements;
     }
@@ -50,7 +50,7 @@ public class Array
      *            The elements for the array.
      * @return The array.
      */
-    public int[] of(int... elements)
+    public static int[] of(int... elements)
     {
         return elements;
     }
@@ -62,7 +62,7 @@ public class Array
      *            The elements for the array.
      * @return The array.
      */
-    public long[] of(long... elements)
+    public static long[] of(long... elements)
     {
         return elements;
     }
@@ -74,7 +74,7 @@ public class Array
      *            The elements for the array.
      * @return The array.
      */
-    public float[] of(float... elements)
+    public static float[] of(float... elements)
     {
         return elements;
     }
@@ -86,7 +86,7 @@ public class Array
      *            The elements for the array.
      * @return The array.
      */
-    public double[] of(double... elements)
+    public static double[] of(double... elements)
     {
         return elements;
     }
@@ -104,7 +104,7 @@ public class Array
      *            The element to push into the array.
      * @return The new array with a size of arr.length + 1.
      */
-    public <T> T[] push(T[] arr, T element)
+    public static <T> T[] push(T[] arr, T element)
     {
         T[] newArr = (T[])java.lang.reflect.Array.newInstance(element.getClass(), 1);
         return arr;
