@@ -14,8 +14,12 @@ import java.util.function.Consumer;
  */
 public class Dispatcher
 {
+    /** A map of class (type of the data that is dispatched) to SubDispatcher. */
     private Map<Class, SubDispatcher> subDispatchers;
 
+    /**
+     * Creates a new instance.
+     */
     public Dispatcher()
     {
         this.subDispatchers = new HashMap<>();
