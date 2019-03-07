@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 import bt.runtime.InstanceKiller;
 import bt.runtime.Killable;
 import bt.utils.log.Logger;
+import bt.utils.thread.fact.DaemonThreadFactory;
 
 /**
  * Holds multiple threadpools with different purposes.
@@ -37,17 +38,8 @@ public class Threads implements Killable
         this.schedulerPool.setRemoveOnCancelPolicy(true);
         this.cachedPool = Executors.newCachedThreadPool();
 
-        // factory purely to create ddaemon threads
-        ThreadFactory daemonFactory = new ThreadFactory()
-        {
-            @Override
-            public Thread newThread(Runnable r)
-            {
-                Thread thread = new Thread(r);
-                thread.setDaemon(true);
-                return thread;
-            }
-        };
+        // factory purely to create daemon threads
+        ThreadFactory daemonFactory = new DaemonThreadFactory();
 
         this.schedulerPoolDaemon = (ScheduledThreadPoolExecutor)Executors.newScheduledThreadPool(10, daemonFactory);
         this.schedulerPoolDaemon.setRemoveOnCancelPolicy(true);
