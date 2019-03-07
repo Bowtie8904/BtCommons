@@ -106,7 +106,15 @@ public final class Array
      */
     public static <T> T[] push(T[] arr, T element)
     {
-        T[] newArr = (T[])java.lang.reflect.Array.newInstance(element.getClass(), 1);
-        return arr;
+        T[] newArr = (T[])java.lang.reflect.Array.newInstance(element.getClass(), arr.length + 1);
+
+        for (int i = 0; i < arr.length; i ++ )
+        {
+            newArr[i] = arr[i];
+        }
+
+        newArr[newArr.length - 1] = element;
+
+        return newArr;
     }
 }
