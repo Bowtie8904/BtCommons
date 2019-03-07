@@ -1,8 +1,16 @@
 package bt.types;
 
 /**
+ * A basic implementation of the {@link Tripple} interface.
+ * 
  * @author &#8904
  *
+ * @param <A>
+ *            The type of the key.
+ * @param <B>
+ *            The type of the first value.
+ * @param <C>
+ *            The type of the second value.
  */
 public class SimpleTripple<A, B, C> implements Tripple<A, B, C>
 {
@@ -10,6 +18,16 @@ public class SimpleTripple<A, B, C> implements Tripple<A, B, C>
     private B value1;
     private C value2;
 
+    /**
+     * Creates a new instance which holds the given values and the given key.
+     * 
+     * @param key
+     *            The key of this Tripple.
+     * @param value1
+     *            The first value of this Tripple.
+     * @param value2
+     *            The second value of this Tripple.
+     */
     public SimpleTripple(A key, B value1, C value2)
     {
         this.key = key;

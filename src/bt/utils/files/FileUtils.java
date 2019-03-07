@@ -11,11 +11,19 @@ import java.net.URISyntaxException;
 import bt.utils.log.Logger;
 
 /**
+ * Simple utilities for finding and reading files.
+ * 
  * @author &#8904
- *
  */
 public class FileUtils
 {
+    /**
+     * Gets the jar file that the given class is implemented in.
+     * 
+     * @param c
+     *            The class to find the jar file for.
+     * @return The file or null if the search failed.
+     */
     public static File getJarFile(Class c)
     {
         try
@@ -29,24 +37,43 @@ public class FileUtils
         return null;
     }
 
+    /**
+     * Gets the directory that the jar file which implements the given class is in.
+     * 
+     * @param c
+     *            The class to find the jar file directory for.
+     * @return The directory or null if the search failed.
+     */
     public static File getJarDirectory(Class c)
     {
-        try
+        File jarFile = getJarFile(c);
+
+        if (jarFile != null)
         {
-            return new File(c.getProtectionDomain().getCodeSource().getLocation().toURI()).getParentFile();
-        }
-        catch (URISyntaxException e)
-        {
-            Logger.global().print(e);
+            return jarFile.getParentFile();
         }
         return null;
     }
 
+    /**
+     * Reads the entire content of the file with the given path.
+     * 
+     * @param path
+     *            The path to the file.
+     * @return The entire content from the file.
+     */
     public static String readFile(String path)
     {
         return readFile(new File(path));
     }
 
+    /**
+     * Reads the entire content of the given file.
+     * 
+     * @param file
+     *            The file to read.
+     * @return The entire content from the file.
+     */
     public static String readFile(File file)
     {
         StringBuilder sb = new StringBuilder();
@@ -71,6 +98,13 @@ public class FileUtils
         return sb.toString();
     }
 
+    /**
+     * Gets all files that are in the directory with the given path.
+     * 
+     * @param directoryPath
+     *            The path to the directory.
+     * @return An array containing all files from the given directory.
+     */
     public static File[] getFiles(String directoryPath)
     {
         File dir = new File(directoryPath);
@@ -83,6 +117,15 @@ public class FileUtils
         return dir.listFiles();
     }
 
+    /**
+     * Gets all files with the given file extension that are in the directory with the given path.
+     * 
+     * @param directoryPath
+     *            The path to the directory.
+     * @param ending
+     *            The file extension to filter for.
+     * @return An array containing all files with the given file extension from the given directory.
+     */
     public static File[] getFiles(String directoryPath, String ending)
     {
         File dir = new File(directoryPath);
