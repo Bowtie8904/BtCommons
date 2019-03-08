@@ -52,22 +52,6 @@ public final class JSON
      */
     public static JSONObject parse(File json)
     {
-        if (json == null || !json.exists())
-        {
-            return null;
-        }
-
-        JSONTokener tokener = new JSONTokener(FileUtils.readFile(json));
-        JSONObject object = null;
-
-        try
-        {
-            object = new JSONObject(tokener);
-        }
-        catch (JSONException e)
-        {
-            return null;
-        }
-        return object;
+        return parse(FileUtils.readFile(json));
     }
 }
