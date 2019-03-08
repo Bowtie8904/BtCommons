@@ -126,8 +126,8 @@ public final class Array
         }
 
         newArr[newArr.length - 1] = element;
-        arr = newArr;
-        return arr;
+
+        return newArr;
     }
 
     /**
@@ -319,11 +319,23 @@ public final class Array
         return newArr;
     }
 
-
+    /**
+     * Removes the element at the given index and returns a new array with reduced size.
+     * 
+     * @param arr
+     *            The base array.
+     * @param index
+     *            The index of the element that should be removed.
+     * @return The new array with a size of arr.length - 1.
+     */
     public static <T> T[] pop(T[] arr, int index)
     {
-        T element = arr[index];
-        T[] newArr = (T[])create(element.getClass(), arr.length - 1);
+        if (arr.length == 0)
+        {
+            throw new IllegalArgumentException("Can't pop an element from an empty array.");
+        }
+
+        T[] newArr = (T[])create(arr[index].getClass(), arr.length - 1);
 
         int newArrIndex = 0;
 
@@ -336,6 +348,319 @@ public final class Array
             }
         }
         return newArr;
+    }
+
+    /**
+     * Removes the element at the given index and returns a new array with reduced size.
+     * 
+     * @param arr
+     *            The base array.
+     * @param index
+     *            The index of the element that should be removed.
+     * @return The new array with a size of arr.length - 1.
+     */
+    public static boolean[] pop(boolean[] arr, int index)
+    {
+        if (arr.length == 0)
+        {
+            throw new IllegalArgumentException("Can't pop an element from an empty array.");
+        }
+
+        boolean[] newArr = new boolean[arr.length - 1];
+
+        int newArrIndex = 0;
+
+        for (int i = 0; i < arr.length; i ++ )
+        {
+            if (i != index)
+            {
+                newArr[newArrIndex] = arr[i];
+                newArrIndex ++ ;
+            }
+        }
+        return newArr;
+    }
+
+    /**
+     * Removes the element at the given index and returns a new array with reduced size.
+     * 
+     * @param arr
+     *            The base array.
+     * @param index
+     *            The index of the element that should be removed.
+     * @return The new array with a size of arr.length - 1.
+     */
+    public static byte[] pop(byte[] arr, int index)
+    {
+        if (arr.length == 0)
+        {
+            throw new IllegalArgumentException("Can't pop an element from an empty array.");
+        }
+
+        byte[] newArr = new byte[arr.length - 1];
+
+        int newArrIndex = 0;
+
+        for (int i = 0; i < arr.length; i ++ )
+        {
+            if (i != index)
+            {
+                newArr[newArrIndex] = arr[i];
+                newArrIndex ++ ;
+            }
+        }
+        return newArr;
+    }
+
+    /**
+     * Removes the element at the given index and returns a new array with reduced size.
+     * 
+     * @param arr
+     *            The base array.
+     * @param index
+     *            The index of the element that should be removed.
+     * @return The new array with a size of arr.length - 1.
+     */
+    public static short[] pop(short[] arr, int index)
+    {
+        if (arr.length == 0)
+        {
+            throw new IllegalArgumentException("Can't pop an element from an empty array.");
+        }
+
+        short[] newArr = new short[arr.length - 1];
+
+        int newArrIndex = 0;
+
+        for (int i = 0; i < arr.length; i ++ )
+        {
+            if (i != index)
+            {
+                newArr[newArrIndex] = arr[i];
+                newArrIndex ++ ;
+            }
+        }
+        return newArr;
+    }
+
+    /**
+     * Removes the element at the given index and returns a new array with reduced size.
+     * 
+     * @param arr
+     *            The base array.
+     * @param index
+     *            The index of the element that should be removed.
+     * @return The new array with a size of arr.length - 1.
+     */
+    public static int[] pop(int[] arr, int index)
+    {
+        if (arr.length == 0)
+        {
+            throw new IllegalArgumentException("Can't pop an element from an empty array.");
+        }
+
+        int[] newArr = new int[arr.length - 1];
+
+        int newArrIndex = 0;
+
+        for (int i = 0; i < arr.length; i ++ )
+        {
+            if (i != index)
+            {
+                newArr[newArrIndex] = arr[i];
+                newArrIndex ++ ;
+            }
+        }
+        return newArr;
+    }
+
+    /**
+     * Removes the element at the given index and returns a new array with reduced size.
+     * 
+     * @param arr
+     *            The base array.
+     * @param index
+     *            The index of the element that should be removed.
+     * @return The new array with a size of arr.length - 1.
+     */
+    public static long[] pop(long[] arr, int index)
+    {
+        if (arr.length == 0)
+        {
+            throw new IllegalArgumentException("Can't pop an element from an empty array.");
+        }
+
+        long[] newArr = new long[arr.length - 1];
+
+        int newArrIndex = 0;
+
+        for (int i = 0; i < arr.length; i ++ )
+        {
+            if (i != index)
+            {
+                newArr[newArrIndex] = arr[i];
+                newArrIndex ++ ;
+            }
+        }
+        return newArr;
+    }
+
+    /**
+     * Removes the element at the given index and returns a new array with reduced size.
+     * 
+     * @param arr
+     *            The base array.
+     * @param index
+     *            The index of the element that should be removed.
+     * @return The new array with a size of arr.length - 1.
+     */
+    public static float[] pop(float[] arr, int index)
+    {
+        if (arr.length == 0)
+        {
+            throw new IllegalArgumentException("Can't pop an element from an empty array.");
+        }
+
+        float[] newArr = new float[arr.length - 1];
+
+        int newArrIndex = 0;
+
+        for (int i = 0; i < arr.length; i ++ )
+        {
+            if (i != index)
+            {
+                newArr[newArrIndex] = arr[i];
+                newArrIndex ++ ;
+            }
+        }
+        return newArr;
+    }
+
+    /**
+     * Removes the element at the given index and returns a new array with reduced size.
+     * 
+     * @param arr
+     *            The base array.
+     * @param index
+     *            The index of the element that should be removed.
+     * @return The new array with a size of arr.length - 1.
+     */
+    public static double[] pop(double[] arr, int index)
+    {
+        if (arr.length == 0)
+        {
+            throw new IllegalArgumentException("Can't pop an element from an empty array.");
+        }
+
+        double[] newArr = new double[arr.length - 1];
+
+        int newArrIndex = 0;
+
+        for (int i = 0; i < arr.length; i ++ )
+        {
+            if (i != index)
+            {
+                newArr[newArrIndex] = arr[i];
+                newArrIndex ++ ;
+            }
+        }
+        return newArr;
+    }
+
+    /**
+     * Removes the first element and returns a new array with reduced size.
+     * 
+     * @param arr
+     *            The base array.
+     * @return The new array with a size of arr.length - 1.
+     */
+    public static <T> T[] pop(T[] arr)
+    {
+        return pop(arr, 0);
+    }
+
+    /**
+     * Removes the first element and returns a new array with reduced size.
+     * 
+     * @param arr
+     *            The base array.
+     * @return The new array with a size of arr.length - 1.
+     */
+    public static boolean[] pop(boolean[] arr)
+    {
+        return pop(arr, 0);
+    }
+
+    /**
+     * Removes the first element and returns a new array with reduced size.
+     * 
+     * @param arr
+     *            The base array.
+     * @return The new array with a size of arr.length - 1.
+     */
+    public static byte[] pop(byte[] arr)
+    {
+        return pop(arr, 0);
+    }
+
+    /**
+     * Removes the first element and returns a new array with reduced size.
+     * 
+     * @param arr
+     *            The base array.
+     * @return The new array with a size of arr.length - 1.
+     */
+    public static short[] pop(short[] arr)
+    {
+        return pop(arr, 0);
+    }
+
+    /**
+     * Removes the first element and returns a new array with reduced size.
+     * 
+     * @param arr
+     *            The base array.
+     * @return The new array with a size of arr.length - 1.
+     */
+    public static int[] pop(int[] arr)
+    {
+        return pop(arr, 0);
+    }
+
+    /**
+     * Removes the first element and returns a new array with reduced size.
+     * 
+     * @param arr
+     *            The base array.
+     * @return The new array with a size of arr.length - 1.
+     */
+    public static long[] pop(long[] arr)
+    {
+        return pop(arr, 0);
+    }
+
+    /**
+     * Removes the first element and returns a new array with reduced size.
+     * 
+     * @param arr
+     *            The base array.
+     * @return The new array with a size of arr.length - 1.
+     */
+    public static float[] pop(float[] arr)
+    {
+        return pop(arr, 0);
+    }
+
+    /**
+     * Removes the first element and returns a new array with reduced size.
+     * 
+     * @param arr
+     *            The base array.
+     * @return The new array with a size of arr.length - 1.
+     */
+    public static double[] pop(double[] arr)
+    {
+        return pop(arr, 0);
     }
 
     /**
