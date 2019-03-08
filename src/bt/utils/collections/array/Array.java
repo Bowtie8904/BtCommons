@@ -126,8 +126,8 @@ public final class Array
         }
 
         newArr[newArr.length - 1] = element;
-
-        return newArr;
+        arr = newArr;
+        return arr;
     }
 
     /**
@@ -316,6 +316,25 @@ public final class Array
 
         newArr[newArr.length - 1] = element;
 
+        return newArr;
+    }
+
+
+    public static <T> T[] pop(T[] arr, int index)
+    {
+        T element = arr[index];
+        T[] newArr = (T[])create(element.getClass(), arr.length - 1);
+
+        int newArrIndex = 0;
+
+        for (int i = 0; i < arr.length; i ++ )
+        {
+            if (i != index)
+            {
+                newArr[newArrIndex] = arr[i];
+                newArrIndex ++ ;
+            }
+        }
         return newArr;
     }
 
