@@ -51,6 +51,11 @@ import bt.utils.thread.Threads;
  */
 public class Logger implements Killable
 {
+    /**
+     * Indicates whether any logging should be done. If this is set to false, no log files will be created and calls to
+     * print have no effect.
+     */
+    private static boolean loggingEnabled = true;
     private static Logger globalLogger;
 
     /**
@@ -163,6 +168,19 @@ public class Logger implements Killable
     public static void setGlobal(Logger logger)
     {
         globalLogger = logger;
+    }
+
+    /**
+     * If this is set to false, no log files will be created and calls to print have no effect.
+     * 
+     * <p>
+     * Instances that are created while this is set to false will not be able to do any logging even after this method
+     * is called to re-enable logging.
+     * </p>
+     */
+    public static void setLoggingEnabled(boolean enabled)
+    {
+        loggingEnabled = enabled;
     }
 
     /**
@@ -293,8 +311,12 @@ public class Logger implements Killable
     public void kill()
     {
         this.printInstant = true;
+        logQueue();
         print(this, "Closing logger.");
-        writer.close();
+        if (writer != null)
+        {
+            writer.close();
+        }
         activeLoggers.remove(this);
         if (future != null)
         {
@@ -334,27 +356,30 @@ public class Logger implements Killable
      */
     public void setLoggerFile(File logFile)
     {
-        try
+        if (loggingEnabled)
         {
-            this.logFile = logFile;
-            logFile.getParentFile().mkdirs();
-            logFile.createNewFile();
             try
             {
-                if (writer != null)
+                this.logFile = logFile;
+                logFile.getParentFile().mkdirs();
+                logFile.createNewFile();
+                try
                 {
-                    writer.close();
+                    if (writer != null)
+                    {
+                        writer.close();
+                    }
                 }
+                catch (Exception ex)
+                {
+                    ex.printStackTrace();
+                }
+                writer = new PrintWriter(new BufferedWriter(new FileWriter(this.logFile, true)), true);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                ex.printStackTrace();
+                e.printStackTrace();
             }
-            writer = new PrintWriter(new BufferedWriter(new FileWriter(this.logFile, true)), true);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
         }
     }
 
@@ -569,13 +594,16 @@ public class Logger implements Killable
      */
     private synchronized void logQueue()
     {
-        ArrayList<String> copy = new ArrayList<String>(queue);
-        queue.clear();
-        for (String line : copy)
+        if (this.enabled && loggingEnabled)
         {
-            writer.println(line);
+            ArrayList<String> copy = new ArrayList<String>(queue);
+            queue.clear();
+            for (String line : copy)
+            {
+                writer.println(line);
+            }
+            writer.flush();
         }
-        writer.flush();
     }
 
     /**
@@ -695,7 +723,7 @@ public class Logger implements Killable
      */
     public void printEmpty()
     {
-        if (this.enabled)
+        if (this.enabled && loggingEnabled)
         {
             if (activeLoggers.contains(this))
             {
@@ -738,7 +766,7 @@ public class Logger implements Killable
      */
     public void print(Object source, String s)
     {
-        if (this.enabled)
+        if (this.enabled && loggingEnabled)
         {
             if (activeLoggers.contains(this))
             {
@@ -934,7 +962,7 @@ public class Logger implements Killable
      */
     public void print(Object source, Throwable t)
     {
-        if (this.enabled)
+        if (this.enabled && loggingEnabled)
         {
             if (activeLoggers.contains(this))
             {
@@ -1022,7 +1050,7 @@ public class Logger implements Killable
      */
     public void print(String s)
     {
-        if (this.enabled)
+        if (this.enabled && loggingEnabled)
         {
             if (activeLoggers.contains(this))
             {
@@ -1180,7 +1208,7 @@ public class Logger implements Killable
      */
     public void print(Throwable t)
     {
-        if (this.enabled)
+        if (this.enabled && loggingEnabled)
         {
             if (activeLoggers.contains(this))
             {
