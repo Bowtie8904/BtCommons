@@ -49,24 +49,6 @@ public final class Properties
      * </p>
      */
     private static final String DEFAULT_PROPERTY_PATH = "properties/properties.txt";
-
-    // creates the default property file
-    static
-    {
-        try
-        {
-            File file = new File(DEFAULT_PROPERTY_PATH);
-            if (!file.exists())
-            {
-                file.getParentFile().mkdirs();
-                file.createNewFile();
-            }
-        }
-        catch (Exception e)
-        {
-            Logger.global().print(e);
-        }
-    }
     
     /**
      * Gets all fieldnames that start with the given fieldstring inside the given file. If the file does not exist it
@@ -84,7 +66,15 @@ public final class Properties
     {
         if (!file.exists())
         {
-            file = new File(DEFAULT_PROPERTY_PATH);
+            try
+            {
+                file.getParentFile().mkdirs();
+                file.createNewFile();
+            }
+            catch (Exception e)
+            {
+                Logger.global().print(e);
+            }
         }
 
         List<String> values = new ArrayList<String>();
@@ -156,9 +146,16 @@ public final class Properties
     {
         if (!file.exists())
         {
-            file = new File(DEFAULT_PROPERTY_PATH);
+            try
+            {
+                file.getParentFile().mkdirs();
+                file.createNewFile();
+            }
+            catch (Exception e)
+            {
+                Logger.global().print(e);
+            }
         }
-
         List<String> values = new ArrayList<String>();
 
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8")))
@@ -232,7 +229,15 @@ public final class Properties
     {
         if (!file.exists())
         {
-            file = new File(DEFAULT_PROPERTY_PATH);
+            try
+            {
+                file.getParentFile().mkdirs();
+                file.createNewFile();
+            }
+            catch (Exception e)
+            {
+                Logger.global().print(e);
+            }
         }
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8")))
         {
@@ -303,16 +308,20 @@ public final class Properties
      */
     public static boolean setValueOf(String field, String value, File file)
     {
-        try
+        if (!file.exists())
         {
-            file.getParentFile().mkdirs();
-            file.createNewFile();
+            try
+            {
+                file.getParentFile().mkdirs();
+                file.createNewFile();
+            }
+            catch (Exception e)
+            {
+                Logger.global().print(e);
+                return false;
+            }
         }
-        catch (Exception e)
-        {
-            Logger.global().print(e);
-            return false;
-        }
+
         StringBuilder sb = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8")))
         {
