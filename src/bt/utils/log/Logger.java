@@ -66,24 +66,6 @@ public class Logger implements Killable
      */
     private static final String DEFAULT_LOG_PATH = "logs/default_logfile.log";
 
-    // creates the default log file
-    static
-    {
-        try
-        {
-            File file = new File(DEFAULT_LOG_PATH);
-            if (!file.exists())
-            {
-                file.getParentFile().mkdirs();
-                file.createNewFile();
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
-
     /** A list which contains all currently active instances of this class. */
     private static ArrayList<Logger> activeLoggers = new ArrayList<Logger>();
 
