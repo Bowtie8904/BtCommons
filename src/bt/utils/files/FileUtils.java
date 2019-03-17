@@ -7,6 +7,8 @@ import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 import bt.utils.log.Logger;
 
@@ -53,6 +55,47 @@ public class FileUtils
             return jarFile.getParentFile();
         }
         return null;
+    }
+
+    /**
+     * Reads and returns all lines from the file at the given path.
+     * 
+     * @param path
+     * @return
+     */
+    public static String[] readLines(String path)
+    {
+        return readLines(new File(path));
+    }
+
+    /**
+     * Reads and returns all lines from the given file.
+     * 
+     * @param file
+     * @return
+     */
+    public static String[] readLines(File file)
+    {
+        List<String> lines = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(file)))
+        {
+            String line;
+            while ((line = br.readLine()) != null)
+            {
+                lines.add(line);
+            }
+        }
+        catch (FileNotFoundException e)
+        {
+            Logger.global().print(e);
+        }
+        catch (IOException e)
+        {
+            Logger.global().print(e);
+        }
+
+        return lines.toArray(new String[] {});
     }
 
     /**
