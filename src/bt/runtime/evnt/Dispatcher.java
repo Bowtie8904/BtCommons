@@ -52,16 +52,18 @@ public class Dispatcher
      * 
      * @param type
      * @param listener
+     * 
+     * @return true if the given consumer was subscribed.
      */
-    public <T> void unsubscribeFrom(Class<T> type, Consumer<T> consumer)
+    public <T> boolean unsubscribeFrom(Class<T> type, Consumer<T> consumer)
     {
         if (!this.subDispatchers.containsKey(type))
         {
-            return;
+            return false;
         }
 
         var dispatcher = (SubDispatcher<T>)this.subDispatchers.get(type);
-        dispatcher.unsubscribe(consumer);
+        return dispatcher.unsubscribe(consumer);
     }
 
     /**
@@ -91,31 +93,34 @@ public class Dispatcher
      * 
      * @param type
      * @param listener
+     * 
+     * @return true if the given runnable was subscribed.
      */
-    public <T> void unsubscribeFrom(Class<T> type, Runnable runnable)
+    public <T> boolean unsubscribeFrom(Class<T> type, Runnable runnable)
     {
         if (!this.subDispatchers.containsKey(type))
         {
-            return;
+            return false;
         }
 
         var dispatcher = (SubDispatcher<T>)this.subDispatchers.get(type);
-        dispatcher.unsubscribe(runnable);
+        return dispatcher.unsubscribe(runnable);
     }
 
     /**
      * Dispatches the given data to all subscribers of that specific data type.
      * 
      * @param data
+     * @return The number of subscribers that received the data.
      */
-    public <T> void dispatch(T data)
+    public <T> int dispatch(T data)
     {
         if (!this.subDispatchers.containsKey(data.getClass()))
         {
-            return;
+            return 0;
         }
         var dispatcher = (SubDispatcher<T>)this.subDispatchers.get(data.getClass());
-        dispatcher.dispatch(data);
+        return dispatcher.dispatch(data);
     }
 
     /**

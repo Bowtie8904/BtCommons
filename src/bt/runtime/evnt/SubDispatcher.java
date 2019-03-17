@@ -49,10 +49,11 @@ public class SubDispatcher<T>
      * 
      * @param consumer
      *            The subscriber to remove.
+     * @return true if the given consumer was subscribed.
      */
-    protected void unsubscribe(Consumer<T> consumer)
+    protected boolean unsubscribe(Consumer<T> consumer)
     {
-        this.consumers.remove(consumer);
+        return this.consumers.remove(consumer);
     }
 
     /**
@@ -76,10 +77,11 @@ public class SubDispatcher<T>
      * 
      * @param runnable
      *            The subscriber to remove.
+     * @return true if the given runnable was subscribed.
      */
-    protected void unsubscribe(Runnable runnable)
+    protected boolean unsubscribe(Runnable runnable)
     {
-        this.runnables.remove(runnable);
+        return this.runnables.remove(runnable);
     }
 
     /**
@@ -91,8 +93,10 @@ public class SubDispatcher<T>
      * 
      * @param data
      *            The object to dispatch.
+     * 
+     * @return The number of subscribers that received the data.
      */
-    protected void dispatch(T data)
+    protected int dispatch(T data)
     {
         for (var consumer : this.consumers)
         {
@@ -103,6 +107,8 @@ public class SubDispatcher<T>
         {
             runnable.run();
         }
+
+        return this.consumers.size() + this.runnables.size();
     }
 
     /**
