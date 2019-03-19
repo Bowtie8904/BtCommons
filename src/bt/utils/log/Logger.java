@@ -931,7 +931,7 @@ public class Logger implements Killable
      */
     public void print(Object source, Object o)
     {
-        print(source, o.toString());
+        print(source, o == null ? "null" : o.toString());
     }
 
     /**
@@ -1179,7 +1179,7 @@ public class Logger implements Killable
      */
     public void print(Object o)
     {
-        print(o.toString());
+        print(o == null ? "null" : o.toString());
     }
 
     /**
