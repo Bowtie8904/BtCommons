@@ -28,24 +28,9 @@ import bt.utils.thread.Threads;
  * A logging class which prints to either a given file or to the default log file which is defined by
  * {@link #DEFAULT_LOG_PATH}.
  * 
- * <h1>Example of usage:</h1>
- * <ul>
- * 
- * <pre>
- * Logger logger = new Logger(&quot;logFile.txt&quot;, &quot;CET&quot;);
- * logger.start();
- * logger.print(&quot;Hello world&quot;);
- * </pre>
- * 
- * </ul>
- * Output:
- * <ul>
- * 
- * <pre>
- * [16 11 2017 21:28:25 CET] Hello world
- * </pre>
- * 
- * </ul>
+ * <p>
+ * All logging from instances of this class can be stopped by calling {@link #setLoggingEnabled(boolean)} with false.
+ * </p>
  * 
  * @author &#8904
  */
@@ -132,6 +117,13 @@ public class Logger implements Killable
     /** Indicates whether this logger will actually log when its print methods are called. */
     private boolean enabled = true;
 
+    /**
+     * An instance of the {@link Logger} class that is meant for general logging. By default it will print output to the
+     * {@link #DEFAULT_LOG_PATH}. This behavior can however be customized by setting an instance with a different
+     * configuration via {@link #setGlobal(Logger)}.
+     * 
+     * @return The global logger instance.
+     */
     public static Logger global()
     {
         if (globalLogger == null)
@@ -168,6 +160,11 @@ public class Logger implements Killable
     /**
      * Creates a {@link Logger} instance which uses the default timezone of the system and prints to the default log
      * file which is defined by {@link #DEFAULT_LOG_PATH}.
+     * 
+     * <p>
+     * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#closeOnShutdown(Killable, int)}
+     * with a priority of {@link Integer#MIN_VALUE} + 1.
+     * </p>
      */
     public Logger()
     {
@@ -177,6 +174,11 @@ public class Logger implements Killable
     /**
      * Creates a {@link Logger} instance which uses the default timezone of the system and prints to the file with the
      * given path. If the file does not exist it will be created.
+     * 
+     * <p>
+     * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#closeOnShutdown(Killable, int)}
+     * with a priority of {@link Integer#MIN_VALUE} + 1.
+     * </p>
      * 
      * @param logPath
      *            The path to the desired log file.
@@ -189,6 +191,11 @@ public class Logger implements Killable
     /**
      * Creates a {@link Logger} instance which uses the default timezone of the system and prints to the given file. If
      * the file does not exist it will be created.
+     * 
+     * <p>
+     * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#closeOnShutdown(Killable, int)}
+     * with a priority of {@link Integer#MIN_VALUE} + 1.
+     * </p>
      * 
      * @param logFile
      *            The file to which this instance should print.
@@ -205,6 +212,11 @@ public class Logger implements Killable
      * {@link #DEFAULT_LOG_PATH}. This constructor will set the given timezone as default for the Java VM. Note that
      * this is affecting all {@link Logger} instances.
      * 
+     * <p>
+     * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#closeOnShutdown(Killable, int)}
+     * with a priority of {@link Integer#MIN_VALUE} + 1.
+     * </p>
+     * 
      * @param timeZone
      *            The timezone which should be set as default for the Java VM.
      */
@@ -217,6 +229,11 @@ public class Logger implements Killable
      * Creates a {@link Logger} instance which prints to the file with the given path. If the file does not exist it
      * will be created. This constructor will set the given timezone as default for the Java VM. Note that this is
      * affecting all {@link Logger} instances.
+     * 
+     * <p>
+     * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#closeOnShutdown(Killable, int)}
+     * with a priority of {@link Integer#MIN_VALUE} + 1.
+     * </p>
      * 
      * @param logPath
      *            The path to the desired log file.
@@ -232,6 +249,11 @@ public class Logger implements Killable
      * Creates a {@link Logger} instance which prints to the given file. If the file does not exist it will be created.
      * This constructor will set the given timezone as default for the Java VM. Note that this is affecting all
      * {@link Logger} instances.
+     * 
+     * <p>
+     * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#closeOnShutdown(Killable, int)}
+     * with a priority of {@link Integer#MIN_VALUE} + 1.
+     * </p>
      * 
      * @param logFile
      *            The file to which this instance should print.
@@ -251,6 +273,11 @@ public class Logger implements Killable
      * will be created. This constructor will set the given timezone as default for the Java VM. Note that this is
      * affecting all {@link Logger} instances.
      * 
+     * <p>
+     * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#closeOnShutdown(Killable, int)}
+     * with a priority of {@link Integer#MIN_VALUE} + 1.
+     * </p>
+     * 
      * @param logPath
      *            The path to the desired log file.
      * @param timeZone
@@ -266,6 +293,11 @@ public class Logger implements Killable
      * Creates a {@link Logger} instance which prints to the given file. If the file does not exist it will be created.
      * This constructor will set the given timezone as default for the Java VM. Note that this is affecting all
      * {@link Logger} instances.
+     * 
+     * <p>
+     * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#closeOnShutdown(Killable, int)}
+     * with a priority of {@link Integer#MIN_VALUE} + 1.
+     * </p>
      * 
      * @param logFile
      *            The file to which this instance should print.
@@ -288,12 +320,20 @@ public class Logger implements Killable
 
     /**
      * Closes this instances {@link #writer} and removes it from the {@link #activeLoggers} list.
+     * 
+     * <p>
+     * If this instance is set to log at a specified interval {@link #logQueue()} is called before closing resources.
+     * </p>
      */
     @Override
     public void kill()
     {
-        this.printInstant = true;
-        logQueue();
+        if (!this.printInstant)
+        {
+            this.printInstant = true;
+            logQueue();
+        }
+
         print(this, "Closing logger.");
         if (writer != null)
         {
@@ -308,9 +348,9 @@ public class Logger implements Killable
     }
 
     /**
-     * Closes the {@link #writer} of every active {@link Logger} instance and clears the {@link #activeLoggers} list.
+     * Calls the {@link #kill()} method of all active loggers.
      */
-    public static void closeAll()
+    public static void killAll()
     {
         for (Logger logger : activeLoggers)
         {
@@ -332,6 +372,10 @@ public class Logger implements Killable
 
     /**
      * Sets the {@link #logFile}.
+     * 
+     * <p>
+     * This method has no effect if {@link #setLoggingEnabled(boolean)} was set to false.
+     * </p>
      * 
      * @param logFile
      *            The desired log file.
@@ -662,10 +706,10 @@ public class Logger implements Killable
         this.callerStackIndex = index;
     }
 
-    private String getCallerString()
+    private String getCallerString(int stackIndex)
     {
         var stack = StackWalker.getInstance(Option.RETAIN_CLASS_REFERENCE)
-                .walk(s -> s.skip(this.callerStackIndex)
+                .walk(s -> s.skip(stackIndex)
                         .findFirst())
                 .get();
 
@@ -697,7 +741,19 @@ public class Logger implements Killable
         str.append(stack.getLineNumber());
         str.append("]");
 
-        return str.toString();
+        String result = str.toString();
+
+        if (result.contains(getClass().getName()))
+        {
+            result = getCallerString(stackIndex + 1);
+        }
+
+        return result;
+    }
+
+    private String getCallerString()
+    {
+        return getCallerString(this.callerStackIndex);
     }
 
     /**
