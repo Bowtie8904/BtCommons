@@ -745,7 +745,7 @@ public class Logger implements Killable
 
         if (result.contains(getClass().getName()))
         {
-            result = getCallerString(stackIndex + 1);
+            result = getCallerString(stackIndex + 2);
         }
 
         return result;
