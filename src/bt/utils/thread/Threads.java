@@ -63,7 +63,7 @@ public class Threads implements Killable
         {
             instance = new Threads();
             Logger.global().registerSource(instance, "THREADS");
-            InstanceKiller.closeOnShutdown(instance, Integer.MIN_VALUE + 2);
+            InstanceKiller.killOnShutdown(instance, Integer.MIN_VALUE + 2);
         }
         return instance;
     }

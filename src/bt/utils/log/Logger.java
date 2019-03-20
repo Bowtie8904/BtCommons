@@ -162,7 +162,7 @@ public class Logger implements Killable
      * file which is defined by {@link #DEFAULT_LOG_PATH}.
      * 
      * <p>
-     * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#closeOnShutdown(Killable, int)}
+     * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#killOnShutdown(Killable, int)}
      * with a priority of {@link Integer#MIN_VALUE} + 1.
      * </p>
      */
@@ -176,7 +176,7 @@ public class Logger implements Killable
      * given path. If the file does not exist it will be created.
      * 
      * <p>
-     * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#closeOnShutdown(Killable, int)}
+     * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#killOnShutdown(Killable, int)}
      * with a priority of {@link Integer#MIN_VALUE} + 1.
      * </p>
      * 
@@ -193,7 +193,7 @@ public class Logger implements Killable
      * the file does not exist it will be created.
      * 
      * <p>
-     * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#closeOnShutdown(Killable, int)}
+     * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#killOnShutdown(Killable, int)}
      * with a priority of {@link Integer#MIN_VALUE} + 1.
      * </p>
      * 
@@ -204,7 +204,7 @@ public class Logger implements Killable
     {
         setLoggerFile(logFile);
         activeLoggers.add(this);
-        InstanceKiller.closeOnShutdown(this, Integer.MIN_VALUE + 1);
+        InstanceKiller.killOnShutdown(this, Integer.MIN_VALUE + 1);
     }
 
     /**
@@ -213,7 +213,7 @@ public class Logger implements Killable
      * this is affecting all {@link Logger} instances.
      * 
      * <p>
-     * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#closeOnShutdown(Killable, int)}
+     * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#killOnShutdown(Killable, int)}
      * with a priority of {@link Integer#MIN_VALUE} + 1.
      * </p>
      * 
@@ -231,7 +231,7 @@ public class Logger implements Killable
      * affecting all {@link Logger} instances.
      * 
      * <p>
-     * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#closeOnShutdown(Killable, int)}
+     * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#killOnShutdown(Killable, int)}
      * with a priority of {@link Integer#MIN_VALUE} + 1.
      * </p>
      * 
@@ -251,7 +251,7 @@ public class Logger implements Killable
      * {@link Logger} instances.
      * 
      * <p>
-     * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#closeOnShutdown(Killable, int)}
+     * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#killOnShutdown(Killable, int)}
      * with a priority of {@link Integer#MIN_VALUE} + 1.
      * </p>
      * 
@@ -265,7 +265,7 @@ public class Logger implements Killable
         setLoggerFile(logFile);
         this.timeZone = timeZone;
         activeLoggers.add(this);
-        InstanceKiller.closeOnShutdown(this, Integer.MIN_VALUE + 1);
+        InstanceKiller.killOnShutdown(this, Integer.MIN_VALUE + 1);
     }
 
     /**
@@ -274,7 +274,7 @@ public class Logger implements Killable
      * affecting all {@link Logger} instances.
      * 
      * <p>
-     * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#closeOnShutdown(Killable, int)}
+     * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#killOnShutdown(Killable, int)}
      * with a priority of {@link Integer#MIN_VALUE} + 1.
      * </p>
      * 
@@ -295,7 +295,7 @@ public class Logger implements Killable
      * {@link Logger} instances.
      * 
      * <p>
-     * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#closeOnShutdown(Killable, int)}
+     * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#killOnShutdown(Killable, int)}
      * with a priority of {@link Integer#MIN_VALUE} + 1.
      * </p>
      * 
@@ -310,7 +310,7 @@ public class Logger implements Killable
         setLoggerFile(logFile);
         this.timeZone = TimeZone.getTimeZone(timeZone);
         activeLoggers.add(this);
-        InstanceKiller.closeOnShutdown(this, Integer.MIN_VALUE + 1);
+        InstanceKiller.killOnShutdown(this, Integer.MIN_VALUE + 1);
     }
 
     public void setEnabled(boolean enabled)

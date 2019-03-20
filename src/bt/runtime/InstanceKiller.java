@@ -65,9 +65,9 @@ public final class InstanceKiller
      * @param killable
      *            The instance that should be killed on application exit.
      */
-    public static synchronized void closeOnShutdown(Killable killable)
+    public static synchronized void killOnShutdown(Killable killable)
     {
-        closeOnShutdown(killable, Integer.MIN_VALUE);
+        killOnShutdown(killable, Integer.MIN_VALUE);
     }
 
     /**
@@ -90,7 +90,7 @@ public final class InstanceKiller
      *            An arbitrary number which determines the order of termination. The higher the priority, the earlier
      *            the instance will be killed.
      */
-    public static synchronized void closeOnShutdown(Killable killable, int priority)
+    public static synchronized void killOnShutdown(Killable killable, int priority)
     {
         killables.add(new SimpleEntry<Killable, Integer>(killable, priority));
     }
