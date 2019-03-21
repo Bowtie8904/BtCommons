@@ -54,7 +54,7 @@ public final class InstanceKiller
      * <p>
      * All Killables added via this method will be killed last, although there is no guarantee that instances which were
      * added will be killed in the same order. The priority attached to the given instance will be
-     * {@link Integer#MIN_VALUE}.
+     * {@link Integer#MIN_VALUE} + 1.
      * </p>
      * 
      * <p>
@@ -67,7 +67,7 @@ public final class InstanceKiller
      */
     public static synchronized void killOnShutdown(Killable killable)
     {
-        killOnShutdown(killable, Integer.MIN_VALUE);
+        killOnShutdown(killable, Integer.MIN_VALUE + 1);
     }
 
     /**

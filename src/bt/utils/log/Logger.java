@@ -163,7 +163,7 @@ public class Logger implements Killable
      * 
      * <p>
      * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#killOnShutdown(Killable, int)}
-     * with a priority of {@link Integer#MIN_VALUE} + 1.
+     * with a priority of {@link Integer#MIN_VALUE}.
      * </p>
      */
     public Logger()
@@ -177,7 +177,7 @@ public class Logger implements Killable
      * 
      * <p>
      * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#killOnShutdown(Killable, int)}
-     * with a priority of {@link Integer#MIN_VALUE} + 1.
+     * with a priority of {@link Integer#MIN_VALUE}.
      * </p>
      * 
      * @param logPath
@@ -194,7 +194,7 @@ public class Logger implements Killable
      * 
      * <p>
      * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#killOnShutdown(Killable, int)}
-     * with a priority of {@link Integer#MIN_VALUE} + 1.
+     * with a priority of {@link Integer#MIN_VALUE}.
      * </p>
      * 
      * @param logFile
@@ -204,7 +204,7 @@ public class Logger implements Killable
     {
         setLoggerFile(logFile);
         activeLoggers.add(this);
-        InstanceKiller.killOnShutdown(this, Integer.MIN_VALUE + 1);
+        InstanceKiller.killOnShutdown(this, Integer.MIN_VALUE);
     }
 
     /**
@@ -214,7 +214,7 @@ public class Logger implements Killable
      * 
      * <p>
      * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#killOnShutdown(Killable, int)}
-     * with a priority of {@link Integer#MIN_VALUE} + 1.
+     * with a priority of {@link Integer#MIN_VALUE}.
      * </p>
      * 
      * @param timeZone
@@ -232,7 +232,7 @@ public class Logger implements Killable
      * 
      * <p>
      * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#killOnShutdown(Killable, int)}
-     * with a priority of {@link Integer#MIN_VALUE} + 1.
+     * with a priority of {@link Integer#MIN_VALUE}.
      * </p>
      * 
      * @param logPath
@@ -252,7 +252,7 @@ public class Logger implements Killable
      * 
      * <p>
      * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#killOnShutdown(Killable, int)}
-     * with a priority of {@link Integer#MIN_VALUE} + 1.
+     * with a priority of {@link Integer#MIN_VALUE}.
      * </p>
      * 
      * @param logFile
@@ -265,7 +265,7 @@ public class Logger implements Killable
         setLoggerFile(logFile);
         this.timeZone = timeZone;
         activeLoggers.add(this);
-        InstanceKiller.killOnShutdown(this, Integer.MIN_VALUE + 1);
+        InstanceKiller.killOnShutdown(this, Integer.MIN_VALUE);
     }
 
     /**
@@ -275,7 +275,7 @@ public class Logger implements Killable
      * 
      * <p>
      * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#killOnShutdown(Killable, int)}
-     * with a priority of {@link Integer#MIN_VALUE} + 1.
+     * with a priority of {@link Integer#MIN_VALUE}.
      * </p>
      * 
      * @param logPath
@@ -296,7 +296,7 @@ public class Logger implements Killable
      * 
      * <p>
      * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#killOnShutdown(Killable, int)}
-     * with a priority of {@link Integer#MIN_VALUE} + 1.
+     * with a priority of {@link Integer#MIN_VALUE}.
      * </p>
      * 
      * @param logFile
@@ -310,7 +310,7 @@ public class Logger implements Killable
         setLoggerFile(logFile);
         this.timeZone = TimeZone.getTimeZone(timeZone);
         activeLoggers.add(this);
-        InstanceKiller.killOnShutdown(this, Integer.MIN_VALUE + 1);
+        InstanceKiller.killOnShutdown(this, Integer.MIN_VALUE);
     }
 
     public void setEnabled(boolean enabled)
