@@ -39,23 +39,35 @@ public class ConsoleTable
         this.rowLength = row.length();
     }
 
-    public void addTitle(Object... data)
+    public void setTitle(Object... data)
     {
         ConsoleRow row = this.formatter.formatRow(data);
         this.titleRow = row;
         this.rowLength = row.length();
     }
 
-    public void addTitle(boolean centered, Object... data)
+    public void setTitle(boolean centered, Object... data)
     {
         ConsoleRow row = this.formatter.formatRow(data, centered);
         this.titleRow = row;
         this.rowLength = row.length();
     }
 
+    /**
+     * Removes the row at the given index. Pass -1 to remove the title row.
+     * 
+     * @param index
+     */
     public void removeRow(int index)
     {
-        this.rows.remove(index);
+        if (index == -1)
+        {
+            this.titleRow = null;
+        }
+        else
+        {
+            this.rows.remove(index);
+        }
     }
 
     /**
@@ -144,15 +156,24 @@ public class ConsoleTable
     {
         this.formatter = formatter;
 
+        if (this.titleRow != null)
+        {
+            this.titleRow.setFormatter(formatter);
+        }
+
         for (ConsoleRow row : this.rows)
         {
             row.setFormatter(formatter);
-            row.setupAfterChange();
         }
     }
 
     public void reformat()
     {
+        if (this.titleRow != null)
+        {
+            this.titleRow.setupAfterChange();
+        }
+
         for (ConsoleRow row : this.rows)
         {
             row.setupAfterChange();
