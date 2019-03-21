@@ -6,60 +6,46 @@ package bt.utils.console;
  */
 public class ConsoleRow
 {
+    private ConsoleFormatter formatter;
     private String text;
-    private String[] data;
-    private int[] format;
+    private Object[] data;
     private boolean centered;
-    private String separator;
 
-    public ConsoleRow(String text, String[] data, int[] format, boolean centered, String separator)
+    public ConsoleRow(ConsoleFormatter formatter, String text, Object[] data, boolean centered)
     {
+        this.formatter = formatter;
         this.text = text;
-        this.format = format;
         this.data = data;
         this.centered = centered;
-        this.separator = separator;
     }
 
-    private void setupAfterChange()
+    protected void setupAfterChange()
     {
-        ConsoleRow newRow = ConsoleFormatter.formatRow(this.data, this.format, this.centered, this.separator);
+        ConsoleRow newRow = this.formatter.formatRow(this.data, this.centered);
         this.text = newRow.toString();
+    }
+
+    public void setFormatter(ConsoleFormatter formatter)
+    {
+        this.formatter = formatter;
+        setupAfterChange();
     }
 
     /**
      * @return the data
      */
-    public String[] getData()
+    public Object[] getData()
     {
-        return data;
+        return this.data;
     }
 
     /**
      * @param data
      *            the data to set
      */
-    public void setData(String... data)
+    public void setData(Object... data)
     {
         this.data = data;
-        setupAfterChange();
-    }
-
-    /**
-     * @return the format
-     */
-    public int[] getFormat()
-    {
-        return format;
-    }
-
-    /**
-     * @param format
-     *            the format to set
-     */
-    public void setFormat(int... format)
-    {
-        this.format = format;
         setupAfterChange();
     }
 
@@ -68,7 +54,7 @@ public class ConsoleRow
      */
     public boolean isCentered()
     {
-        return centered;
+        return this.centered;
     }
 
     /**
@@ -78,24 +64,6 @@ public class ConsoleRow
     public void setCentered(boolean centered)
     {
         this.centered = centered;
-        setupAfterChange();
-    }
-
-    /**
-     * @return the separator
-     */
-    public String getSeparator()
-    {
-        return separator;
-    }
-
-    /**
-     * @param separator
-     *            the separator to set
-     */
-    public void setSeparator(String separator)
-    {
-        this.separator = separator;
         setupAfterChange();
     }
 

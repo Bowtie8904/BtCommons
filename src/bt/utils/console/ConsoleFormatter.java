@@ -4,46 +4,61 @@ package bt.utils.console;
  * @author &#8904
  *
  */
-public final class ConsoleFormatter
+public class ConsoleFormatter
 {
-    public static ConsoleRow formatRow(String[] text, int[] format, boolean centered, String separator)
+    private int[] format;
+    private String columnSeparator = "|";
+    private char rowSeparator = '-';
+    private char titleSeparator = '=';
+
+    public ConsoleFormatter(int... format)
     {
-        if (text.length != format.length)
+        this.format = format;
+    }
+
+    public ConsoleRow formatRow(Object[] data)
+    {
+        return formatRow(data, false);
+    }
+
+    public ConsoleRow formatRow(Object[] data, boolean centered)
+    {
+        if (data.length != this.format.length)
         {
             throw new IllegalArgumentException("Format and text array must be the same length.");
         }
 
-        String[] dataCopy = new String[text.length];
+        Object[] dataCopy = new Object[data.length];
 
-        for (int i = 0; i < text.length; i ++ )
+        for (int i = 0; i < data.length; i ++ )
         {
-            dataCopy[i] = text[i];
+            dataCopy[i] = data[i] == null ? "null" : data[i];
         }
 
-        String row = separator;
+        String row = this.columnSeparator;
         for (int i = 0; i < dataCopy.length; i ++ )
         {
-            if (dataCopy[i].length() > format[i] - 2)
+            if (dataCopy[i].toString().length() > this.format[i] - 2)
             {
-                if (format[i] == 0)
+                if (this.format[i] == 0)
                 {
                     throw new IllegalArgumentException(
-                            "Format " + format[i] + " at position " + i + " is invalid. Formats must be above 0.");
+                            "Format " + this.format[i] + " at position " + i + " is invalid. Formats must be above 0.");
                 }
-                if (format[i] <= 3)
+                if (this.format[i] <= 3)
                 {
                     dataCopy[i] = "";
                 }
-                else if (format[i] <= 5)
+                else if (this.format[i] <= 5)
                 {
                     dataCopy[i] = "...";
                 }
                 else
                 {
-                    dataCopy[i] = dataCopy[i].substring(0, format[i] - 5) + "...";
+                    dataCopy[i] = dataCopy[i].toString().substring(0, this.format[i] - 5) + "...";
                 }
             }
-            int spaces = (int)((format[i] - dataCopy[i].length()) / 2);
+            int spaces = (int)((this.format[i] - dataCopy[i].toString().length()) / 2);
             if (centered)
             {
                 for (int j = 0; j < spaces; j ++ )
@@ -51,7 +66,7 @@ public final class ConsoleFormatter
                     row += " ";
                 }
                 row += dataCopy[i];
-                spaces = format[i] - dataCopy[i].length() - spaces;
+                spaces = this.format[i] - dataCopy[i].toString().length() - spaces;
                 for (int j = 0; j < spaces; j ++ )
                 {
                     row += " ";
@@ -61,14 +76,80 @@ public final class ConsoleFormatter
             {
                 row += " ";
                 row += dataCopy[i];
-                spaces = format[i] - dataCopy[i].length() - 1;
+                spaces = this.format[i] - dataCopy[i].toString().length() - 1;
                 for (int j = 0; j < spaces; j ++ )
                 {
                     row += " ";
                 }
             }
-            row += separator;
+            row += this.columnSeparator;
         }
-        return new ConsoleRow(row, text, format, centered, separator);
+
+        return new ConsoleRow(this, row, data, centered);
+    }
+
+    /**
+     * @return the format
+     */
+    public int[] getFormat()
+    {
+        return this.format;
+    }
+
+    /**
+     * @param format
+     *            the format to set
+     */
+    public void setFormat(int... format)
+    {
+        this.format = format;
+    }
+
+    /**
+     * @return the rowSeparator
+     */
+    public char getRowSeparator()
+    {
+        return rowSeparator;
+    }
+
+    /**
+     * @param rowSeparator
+     *            the rowSeparator to set
+     */
+    public void setRowSeparator(char rowSeparator)
+    {
+        this.rowSeparator = rowSeparator;
+    }
+
+    public char getTitleSeparator()
+    {
+        return titleSeparator;
+    }
+
+    /**
+     * @param rowSeparator
+     *            the rowSeparator to set
+     */
+    public void setTitleSeparator(char titleSeparator)
+    {
+        this.titleSeparator = titleSeparator;
+    }
+
+    /**
+     * @return the columnSeparator
+     */
+    public String getColumnSeparator()
+    {
+        return columnSeparator;
+    }
+
+    /**
+     * @param columnSeparator
+     *            the columnSeparator to set
+     */
+    public void setColumnSeparator(String columnSeparator)
+    {
+        this.columnSeparator = columnSeparator;
     }
 }
