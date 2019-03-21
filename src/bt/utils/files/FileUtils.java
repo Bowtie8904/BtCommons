@@ -183,7 +183,7 @@ public class FileUtils
             @Override
             public boolean accept(File dir, String name)
             {
-                return name.toLowerCase().endsWith("." + ending);
+                return name.toLowerCase().endsWith("." + ending.toLowerCase());
             }
         };
 
