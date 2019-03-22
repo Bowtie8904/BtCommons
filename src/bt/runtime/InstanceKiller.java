@@ -112,7 +112,7 @@ public final class InstanceKiller
      */
     public static synchronized void killOnShutdown(Killable killable, int priority)
     {
-        if (!killables.stream().anyMatch(k -> k.getKey().equals(killable)))
+        if (!isRegistered(killable))
         {
             killables.add(new SimpleEntry<Killable, Integer>(killable, priority));
         }
@@ -128,5 +128,16 @@ public final class InstanceKiller
     public static synchronized void unregister(Killable killable)
     {
         killables.removeIf(k -> k.getKey().equals(killable));
+    }
+
+    /**
+     * Indicates whether the given killable is already registered for termination.
+     * 
+     * @param killable
+     * @return true if the killable is already registered.
+     */
+    public static synchronized boolean isRegistered(Killable killable)
+    {
+        return killables.stream().anyMatch(k -> k.getKey().equals(killable));
     }
 }
