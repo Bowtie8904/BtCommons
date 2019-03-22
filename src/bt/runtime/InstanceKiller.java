@@ -94,4 +94,16 @@ public final class InstanceKiller
     {
         killables.add(new SimpleEntry<Killable, Integer>(killable, priority));
     }
+
+    /**
+     * Unregisteres the given killable. Its {@link Killable#kill() kill} method will not be called by this instance
+     * killer.
+     * 
+     * @param killable
+     *            The killable to unrewgister.
+     */
+    public static synchronized void unregister(Killable killable)
+    {
+        killables.removeIf(k -> k.getKey().equals(killable));
+    }
 }
