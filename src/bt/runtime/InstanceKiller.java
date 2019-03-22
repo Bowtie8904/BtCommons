@@ -49,7 +49,8 @@ public final class InstanceKiller
     }
 
     /**
-     * Registers the given Killable to be killed upon application termination.
+     * Registers the given Killable to be killed upon application termination. The killable will only be added if it is
+     * not already registered.
      * 
      * <p>
      * All Killables added via this method will be killed last, although there is no guarantee that instances which were
@@ -72,7 +73,9 @@ public final class InstanceKiller
 
     /**
      * Registers the given Killable to be killed upon application termination. The higher the priority number, the
-     * earlier the instance will be killed.
+     * earlier the instance will be killed. The killable will only be added if it is not already registered, even if the
+     * priority is different. If you want to update the priority on an already registered killable, you should
+     * {@link #unregister(Killable) unregister} and re-add it via this method.
      * 
      * <p>
      * There is no guarantee that instances with the same priority which were added via this method will be killed in
@@ -92,7 +95,10 @@ public final class InstanceKiller
      */
     public static synchronized void killOnShutdown(Killable killable, int priority)
     {
-        killables.add(new SimpleEntry<Killable, Integer>(killable, priority));
+        if (!killables.stream().anyMatch(k -> k.getKey().equals(killable)))
+        {
+            killables.add(new SimpleEntry<Killable, Integer>(killable, priority));
+        }
     }
 
     /**
@@ -100,7 +106,7 @@ public final class InstanceKiller
      * killer.
      * 
      * @param killable
-     *            The killable to unrewgister.
+     *            The killable to unregister.
      */
     public static synchronized void unregister(Killable killable)
     {
