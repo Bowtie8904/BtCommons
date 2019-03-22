@@ -32,6 +32,12 @@ public final class InstanceKiller
         }));
     }
 
+    /**
+     * Indicates whether the InstanceKiller is currently looping through all registered Killables to call their kill
+     * method.
+     * 
+     * @return true if the InstanceKiller is currently calling kill methods.
+     */
     public static boolean isActive()
     {
         return isActive;
