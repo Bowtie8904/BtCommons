@@ -22,12 +22,19 @@ public final class InstanceKiller
 {
     private static List<Entry<Killable, Integer>> killables = new CopyOnWriteArrayList<>();
 
+    private volatile static boolean isActive;
+
     static
     {
         Runtime.getRuntime().addShutdownHook(new Thread(() ->
         {
             kill();
         }));
+    }
+
+    public static boolean isActive()
+    {
+        return isActive;
     }
 
     /**
@@ -38,6 +45,8 @@ public final class InstanceKiller
         Thread.currentThread().setName("INSTANCE_KILLER");
         if (killables.size() > 0)
         {
+            isActive = true;
+
             Logger.global().print("Killing " + killables.size() + " instances.");
             killables.sort(Comparator.comparing(Entry::getValue, Comparator.reverseOrder()));
 
@@ -45,6 +54,8 @@ public final class InstanceKiller
             {
                 killable.getKey().kill();
             }
+
+            isActive = false;
         }
     }
 
