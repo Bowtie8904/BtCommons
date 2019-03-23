@@ -7,6 +7,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
+import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.Line;
 import javax.sound.sampled.LineEvent;
 import javax.sound.sampled.LineUnavailableException;
@@ -24,6 +25,7 @@ public class Sound
     private int size;
     private byte[] audio;
     private DataLine.Info info;
+    private float volume;
 
     /**
      * Attempts to load audio data from the given file and store it in a byte array.
@@ -44,6 +46,16 @@ public class Sound
         {
             Logger.global().print(e);
         }
+    }
+
+    /**
+     * Sets the volume for all future clips created by this instance.
+     * 
+     * @param volume
+     */
+    public void setVolume(float volume)
+    {
+        this.volume = volume;
     }
 
     /**
@@ -70,11 +82,28 @@ public class Sound
                     soundClip.close();
                 }
             });
+            FloatControl gainControl = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(this.volume);
         }
         catch (LineUnavailableException e)
         {
             Logger.global().print(e);
         }
         return clip;
+    }
+
+    public void start()
+    {
+        getClip().start();
+    }
+
+    public void loop()
+    {
+        loop(Clip.LOOP_CONTINUOUSLY);
+    }
+
+    public void loop(int count)
+    {
+        getClip().loop(count);
     }
 }
