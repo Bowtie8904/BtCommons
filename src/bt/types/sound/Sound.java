@@ -92,18 +92,22 @@ public class Sound
         return clip;
     }
 
-    public void start()
+    public Clip start()
     {
-        getClip().start();
+        Clip clip = getClip();
+        clip.start();
+        return clip;
     }
 
-    public void loop()
+    public Clip loop()
     {
-        loop(Clip.LOOP_CONTINUOUSLY);
+        return loop(Clip.LOOP_CONTINUOUSLY);
     }
 
-    public void loop(int count)
+    public Clip loop(int count)
     {
-        getClip().loop(count);
+        Clip clip = getClip();
+        clip.loop(count);
+        return clip;
     }
 }
