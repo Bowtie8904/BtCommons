@@ -1,113 +1,90 @@
 package bt.types.sound;
 
-import java.io.File;
-
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import javax.sound.sampled.DataLine;
 import javax.sound.sampled.FloatControl;
-import javax.sound.sampled.Line;
-import javax.sound.sampled.LineEvent;
-import javax.sound.sampled.LineUnavailableException;
 
-import bt.utils.log.Logger;
+import bt.utils.num.NumberUtils;
 
 /**
- * An audio data holder that supplies {@link Clips}s without having to reload any resources.
  * 
  * @author &#8904
  */
 public class Sound
 {
-    private AudioFormat af;
-    private int size;
-    private byte[] audio;
-    private DataLine.Info info;
-    private float volume;
+    private SoundSupplier supplier;
+    private Clip clip;
+    private float volume = 1;
 
-    /**
-     * Attempts to load audio data from the given file and store it in a byte array.
-     * 
-     * @param file
-     */
-    public Sound(File file)
+    public Sound(SoundSupplier supplier)
     {
-        try (AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file))
-        {
-            this.af = audioInputStream.getFormat();
-            this.size = (int)(this.af.getFrameSize() * audioInputStream.getFrameLength());
-            this.audio = new byte[this.size];
-            this.info = new DataLine.Info(Clip.class, this.af, this.size);
-            audioInputStream.read(this.audio, 0, this.size);
-        }
-        catch (Exception e)
-        {
-            Logger.global().print(e);
-        }
+        this.supplier = supplier;
     }
 
     /**
-     * Sets the volume for all future clips created by this instance.
+     * Sets the volume of the sound.
      * 
      * @param volume
+     *            A volume value between 0 (no volume) and 1 (highest volume). Values that are below 0 or above 1 will
+     *            be clamped to their clostest bound, i. e. -5 becomes 0 and 14 becomes 1.
      */
     public void setVolume(float volume)
     {
+        volume = NumberUtils.clamp(volume, 0, 1);
         this.volume = volume;
+        
+        if (this.clip != null)
+        {
+            FloatControl masterGain = (FloatControl)this.clip.getControl(FloatControl.Type.MASTER_GAIN);
+            float range = masterGain.getMaximum() - masterGain.getMinimum();
+            float gain = (range * volume) + masterGain.getMinimum();
+            masterGain.setValue(gain);
+        }
+    }
+
+    private void setupClip()
+    {
+        if (this.clip != null)
+        {
+            this.clip.stop();
+        }
+
+        this.clip = this.supplier.getClip();
+        setVolume(this.volume);
     }
 
     /**
-     * Gets a clip of the stored audio data.
-     * 
-     * <p>
-     * The clip is set to close as soon as {@link LineEvent.Type#STOP} is received.
-     * </p>
-     * 
-     * @return
+     * Plays the sound once.
      */
-    public Clip getClip()
+    public void start()
     {
-        Clip clip = null;
-        try
+        setupClip();
+        this.clip.start();
+    }
+
+    /**
+     * Plays the sound in a continous loop.
+     */
+    public void loop()
+    {
+        loop(Clip.LOOP_CONTINUOUSLY);
+    }
+
+    /**
+     * Plays the sound <i>count + 1</i> times.
+     * 
+     * @param count
+     */
+    public void loop(int count)
+    {
+        setupClip();
+        this.clip.loop(count);
+    }
+
+    public void stop()
+    {
+        if (this.clip != null)
         {
-            clip = (Clip)AudioSystem.getLine(this.info);
-            clip.open(this.af, this.audio, 0, this.size);
-            clip.addLineListener((e) ->
-            {
-                if (e.getType().equals(LineEvent.Type.STOP))
-                {
-                    Line soundClip = e.getLine();
-                    soundClip.close();
-                }
-            });
-            FloatControl gainControl = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(this.volume);
+            this.clip.stop();
         }
-        catch (LineUnavailableException e)
-        {
-            Logger.global().print(e);
-        }
-        return clip;
-    }
-
-    public Clip start()
-    {
-        Clip clip = getClip();
-        clip.start();
-        return clip;
-    }
-
-    public Clip loop()
-    {
-        return loop(Clip.LOOP_CONTINUOUSLY);
-    }
-
-    public Clip loop(int count)
-    {
-        Clip clip = getClip();
-        clip.loop(count);
-        return clip;
     }
 }
