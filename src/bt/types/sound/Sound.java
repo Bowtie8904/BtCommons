@@ -41,6 +41,11 @@ public class Sound
         }
     }
 
+    public float getVolume()
+    {
+        return this.volume;
+    }
+
     private void setupClip()
     {
         if (this.clip != null)
