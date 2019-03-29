@@ -5,10 +5,13 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.Base64;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 import bt.utils.log.Logger;
 
@@ -126,15 +129,35 @@ public class ImageUtils
             return (BufferedImage)img;
         }
 
-        // Create a buffered image with transparency
         BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 
-        // Draw the image on to the buffered image
         Graphics2D bGr = bimage.createGraphics();
         bGr.drawImage(img, 0, 0, null);
         bGr.dispose();
 
-        // Return the buffered image
         return bimage;
+    }
+
+    /**
+     * Creates a new ImageIcon from the given file.
+     * 
+     * @param file
+     *            The file to create the icon from.
+     * @return The created icon.
+     */
+    public static ImageIcon gertImageIcon(File file)
+    {
+        ImageIcon icon = null;
+
+        try
+        {
+            icon = new ImageIcon(file.toURI().toURL());
+        }
+        catch (MalformedURLException e)
+        {
+            Logger.global().print(e);
+        }
+
+        return icon;
     }
 }
