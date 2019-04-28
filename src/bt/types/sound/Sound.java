@@ -11,9 +11,28 @@ import bt.utils.num.NumberUtils;
  */
 public class Sound
 {
+    private static float masterVolume = 1;
     private SoundSupplier supplier;
     private Clip clip;
     private float volume = 1;
+
+    /**
+     * Sets the master volume for all sounds.
+     * 
+     * @param volume
+     *            A volume value between 0 (no volume) and 1 (highest volume). Values that are below 0 or above 1 will
+     *            be clamped to their clostest bound, i. e. -5 becomes 0 and 14 becomes 1.
+     */
+    public static void setMasterVolume(float volume)
+    {
+        volume = NumberUtils.clamp(volume, 0, 1);
+        masterVolume = volume;
+    }
+
+    public static float getMasterVolume()
+    {
+        return masterVolume;
+    }
 
     public Sound(SoundSupplier supplier)
     {
@@ -23,6 +42,10 @@ public class Sound
     /**
      * Sets the volume of the sound.
      * 
+     * <p>
+     * The given volume will be multiplied with the {@link #getMasterVolume() master volume}.
+     * </p>
+     * 
      * @param volume
      *            A volume value between 0 (no volume) and 1 (highest volume). Values that are below 0 or above 1 will
      *            be clamped to their clostest bound, i. e. -5 becomes 0 and 14 becomes 1.
@@ -30,7 +53,7 @@ public class Sound
     public void setVolume(float volume)
     {
         volume = NumberUtils.clamp(volume, 0, 1);
-        this.volume = volume;
+        this.volume = volume * masterVolume;
         
         if (this.clip != null)
         {
