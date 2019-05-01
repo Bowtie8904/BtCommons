@@ -115,4 +115,9 @@ public class Sound
             this.clip.stop();
         }
     }
+
+    public boolean isRunning()
+    {
+        return this.clip != null && this.clip.isRunning();
+    }
 }
