@@ -25,6 +25,12 @@ public class SoundSupplier
     private byte[] audio;
     private DataLine.Info info;
 
+    /**
+     * Creates a new instance and loads the audio from the given file.
+     * 
+     * @param file
+     *            The sound file that should be used.
+     */
     public SoundSupplier(File file)
     {
         try (AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file))
@@ -41,11 +47,25 @@ public class SoundSupplier
         }
     }
 
+    /**
+     * Gets a new {@link Sound} instance which will use this supplier.
+     * 
+     * @return The new sound.
+     */
     public Sound getSound()
     {
         return new Sound(this);
     }
 
+    /**
+     * Creates a new {@link Clip} from the contained audio data.
+     * 
+     * <p>
+     * The clip will be configured to automatically close its resources once its stopped.
+     * </p>
+     * 
+     * @return The clip.
+     */
     public Clip getClip()
     {
         Clip clip = null;

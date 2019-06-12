@@ -6,6 +6,7 @@ import javax.sound.sampled.FloatControl;
 import bt.utils.num.NumberUtils;
 
 /**
+ * A class wrapping a repeatable {@link Clip}.
  * 
  * @author &#8904
  */
@@ -29,11 +30,22 @@ public class Sound
         masterVolume = volume;
     }
 
+    /**
+     * Gets the currently set master volume for all sounds.
+     * 
+     * @return A volume value between 0 (no volume) and 1 (highest volume).
+     */
     public static float getMasterVolume()
     {
         return masterVolume;
     }
 
+    /**
+     * Creates a new instance.
+     * 
+     * @param supplier
+     *            The sound supplier that will offer a new clip whenever this sound is played.
+     */
     public Sound(SoundSupplier supplier)
     {
         this.supplier = supplier;
@@ -64,11 +76,23 @@ public class Sound
         }
     }
 
+    /**
+     * Gets the volume of this sound.
+     * 
+     * @return A volume value between 0 (no volume) and 1 (highest volume).
+     */
     public float getVolume()
     {
         return this.volume;
     }
 
+    /**
+     * Sets up a new clip and sets its volume by calling {@link #setVolume(float)}.
+     * 
+     * <p>
+     * If an old clip exists it will be stopped.
+     * </p>
+     */
     private void setupClip()
     {
         if (this.clip != null)
@@ -108,6 +132,9 @@ public class Sound
         this.clip.loop(count);
     }
 
+    /**
+     * Stops the current clip if one exists.
+     */
     public void stop()
     {
         if (this.clip != null)
@@ -116,6 +143,11 @@ public class Sound
         }
     }
 
+    /**
+     * Indicates whether this sound is currently playing.
+     * 
+     * @return True if this sound is currently playing.
+     */
     public boolean isRunning()
     {
         return this.clip != null && this.clip.isRunning();
