@@ -1,13 +1,10 @@
 package bt.types.sound;
 
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
-import javax.sound.sampled.Line;
 import javax.sound.sampled.LineEvent;
 
+import bt.utils.log.Logger;
 import bt.utils.num.NumberUtils;
 
 /**
@@ -127,21 +124,31 @@ public class Sound
      */
     public void startAndWait()
     {
-        Lock lock = new ReentrantLock();
+        Object lock = new Object();
         setupClip();
+
         this.clip.addLineListener((e) -> {
             if (e.getType().equals(LineEvent.Type.STOP))
             {
-                Line soundClip = e.getLine();
-                soundClip.close();
-                lock.unlock();
+                synchronized (lock)
+                {
+                    lock.notifyAll();
+                }
             }
         });
 
-        lock.lock();
         this.clip.start();
-        lock.lock();
-        lock.unlock();
+
+        synchronized (lock)
+        {
+            try
+            {
+                lock.wait();
+            }
+            catch (InterruptedException e1)
+            {
+            }
+        }
     }
 
     /**
@@ -161,6 +168,43 @@ public class Sound
     {
         setupClip();
         this.clip.loop(count);
+    }
+
+    /**
+     * Plays the sound <i>count + 1</i> times.
+     * 
+     * <p>
+     * This method will not return until the loop has finished playing the sound <i>count + 1</i> times.
+     * </p>
+     */
+    public void loopAndWait(int count)
+    {
+        Object lock = new Object();
+        setupClip();
+
+        this.clip.addLineListener((e) -> {
+            if (e.getType().equals(LineEvent.Type.STOP))
+            {
+                synchronized (lock)
+                {
+                    lock.notifyAll();
+                }
+            }
+        });
+
+        this.clip.loop(count);
+
+        synchronized (lock)
+        {
+            try
+            {
+                lock.wait();
+            }
+            catch (InterruptedException e1)
+            {
+                Logger.global().print(e1);
+            }
+        }
     }
 
     /**
