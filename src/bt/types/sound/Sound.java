@@ -1,7 +1,12 @@
 package bt.types.sound;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.Line;
+import javax.sound.sampled.LineEvent;
 
 import bt.utils.num.NumberUtils;
 
@@ -111,6 +116,32 @@ public class Sound
     {
         setupClip();
         this.clip.start();
+    }
+
+    /**
+     * Plays the sound once.
+     * 
+     * <p>
+     * This method will not return until the sound has ended.
+     * </p>
+     */
+    public void startAndWait()
+    {
+        Lock lock = new ReentrantLock();
+        setupClip();
+        this.clip.addLineListener((e) -> {
+            if (e.getType().equals(LineEvent.Type.STOP))
+            {
+                Line soundClip = e.getLine();
+                soundClip.close();
+                lock.unlock();
+            }
+        });
+
+        lock.lock();
+        this.clip.start();
+        lock.lock();
+        lock.unlock();
     }
 
     /**
