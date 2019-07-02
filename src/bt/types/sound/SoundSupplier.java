@@ -1,6 +1,7 @@
 package bt.types.sound;
 
 import java.io.File;
+import java.io.InputStream;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -34,6 +35,28 @@ public class SoundSupplier
     public SoundSupplier(File file)
     {
         try (AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file))
+        {
+            this.af = audioInputStream.getFormat();
+            this.size = (int)(this.af.getFrameSize() * audioInputStream.getFrameLength());
+            this.audio = new byte[this.size];
+            this.info = new DataLine.Info(Clip.class, this.af, this.size);
+            audioInputStream.read(this.audio, 0, this.size);
+        }
+        catch (Exception e)
+        {
+            Logger.global().print(e);
+        }
+    }
+
+    /**
+     * Creates a new instance and loads the audio from the given file.
+     * 
+     * @param stream
+     *            The stream of the sound file that should be used.
+     */
+    public SoundSupplier(InputStream stream)
+    {
+        try (AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(stream))
         {
             this.af = audioInputStream.getFormat();
             this.size = (int)(this.af.getFrameSize() * audioInputStream.getFrameLength());
