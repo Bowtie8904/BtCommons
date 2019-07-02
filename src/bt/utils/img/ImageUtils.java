@@ -7,6 +7,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.util.Base64;
 
@@ -145,7 +146,7 @@ public class ImageUtils
      *            The file to create the icon from.
      * @return The created icon.
      */
-    public static ImageIcon gertImageIcon(File file)
+    public static ImageIcon getImageIcon(File file)
     {
         ImageIcon icon = null;
 
@@ -154,6 +155,29 @@ public class ImageUtils
             icon = new ImageIcon(file.toURI().toURL());
         }
         catch (MalformedURLException e)
+        {
+            Logger.global().print(e);
+        }
+
+        return icon;
+    }
+
+    /**
+     * Creates a new ImageIcon from the given file.
+     * 
+     * @param stream
+     *            The stream to create the icon from.
+     * @return The created icon.
+     */
+    public static ImageIcon getImageIcon(InputStream stream)
+    {
+        ImageIcon icon = null;
+
+        try
+        {
+            icon = new ImageIcon(ImageIO.read(stream));
+        }
+        catch (IOException e)
         {
             Logger.global().print(e);
         }
