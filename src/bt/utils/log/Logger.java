@@ -1139,6 +1139,11 @@ public class Logger implements Killable
         }
     }
 
+    public void printf(String s, Object... args)
+    {
+        print(String.format(s, args));
+    }
+
     /**
      * Prints the given parameter with the current date to the {@link #logFile} and, if {@link #logToSystemOut} is true,
      * to {@link System#out}.
