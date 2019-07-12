@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 import bt.runtime.InstanceKiller;
 import bt.runtime.Killable;
+import bt.utils.id.StringID;
 import bt.utils.log.Logger;
 import bt.utils.thread.fact.DaemonThreadFactory;
 
@@ -76,7 +77,7 @@ public class Threads implements Killable
      */
     public void execute(Runnable task)
     {
-        new Thread(task).start();
+        execute(task, "BtThread-" + StringID.uniqueID());
     }
 
     /**
@@ -104,9 +105,7 @@ public class Threads implements Killable
      */
     public void executeDaemon(Runnable task)
     {
-        Thread thread = new Thread(task);
-        thread.setDaemon(true);
-        thread.start();
+        executeDaemon(task, "BtThreadDaemon-" + StringID.uniqueID());
     }
 
     /**
@@ -136,7 +135,7 @@ public class Threads implements Killable
      */
     public void executeCached(Runnable task)
     {
-        this.cachedPool.execute(task);
+        executeCached(task, "BtThreadCached-" + StringID.uniqueID());
     }
 
     /**
@@ -164,7 +163,7 @@ public class Threads implements Killable
      */
     public void executeCachedDaemon(Runnable task)
     {
-        this.cachedPoolDaemon.execute(task);
+        executeCachedDaemon(task, "BtThreadCachedDaemon-" + StringID.uniqueID());
     }
 
     /**
@@ -198,10 +197,7 @@ public class Threads implements Killable
      */
     public ScheduledFuture<?> schedule(Runnable task, long delay, TimeUnit unit)
     {
-        return this.schedulerPool.schedule(() ->
-        {
-            task.run();
-        }, delay, unit);
+        return schedule(task, delay, unit, "BtThreadSchedule-" + StringID.uniqueID());
     }
 
     /**
@@ -241,10 +237,7 @@ public class Threads implements Killable
      */
     public ScheduledFuture<?> scheduleDaemon(Runnable task, long delay, TimeUnit unit)
     {
-        return this.schedulerPoolDaemon.schedule(() ->
-        {
-            task.run();
-        }, delay, unit);
+        return scheduleDaemon(task, delay, unit, "BtThreadScheduleDaemon-" + StringID.uniqueID());
     }
 
     /**
@@ -291,10 +284,8 @@ public class Threads implements Killable
      */
     public ScheduledFuture<?> scheduleAtFixedRate(Runnable task, long initialDelay, long period, TimeUnit unit)
     {
-        return this.schedulerPool.scheduleAtFixedRate(() ->
-        {
-            task.run();
-        }, initialDelay, period, unit);
+        return scheduleAtFixedRate(task, initialDelay, period, unit,
+                "BtThreadScheduleFixedRate-" + StringID.uniqueID());
     }
 
     /**
@@ -349,10 +340,8 @@ public class Threads implements Killable
      */
     public ScheduledFuture<?> scheduleAtFixedRateDaemon(Runnable task, long initialDelay, long period, TimeUnit unit)
     {
-        return this.schedulerPoolDaemon.scheduleAtFixedRate(() ->
-        {
-            task.run();
-        }, initialDelay, period, unit);
+        return scheduleAtFixedRateDaemon(task, initialDelay, period, unit,
+                "BtThreadScheduleFixedRateDaemon-" + StringID.uniqueID());
     }
 
     /**
@@ -405,10 +394,8 @@ public class Threads implements Killable
      */
     public ScheduledFuture<?> scheduleWithFixedDelay(Runnable task, long initialDelay, long delay, TimeUnit unit)
     {
-        return this.schedulerPool.scheduleWithFixedDelay(() ->
-        {
-            task.run();
-        }, initialDelay, delay, unit);
+        return scheduleWithFixedDelay(task, initialDelay, delay, unit,
+                "BtThreadScheduleFixedDelay-" + StringID.uniqueID());
     }
 
     /**
@@ -459,10 +446,8 @@ public class Threads implements Killable
      */
     public ScheduledFuture<?> scheduleWithFixedDelayDaemon(Runnable task, long initialDelay, long delay, TimeUnit unit)
     {
-        return this.schedulerPoolDaemon.scheduleWithFixedDelay(() ->
-        {
-            task.run();
-        }, initialDelay, delay, unit);
+        return scheduleWithFixedDelayDaemon(task, initialDelay, delay, unit,
+                "BtThreadScheduleFixedDelayDaemon-" + StringID.uniqueID());
     }
 
     /**
