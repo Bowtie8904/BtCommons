@@ -1170,7 +1170,7 @@ public class Logger implements Killable
                             args));
     }
 
-    public void printf(Object source, String s, Object... args)
+    public void printfSrc(Object source, String s, Object... args)
     {
         print(source,
               String.format(s,
