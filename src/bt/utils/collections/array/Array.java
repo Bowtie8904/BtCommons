@@ -118,7 +118,8 @@ public final class Array
      */
     public static <T> T[] push(T[] arr, T element)
     {
-        T[] newArr = (T[])create(element.getClass(), arr.length + 1);
+        T[] newArr = (T[])create(element.getClass(),
+                                 arr.length + 1);
 
         for (int i = 0; i < arr.length; i ++ )
         {
@@ -335,7 +336,8 @@ public final class Array
             throw new IllegalArgumentException("Can't pop an element from an empty array.");
         }
 
-        T[] newArr = (T[])create(arr[index].getClass(), arr.length - 1);
+        T[] newArr = (T[])create(arr[index].getClass(),
+                                 arr.length - 1);
 
         int newArrIndex = 0;
 
@@ -576,7 +578,8 @@ public final class Array
      */
     public static <T> T[] pop(T[] arr)
     {
-        return pop(arr, 0);
+        return pop(arr,
+                   0);
     }
 
     /**
@@ -588,7 +591,8 @@ public final class Array
      */
     public static boolean[] pop(boolean[] arr)
     {
-        return pop(arr, 0);
+        return pop(arr,
+                   0);
     }
 
     /**
@@ -600,7 +604,8 @@ public final class Array
      */
     public static byte[] pop(byte[] arr)
     {
-        return pop(arr, 0);
+        return pop(arr,
+                   0);
     }
 
     /**
@@ -612,7 +617,8 @@ public final class Array
      */
     public static short[] pop(short[] arr)
     {
-        return pop(arr, 0);
+        return pop(arr,
+                   0);
     }
 
     /**
@@ -624,7 +630,8 @@ public final class Array
      */
     public static int[] pop(int[] arr)
     {
-        return pop(arr, 0);
+        return pop(arr,
+                   0);
     }
 
     /**
@@ -636,7 +643,8 @@ public final class Array
      */
     public static long[] pop(long[] arr)
     {
-        return pop(arr, 0);
+        return pop(arr,
+                   0);
     }
 
     /**
@@ -648,7 +656,8 @@ public final class Array
      */
     public static float[] pop(float[] arr)
     {
-        return pop(arr, 0);
+        return pop(arr,
+                   0);
     }
 
     /**
@@ -660,7 +669,8 @@ public final class Array
      */
     public static double[] pop(double[] arr)
     {
-        return pop(arr, 0);
+        return pop(arr,
+                   0);
     }
 
     /**
@@ -674,6 +684,7 @@ public final class Array
      */
     public static <T> T[] create(Class<T> type, int size)
     {
-        return (T[])java.lang.reflect.Array.newInstance(type, size);
+        return (T[])java.lang.reflect.Array.newInstance(type,
+                                                        size);
     }
 }

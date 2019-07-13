@@ -28,7 +28,9 @@ public class Sound
      */
     public static void setMasterVolume(float volume)
     {
-        volume = NumberUtils.clamp(volume, 0, 1);
+        volume = NumberUtils.clamp(volume,
+                                   0,
+                                   1);
         masterVolume = volume;
     }
 
@@ -66,9 +68,11 @@ public class Sound
      */
     public void setVolume(float volume)
     {
-        volume = NumberUtils.clamp(volume, 0, 1);
+        volume = NumberUtils.clamp(volume,
+                                   0,
+                                   1);
         this.volume = volume * masterVolume;
-        
+
         if (this.clip != null)
         {
             FloatControl masterGain = (FloatControl)this.clip.getControl(FloatControl.Type.MASTER_GAIN);
@@ -127,7 +131,8 @@ public class Sound
         Object lock = new Object();
         setupClip();
 
-        this.clip.addLineListener((e) -> {
+        this.clip.addLineListener((e) ->
+        {
             if (e.getType().equals(LineEvent.Type.STOP))
             {
                 synchronized (lock)
@@ -146,8 +151,7 @@ public class Sound
                 lock.wait();
             }
             catch (InterruptedException e1)
-            {
-            }
+            {}
         }
     }
 
@@ -182,7 +186,8 @@ public class Sound
         Object lock = new Object();
         setupClip();
 
-        this.clip.addLineListener((e) -> {
+        this.clip.addLineListener((e) ->
+        {
             if (e.getType().equals(LineEvent.Type.STOP))
             {
                 synchronized (lock)

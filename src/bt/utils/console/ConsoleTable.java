@@ -34,7 +34,8 @@ public class ConsoleTable
 
     public void addRow(boolean centered, Object... data)
     {
-        ConsoleRow row = this.formatter.formatRow(data, centered);
+        ConsoleRow row = this.formatter.formatRow(data,
+                                                  centered);
         this.rows.add(row);
         this.rowLength = row.length();
     }
@@ -48,7 +49,8 @@ public class ConsoleTable
 
     public void setTitle(boolean centered, Object... data)
     {
-        ConsoleRow row = this.formatter.formatRow(data, centered);
+        ConsoleRow row = this.formatter.formatRow(data,
+                                                  centered);
         this.titleRow = row;
         this.rowLength = row.length();
     }

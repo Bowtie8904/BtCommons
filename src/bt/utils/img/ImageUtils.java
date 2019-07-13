@@ -63,7 +63,9 @@ public class ImageUtils
 
         try (ByteArrayOutputStream out = new ByteArrayOutputStream())
         {
-            ImageIO.write(image, fileEnding, out);
+            ImageIO.write(image,
+                          fileEnding,
+                          out);
             base64 = Base64.getEncoder().encodeToString(out.toByteArray());
         }
         catch (IOException e)
@@ -108,9 +110,16 @@ public class ImageUtils
         width = (int)(width * scale);
         height = (int)(height * scale);
 
-        BufferedImage resizedImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        BufferedImage resizedImg = new BufferedImage(width,
+                                                     height,
+                                                     BufferedImage.TYPE_INT_RGB);
         Graphics2D g2 = resizedImg.createGraphics();
-        g2.drawImage(srcImg, 0, 0, width, height, null);
+        g2.drawImage(srcImg,
+                     0,
+                     0,
+                     width,
+                     height,
+                     null);
         g2.dispose();
 
         return resizedImg;
@@ -130,10 +139,15 @@ public class ImageUtils
             return (BufferedImage)img;
         }
 
-        BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+        BufferedImage bimage = new BufferedImage(img.getWidth(null),
+                                                 img.getHeight(null),
+                                                 BufferedImage.TYPE_INT_ARGB);
 
         Graphics2D bGr = bimage.createGraphics();
-        bGr.drawImage(img, 0, 0, null);
+        bGr.drawImage(img,
+                      0,
+                      0,
+                      null);
         bGr.dispose();
 
         return bimage;

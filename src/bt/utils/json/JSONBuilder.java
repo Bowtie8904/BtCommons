@@ -55,11 +55,13 @@ public class JSONBuilder
         {
             if (value instanceof Jsonable)
             {
-                this.jsonObject.put(name, ((Jsonable)value).toJSON());
+                this.jsonObject.put(name,
+                                    ((Jsonable)value).toJSON());
             }
             else
             {
-                this.jsonObject.put(name, value);
+                this.jsonObject.put(name,
+                                    value);
             }
         }
         catch (JSONException e)
@@ -80,7 +82,8 @@ public class JSONBuilder
     {
         try
         {
-            this.jsonObject.put(name, value);
+            this.jsonObject.put(name,
+                                value);
         }
         catch (JSONException e)
         {
@@ -100,7 +103,8 @@ public class JSONBuilder
     {
         try
         {
-            this.jsonObject.put(name, value);
+            this.jsonObject.put(name,
+                                value);
         }
         catch (JSONException e)
         {
@@ -120,7 +124,8 @@ public class JSONBuilder
     {
         try
         {
-            this.jsonObject.put(name, value);
+            this.jsonObject.put(name,
+                                value);
         }
         catch (JSONException e)
         {
@@ -140,7 +145,8 @@ public class JSONBuilder
     {
         try
         {
-            this.jsonObject.put(name, value);
+            this.jsonObject.put(name,
+                                value);
         }
         catch (JSONException e)
         {
@@ -160,7 +166,8 @@ public class JSONBuilder
     {
         try
         {
-            this.jsonObject.put(name, value);
+            this.jsonObject.put(name,
+                                value);
         }
         catch (JSONException e)
         {
@@ -180,7 +187,8 @@ public class JSONBuilder
     {
         try
         {
-            this.jsonObject.put(name, value);
+            this.jsonObject.put(name,
+                                value);
         }
         catch (JSONException e)
         {
@@ -200,7 +208,8 @@ public class JSONBuilder
     {
         try
         {
-            this.jsonObject.put(name, value);
+            this.jsonObject.put(name,
+                                value);
         }
         catch (JSONException e)
         {
@@ -238,7 +247,8 @@ public class JSONBuilder
 
         try
         {
-            this.jsonObject.put(name, array);
+            this.jsonObject.put(name,
+                                array);
         }
         catch (JSONException e)
         {
@@ -265,7 +275,8 @@ public class JSONBuilder
 
         try
         {
-            this.jsonObject.put(name, array);
+            this.jsonObject.put(name,
+                                array);
         }
         catch (JSONException e)
         {
@@ -292,7 +303,8 @@ public class JSONBuilder
 
         try
         {
-            this.jsonObject.put(name, array);
+            this.jsonObject.put(name,
+                                array);
         }
         catch (JSONException e)
         {
@@ -319,7 +331,8 @@ public class JSONBuilder
 
         try
         {
-            this.jsonObject.put(name, array);
+            this.jsonObject.put(name,
+                                array);
         }
         catch (JSONException e)
         {
@@ -346,7 +359,8 @@ public class JSONBuilder
 
         try
         {
-            this.jsonObject.put(name, array);
+            this.jsonObject.put(name,
+                                array);
         }
         catch (JSONException e)
         {
@@ -380,7 +394,8 @@ public class JSONBuilder
 
         try
         {
-            this.jsonObject.put(name, array);
+            this.jsonObject.put(name,
+                                array);
         }
         catch (JSONException e)
         {
@@ -414,7 +429,8 @@ public class JSONBuilder
 
         try
         {
-            this.jsonObject.put(name, array);
+            this.jsonObject.put(name,
+                                array);
         }
         catch (JSONException e)
         {
@@ -441,7 +457,8 @@ public class JSONBuilder
 
         try
         {
-            this.jsonObject.put(name, array);
+            this.jsonObject.put(name,
+                                array);
         }
         catch (JSONException e)
         {

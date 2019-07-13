@@ -21,7 +21,8 @@ public class ConsoleRow
 
     protected void setupAfterChange()
     {
-        ConsoleRow newRow = this.formatter.formatRow(this.data, this.centered);
+        ConsoleRow newRow = this.formatter.formatRow(this.data,
+                                                     this.centered);
         this.text = newRow.toString();
     }
 

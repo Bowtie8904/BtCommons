@@ -21,7 +21,8 @@ public final class ScreenUtils
     {
         GraphicsDevice device = getScreens()[screenIndex];
         DisplayMode mode = device.getDisplayMode();
-        return new Dimension(mode.getWidth(), mode.getHeight());
+        return new Dimension(mode.getWidth(),
+                             mode.getHeight());
     }
 
     /**
@@ -33,7 +34,8 @@ public final class ScreenUtils
     {
         GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         DisplayMode mode = device.getDisplayMode();
-        return new Dimension(mode.getWidth(), mode.getHeight());
+        return new Dimension(mode.getWidth(),
+                             mode.getHeight());
     }
 
     /**

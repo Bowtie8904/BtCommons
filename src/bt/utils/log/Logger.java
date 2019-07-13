@@ -129,7 +129,8 @@ public class Logger implements Killable
         if (globalLogger == null)
         {
             globalLogger = new Logger();
-            globalLogger.registerSource(globalLogger, "GLOBAL_LOGGER");
+            globalLogger.registerSource(globalLogger,
+                                        "GLOBAL_LOGGER");
         }
         return globalLogger;
     }
@@ -204,7 +205,8 @@ public class Logger implements Killable
     {
         setLoggerFile(logFile);
         activeLoggers.add(this);
-        InstanceKiller.killOnShutdown(this, Integer.MIN_VALUE);
+        InstanceKiller.killOnShutdown(this,
+                                      Integer.MIN_VALUE);
     }
 
     /**
@@ -222,7 +224,8 @@ public class Logger implements Killable
      */
     public Logger(TimeZone timeZone)
     {
-        this(DEFAULT_LOG_PATH, timeZone);
+        this(DEFAULT_LOG_PATH,
+             timeZone);
     }
 
     /**
@@ -242,7 +245,8 @@ public class Logger implements Killable
      */
     public Logger(String logPath, TimeZone timeZone)
     {
-        this(new File(logPath), timeZone);
+        this(new File(logPath),
+             timeZone);
     }
 
     /**
@@ -265,7 +269,8 @@ public class Logger implements Killable
         setLoggerFile(logFile);
         this.timeZone = timeZone;
         activeLoggers.add(this);
-        InstanceKiller.killOnShutdown(this, Integer.MIN_VALUE);
+        InstanceKiller.killOnShutdown(this,
+                                      Integer.MIN_VALUE);
     }
 
     /**
@@ -286,7 +291,8 @@ public class Logger implements Killable
      */
     public Logger(String logPath, String timeZone)
     {
-        this(new File(logPath), timeZone);
+        this(new File(logPath),
+             timeZone);
     }
 
     /**
@@ -310,7 +316,8 @@ public class Logger implements Killable
         setLoggerFile(logFile);
         this.timeZone = TimeZone.getTimeZone(timeZone);
         activeLoggers.add(this);
-        InstanceKiller.killOnShutdown(this, Integer.MIN_VALUE);
+        InstanceKiller.killOnShutdown(this,
+                                      Integer.MIN_VALUE);
     }
 
     public void setEnabled(boolean enabled)
@@ -334,7 +341,8 @@ public class Logger implements Killable
             logQueue();
         }
 
-        print(this, "Closing logger.");
+        print(this,
+              "Closing logger.");
         if (writer != null)
         {
             writer.close();
@@ -400,7 +408,9 @@ public class Logger implements Killable
                 {
                     ex.printStackTrace();
                 }
-                writer = new PrintWriter(new BufferedWriter(new FileWriter(this.logFile, true)), true);
+                writer = new PrintWriter(new BufferedWriter(new FileWriter(this.logFile,
+                                                                           true)),
+                                         true);
             }
             catch (Exception e)
             {
@@ -538,7 +548,8 @@ public class Logger implements Killable
      */
     public String registerSource(Object source, String name)
     {
-        return registerSource(new LogSource(source, name));
+        return registerSource(new LogSource(source,
+                                            name));
     }
 
     /**
@@ -566,7 +577,8 @@ public class Logger implements Killable
                 }
             }
         }
-        return registerSource(source, source.getClass().getName() + "-" + nameExt);
+        return registerSource(source,
+                              source.getClass().getName() + "-" + nameExt);
     }
 
     /**
@@ -604,14 +616,17 @@ public class Logger implements Killable
         if (!isStarted)
         {
             isStarted = true;
-            future = Threads.get().scheduleWithFixedDelayDaemon(new Runnable()
-            {
+            future = Threads.get().scheduleWithFixedDelayDaemon(new Runnable() {
                 @Override
                 public void run()
                 {
                     logQueue();
                 }
-            }, logInterval, logInterval, TimeUnit.MILLISECONDS, "LOGGER_QUEUE");
+            },
+                                                                logInterval,
+                                                                logInterval,
+                                                                TimeUnit.MILLISECONDS,
+                                                                "LOGGER_QUEUE");
         }
     }
 
@@ -709,9 +724,9 @@ public class Logger implements Killable
     private String getCallerString(int stackIndex)
     {
         var stack = StackWalker.getInstance(Option.RETAIN_CLASS_REFERENCE)
-                .walk(s -> s.skip(stackIndex)
-                        .findFirst())
-                .get();
+                               .walk(s -> s.skip(stackIndex)
+                                           .findFirst())
+                               .get();
 
         String className = stack.getClassName();
         String methodName = stack.getMethodName();
@@ -733,7 +748,8 @@ public class Logger implements Killable
         String ret = str.toString();
         if (type.parameterCount() > 0)
         {
-            ret = ret.substring(0, ret.length() - 2);
+            ret = ret.substring(0,
+                                ret.length() - 2);
         }
         str.setLength(0);
         str.append(ret);
@@ -883,7 +899,8 @@ public class Logger implements Killable
      */
     public void print(Object source, boolean b)
     {
-        print(source, Boolean.toString(b));
+        print(source,
+              Boolean.toString(b));
     }
 
     /**
@@ -896,7 +913,8 @@ public class Logger implements Killable
      */
     public void print(Object source, int i)
     {
-        print(source, Integer.toString(i));
+        print(source,
+              Integer.toString(i));
     }
 
     /**
@@ -909,7 +927,8 @@ public class Logger implements Killable
      */
     public void print(Object source, short s)
     {
-        print(source, Short.toString(s));
+        print(source,
+              Short.toString(s));
     }
 
     /**
@@ -922,7 +941,8 @@ public class Logger implements Killable
      */
     public void print(Object source, long l)
     {
-        print(source, Long.toString(l));
+        print(source,
+              Long.toString(l));
     }
 
     /**
@@ -935,7 +955,8 @@ public class Logger implements Killable
      */
     public void print(Object source, double d)
     {
-        print(source, Double.toString(d));
+        print(source,
+              Double.toString(d));
     }
 
     /**
@@ -948,7 +969,8 @@ public class Logger implements Killable
      */
     public void print(Object source, float f)
     {
-        print(source, Float.toString(f));
+        print(source,
+              Float.toString(f));
     }
 
     /**
@@ -961,7 +983,8 @@ public class Logger implements Killable
      */
     public void print(Object source, char c)
     {
-        print(source, Character.toString(c));
+        print(source,
+              Character.toString(c));
     }
 
     /**
@@ -974,7 +997,8 @@ public class Logger implements Killable
      */
     public void print(Object source, byte b)
     {
-        print(source, Byte.toString(b));
+        print(source,
+              Byte.toString(b));
     }
 
     /**
@@ -987,7 +1011,8 @@ public class Logger implements Killable
      */
     public void print(Object source, Object o)
     {
-        print(source, o == null ? "null" : o.toString());
+        print(source,
+              o == null ? "null" : o.toString());
     }
 
     /**
@@ -1141,7 +1166,8 @@ public class Logger implements Killable
 
     public void printf(String s, Object... args)
     {
-        print(String.format(s, args));
+        print(String.format(s,
+                            args));
     }
 
     /**

@@ -178,8 +178,7 @@ public class FileUtils
             throw new IllegalArgumentException("Path " + directoryPath + " does not point to a directory.");
         }
 
-        FilenameFilter filter = new FilenameFilter()
-        {
+        FilenameFilter filter = new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name)
             {

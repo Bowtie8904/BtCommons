@@ -54,7 +54,8 @@ public final class InstanceKiller
             isActive = true;
 
             Logger.global().print("Killing " + killables.size() + " instances.");
-            killables.sort(Comparator.comparing(Entry::getValue, Comparator.reverseOrder()));
+            killables.sort(Comparator.comparing(Entry::getValue,
+                                                Comparator.reverseOrder()));
 
             for (Entry<Killable, Integer> killable : killables)
             {
@@ -85,7 +86,8 @@ public final class InstanceKiller
      */
     public static synchronized void killOnShutdown(Killable killable)
     {
-        killOnShutdown(killable, Integer.MIN_VALUE + 1);
+        killOnShutdown(killable,
+                       Integer.MIN_VALUE + 1);
     }
 
     /**
@@ -114,7 +116,8 @@ public final class InstanceKiller
     {
         if (!isRegistered(killable))
         {
-            killables.add(new SimpleEntry<Killable, Integer>(killable, priority));
+            killables.add(new SimpleEntry<Killable, Integer>(killable,
+                                                             priority));
         }
     }
 

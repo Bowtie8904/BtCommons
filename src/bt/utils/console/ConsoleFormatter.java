@@ -18,7 +18,8 @@ public class ConsoleFormatter
 
     public ConsoleRow formatRow(Object[] data)
     {
-        return formatRow(data, false);
+        return formatRow(data,
+                         false);
     }
 
     public ConsoleRow formatRow(Object[] data, boolean centered)
@@ -43,7 +44,8 @@ public class ConsoleFormatter
                 if (this.format[i] == 0)
                 {
                     throw new IllegalArgumentException(
-                            "Format " + this.format[i] + " at position " + i + " is invalid. Formats must be above 0.");
+                                                       "Format " + this.format[i] + " at position " + i
+                                                       + " is invalid. Formats must be above 0.");
                 }
                 if (this.format[i] <= 3)
                 {
@@ -55,7 +57,10 @@ public class ConsoleFormatter
                 }
                 else
                 {
-                    dataCopy[i] = dataCopy[i].toString().substring(0, this.format[i] - 5) + "...";
+                    dataCopy[i] = dataCopy[i].toString()
+                                             .substring(0,
+                                                        this.format[i] - 5)
+                                  + "...";
                 }
             }
             int spaces = (int)((this.format[i] - dataCopy[i].toString().length()) / 2);
@@ -85,7 +90,10 @@ public class ConsoleFormatter
             row += this.columnSeparator;
         }
 
-        return new ConsoleRow(this, row, data, centered);
+        return new ConsoleRow(this,
+                              row,
+                              data,
+                              centered);
     }
 
     /**

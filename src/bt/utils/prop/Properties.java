@@ -31,9 +31,12 @@ import bt.utils.log.Logger;
  * <ul>
  * 
  * <pre>
- * String value = Properties.getValueOf(&quot;fieldname1&quot;, &quot;properties.txt&quot;);
+ * String value = Properties.getValueOf(&quot;fieldname1&quot;,
+ *                                      &quot;properties.txt&quot;);
  * 
- * Properties.setValueOf(&quot;fieldname2&quot;, &quot;value3&quot;, &quot;properties.txt&quot;);
+ * Properties.setValueOf(&quot;fieldname2&quot;,
+ *                       &quot;value3&quot;,
+ *                       &quot;properties.txt&quot;);
  * </pre>
  * 
  * </ul>
@@ -49,7 +52,7 @@ public final class Properties
      * </p>
      */
     private static final String DEFAULT_PROPERTY_PATH = "properties/properties.txt";
-    
+
     /**
      * Gets all fieldnames that start with the given fieldstring inside the given file. If the file does not exist it
      * will instead search in the default property file which is defined by {@link #DEFAULT_PROPERTY_PATH}.
@@ -79,7 +82,8 @@ public final class Properties
 
         List<String> values = new ArrayList<String>();
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8")))
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file),
+                                                                          "UTF-8")))
         {
             String line;
             while ((line = br.readLine()) != null)
@@ -97,7 +101,7 @@ public final class Properties
         }
         return values.toArray(new String[] {});
     }
-    
+
     /**
      * Gets all fieldnames that start with the given fieldstring inside the file at the given path. If the file does not
      * exist it will instead search in the default property file which is defined by {@link #DEFAULT_PROPERTY_PATH}.
@@ -112,9 +116,10 @@ public final class Properties
      */
     public static String[] getAllFieldsLike(String field, String path)
     {
-        return getAllFieldsLike(field, new File(path));
+        return getAllFieldsLike(field,
+                                new File(path));
     }
-    
+
     /**
      * Gets all fieldnames that start with the given fieldstring inside the default property file. If the file does not
      * exist it will instead search in the default property file which is defined by {@link #DEFAULT_PROPERTY_PATH}.
@@ -127,7 +132,8 @@ public final class Properties
      */
     public static String[] getAllFieldsLike(String field)
     {
-        return getAllFieldsLike(field, DEFAULT_PROPERTY_PATH);
+        return getAllFieldsLike(field,
+                                DEFAULT_PROPERTY_PATH);
     }
 
     /**
@@ -158,7 +164,8 @@ public final class Properties
         }
         List<String> values = new ArrayList<String>();
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8")))
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file),
+                                                                          "UTF-8")))
         {
             String line;
             while ((line = br.readLine()) != null)
@@ -176,7 +183,7 @@ public final class Properties
         }
         return values.toArray(new String[] {});
     }
-    
+
     /**
      * Gets all values whichs fieldnames start with the given fieldstring inside the file at the given path. If the file
      * does not exist it will instead search in the default property file which is defined by
@@ -192,9 +199,10 @@ public final class Properties
      */
     public static String[] getAllLike(String field, String path)
     {
-        return getAllLike(field, new File(path));
+        return getAllLike(field,
+                          new File(path));
     }
-    
+
     /**
      * Gets all values whichs fieldnames start with the given fieldstring inside the default property file. If the file
      * does not exist it will instead search in the default property file which is defined by
@@ -208,7 +216,8 @@ public final class Properties
      */
     public static String[] getAllLike(String field)
     {
-        return getAllLike(field, DEFAULT_PROPERTY_PATH);
+        return getAllLike(field,
+                          DEFAULT_PROPERTY_PATH);
     }
 
     /**
@@ -239,7 +248,8 @@ public final class Properties
                 Logger.global().print(e);
             }
         }
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8")))
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file),
+                                                                          "UTF-8")))
         {
             String line;
             while ((line = br.readLine()) != null)
@@ -274,7 +284,8 @@ public final class Properties
      */
     public static String getValueOf(String field, String path)
     {
-        return getValueOf(field, new File(path));
+        return getValueOf(field,
+                          new File(path));
     }
 
     /**
@@ -289,7 +300,8 @@ public final class Properties
      */
     public static String getValueOf(String field)
     {
-        return getValueOf(field, new File(DEFAULT_PROPERTY_PATH));
+        return getValueOf(field,
+                          new File(DEFAULT_PROPERTY_PATH));
     }
 
     /**
@@ -323,7 +335,8 @@ public final class Properties
         }
 
         StringBuilder sb = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8")))
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file),
+                                                                          "UTF-8")))
         {
             String line;
             boolean exists = false;
@@ -378,7 +391,9 @@ public final class Properties
      */
     public static boolean setValueOf(String field, String value, String path)
     {
-        return setValueOf(field, value, new File(path));
+        return setValueOf(field,
+                          value,
+                          new File(path));
     }
 
     /**
@@ -395,6 +410,8 @@ public final class Properties
      */
     public static boolean setValueOf(String field, String value)
     {
-        return setValueOf(field, value, new File(DEFAULT_PROPERTY_PATH));
+        return setValueOf(field,
+                          value,
+                          new File(DEFAULT_PROPERTY_PATH));
     }
 }

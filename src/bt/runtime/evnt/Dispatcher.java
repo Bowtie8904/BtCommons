@@ -40,7 +40,8 @@ public class Dispatcher
     {
         if (!this.subDispatchers.containsKey(type))
         {
-            this.subDispatchers.put(type, new SubDispatcher<T>());
+            this.subDispatchers.put(type,
+                                    new SubDispatcher<T>());
         }
 
         var dispatcher = (SubDispatcher<T>)this.subDispatchers.get(type);
@@ -81,7 +82,8 @@ public class Dispatcher
     {
         if (!this.subDispatchers.containsKey(type))
         {
-            this.subDispatchers.put(type, new SubDispatcher<T>());
+            this.subDispatchers.put(type,
+                                    new SubDispatcher<T>());
         }
 
         var dispatcher = (SubDispatcher<T>)this.subDispatchers.get(type);

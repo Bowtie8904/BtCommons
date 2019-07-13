@@ -30,6 +30,7 @@ public class ClosedLoggerException extends RuntimeException
      */
     protected ClosedLoggerException(String message, Throwable e)
     {
-        super(message, e);
+        super(message,
+              e);
     }
 }
