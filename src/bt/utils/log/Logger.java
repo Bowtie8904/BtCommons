@@ -27,11 +27,11 @@ import bt.utils.thread.Threads;
 /**
  * A logging class which prints to either a given file or to the default log file which is defined by
  * {@link #DEFAULT_LOG_PATH}.
- * 
+ *
  * <p>
  * All logging from instances of this class can be stopped by calling {@link #setLoggingEnabled(boolean)} with false.
  * </p>
- * 
+ *
  * @author &#8904
  */
 public class Logger implements Killable
@@ -52,17 +52,17 @@ public class Logger implements Killable
     private static final String DEFAULT_LOG_PATH = "logs/default_logfile.log";
 
     /** A list which contains all currently active instances of this class. */
-    private static ArrayList<Logger> activeLoggers = new ArrayList<Logger>();
+    private static ArrayList<Logger> activeLoggers = new ArrayList<>();
 
     /**
      * A queue which holds strings that are supposed to be logged. This is used as a buffer to bundle write operations.
      */
-    private ArrayBlockingQueue<String> queue = new ArrayBlockingQueue<String>(500);
+    private ArrayBlockingQueue<String> queue = new ArrayBlockingQueue<>(500);
 
     private ScheduledFuture future;
 
     /** A list containing all registered sources. */
-    private ArrayList<LogSource> logSources = new ArrayList<LogSource>();
+    private ArrayList<LogSource> logSources = new ArrayList<>();
 
     /** The {@link PrintWriter} object which is used to log to the desired file. */
     private PrintWriter writer;
@@ -96,7 +96,7 @@ public class Logger implements Killable
     private long logInterval = 30000;
 
     /** Contains Strings which are used to filter out certain lines. */
-    private List<String> filterTexts = new ArrayList<String>();
+    private List<String> filterTexts = new ArrayList<>();
 
     /** Indicates whether the logger should print information about the calling method. */
     private boolean printCaller = true;
@@ -121,7 +121,7 @@ public class Logger implements Killable
      * An instance of the {@link Logger} class that is meant for general logging. By default it will print output to the
      * {@link #DEFAULT_LOG_PATH}. This behavior can however be customized by setting an instance with a different
      * configuration via {@link #setGlobal(Logger)}.
-     * 
+     *
      * @return The global logger instance.
      */
     public static Logger global()
@@ -137,7 +137,7 @@ public class Logger implements Killable
 
     /**
      * Sets the global Logger instance that will be used for general logging.
-     * 
+     *
      * @param logger
      */
     public static void setGlobal(Logger logger)
@@ -147,7 +147,7 @@ public class Logger implements Killable
 
     /**
      * If this is set to false, no log files will be created and calls to print have no effect.
-     * 
+     *
      * <p>
      * Instances that are created while this is set to false will not be able to do any logging even after this method
      * is called to re-enable logging.
@@ -161,7 +161,7 @@ public class Logger implements Killable
     /**
      * Creates a {@link Logger} instance which uses the default timezone of the system and prints to the default log
      * file which is defined by {@link #DEFAULT_LOG_PATH}.
-     * 
+     *
      * <p>
      * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#killOnShutdown(Killable, int)}
      * with a priority of {@link Integer#MIN_VALUE}.
@@ -175,12 +175,12 @@ public class Logger implements Killable
     /**
      * Creates a {@link Logger} instance which uses the default timezone of the system and prints to the file with the
      * given path. If the file does not exist it will be created.
-     * 
+     *
      * <p>
      * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#killOnShutdown(Killable, int)}
      * with a priority of {@link Integer#MIN_VALUE}.
      * </p>
-     * 
+     *
      * @param logPath
      *            The path to the desired log file.
      */
@@ -192,12 +192,12 @@ public class Logger implements Killable
     /**
      * Creates a {@link Logger} instance which uses the default timezone of the system and prints to the given file. If
      * the file does not exist it will be created.
-     * 
+     *
      * <p>
      * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#killOnShutdown(Killable, int)}
      * with a priority of {@link Integer#MIN_VALUE}.
      * </p>
-     * 
+     *
      * @param logFile
      *            The file to which this instance should print.
      */
@@ -213,12 +213,12 @@ public class Logger implements Killable
      * Creates a {@link Logger} instance which prints to the default log file which is defined by
      * {@link #DEFAULT_LOG_PATH}. This constructor will set the given timezone as default for the Java VM. Note that
      * this is affecting all {@link Logger} instances.
-     * 
+     *
      * <p>
      * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#killOnShutdown(Killable, int)}
      * with a priority of {@link Integer#MIN_VALUE}.
      * </p>
-     * 
+     *
      * @param timeZone
      *            The timezone which should be set as default for the Java VM.
      */
@@ -232,12 +232,12 @@ public class Logger implements Killable
      * Creates a {@link Logger} instance which prints to the file with the given path. If the file does not exist it
      * will be created. This constructor will set the given timezone as default for the Java VM. Note that this is
      * affecting all {@link Logger} instances.
-     * 
+     *
      * <p>
      * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#killOnShutdown(Killable, int)}
      * with a priority of {@link Integer#MIN_VALUE}.
      * </p>
-     * 
+     *
      * @param logPath
      *            The path to the desired log file.
      * @param timeZone
@@ -253,12 +253,12 @@ public class Logger implements Killable
      * Creates a {@link Logger} instance which prints to the given file. If the file does not exist it will be created.
      * This constructor will set the given timezone as default for the Java VM. Note that this is affecting all
      * {@link Logger} instances.
-     * 
+     *
      * <p>
      * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#killOnShutdown(Killable, int)}
      * with a priority of {@link Integer#MIN_VALUE}.
      * </p>
-     * 
+     *
      * @param logFile
      *            The file to which this instance should print.
      * @param timeZone
@@ -277,12 +277,12 @@ public class Logger implements Killable
      * Creates a {@link Logger} instance which prints to the file with the given path. If the file does not exist it
      * will be created. This constructor will set the given timezone as default for the Java VM. Note that this is
      * affecting all {@link Logger} instances.
-     * 
+     *
      * <p>
      * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#killOnShutdown(Killable, int)}
      * with a priority of {@link Integer#MIN_VALUE}.
      * </p>
-     * 
+     *
      * @param logPath
      *            The path to the desired log file.
      * @param timeZone
@@ -299,12 +299,12 @@ public class Logger implements Killable
      * Creates a {@link Logger} instance which prints to the given file. If the file does not exist it will be created.
      * This constructor will set the given timezone as default for the Java VM. Note that this is affecting all
      * {@link Logger} instances.
-     * 
+     *
      * <p>
      * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#killOnShutdown(Killable, int)}
      * with a priority of {@link Integer#MIN_VALUE}.
      * </p>
-     * 
+     *
      * @param logFile
      *            The file to which this instance should print.
      * @param timeZone
@@ -327,7 +327,7 @@ public class Logger implements Killable
 
     /**
      * Closes this instances {@link #writer} and removes it from the {@link #activeLoggers} list.
-     * 
+     *
      * <p>
      * If this instance is set to log at a specified interval {@link #logQueue()} is called before closing resources.
      * </p>
@@ -343,16 +343,16 @@ public class Logger implements Killable
 
         print(this,
               "Closing logger.");
-        if (writer != null)
+        if (this.writer != null)
         {
-            writer.close();
+            this.writer.close();
         }
         activeLoggers.remove(this);
-        if (future != null)
+        if (this.future != null)
         {
-            future.cancel(true);
+            this.future.cancel(true);
         }
-        isStarted = false;
+        this.isStarted = false;
     }
 
     /**
@@ -369,7 +369,7 @@ public class Logger implements Killable
 
     /**
      * Sets the {@link #logFile}.
-     * 
+     *
      * @param path
      *            The path to the desired log file.
      */
@@ -380,11 +380,11 @@ public class Logger implements Killable
 
     /**
      * Sets the {@link #logFile}.
-     * 
+     *
      * <p>
      * This method has no effect if {@link #setLoggingEnabled(boolean)} was set to false.
      * </p>
-     * 
+     *
      * @param logFile
      *            The desired log file.
      */
@@ -399,16 +399,16 @@ public class Logger implements Killable
                 logFile.createNewFile();
                 try
                 {
-                    if (writer != null)
+                    if (this.writer != null)
                     {
-                        writer.close();
+                        this.writer.close();
                     }
                 }
                 catch (Exception ex)
                 {
                     ex.printStackTrace();
                 }
-                writer = new PrintWriter(new BufferedWriter(new FileWriter(this.logFile,
+                this.writer = new PrintWriter(new BufferedWriter(new FileWriter(this.logFile,
                                                                            true)),
                                          true);
             }
@@ -421,7 +421,7 @@ public class Logger implements Killable
 
     /**
      * Gets the current {@link #logFile}.
-     * 
+     *
      * @return The current {@link #logFile}.
      */
     public File getLoggerFile()
@@ -431,7 +431,7 @@ public class Logger implements Killable
 
     /**
      * Sets wether this instance should also print to {@link System#out}.
-     * 
+     *
      * @param b
      *            True if this insatnce should also print to {@link System#out}.
      */
@@ -442,7 +442,7 @@ public class Logger implements Killable
 
     /**
      * Indicates wether this instance is also printing to {@link System#out}.
-     * 
+     *
      * @return True if this insatnce is also printing to {@link System#out}.
      */
     public boolean isLogToSystemOut()
@@ -452,7 +452,7 @@ public class Logger implements Killable
 
     /**
      * Sets a prefix which is put in front of the log message.
-     * 
+     *
      * @param prefix
      *            The prefix.
      */
@@ -464,19 +464,19 @@ public class Logger implements Killable
     /**
      * Sets the timezone of this {@link Logger} instance to the timezone with the given id. If the id is not recognized
      * the timezone will be set to GMT.
-     * 
+     *
      * @param id
      *            The id of the desired timezone.
      */
     public void setTimeZone(String id)
     {
-        timeZone = TimeZone.getTimeZone(id);
+        this.timeZone = TimeZone.getTimeZone(id);
     }
 
     /**
      * Sets the timezone of this {@link Logger} insatnce to the given one. Note that this is affecting all
      * {@link Logger} instances.
-     * 
+     *
      * @param zone
      *            The desired timezone.
      */
@@ -487,46 +487,46 @@ public class Logger implements Killable
 
     /**
      * Gets the current timezone of this {@link Logger} insatnce .
-     * 
+     *
      * @return The currently set default timezone of this instance.
      */
     public TimeZone getTimeZone()
     {
-        return timeZone;
+        return this.timeZone;
     }
 
     /**
      * Gets this instances {@link #writer}.
-     * 
+     *
      * @return This instances {@link #writer}.
      */
     public Writer getPrintWriter()
     {
-        return writer;
+        return this.writer;
     }
 
     /**
      * Formats a date String with the set {@link TimeZone}.
-     * 
+     *
      * @return the date String.
      */
     public String getDateString()
     {
         Calendar calendar = new GregorianCalendar();
 
-        formatter.setCalendar(calendar);
+        this.formatter.setCalendar(calendar);
 
-        if (timeZone != null)
+        if (this.timeZone != null)
         {
-            formatter.setTimeZone(timeZone);
+            this.formatter.setTimeZone(this.timeZone);
         }
 
-        return "[" + formatter.format(calendar.getTime()) + "]";
+        return "[" + this.formatter.format(calendar.getTime()) + "]";
     }
 
     /**
      * Registers the given source so its name can be displayed when logging.
-     * 
+     *
      * @param source
      *            The LogSource object which represents the logging object.
      * @return The name of the LogSource.
@@ -539,7 +539,7 @@ public class Logger implements Killable
 
     /**
      * Registers the given source so its name can be displayed when logging.
-     * 
+     *
      * @param source
      *            The instance which will use this logger.
      * @param name
@@ -554,7 +554,7 @@ public class Logger implements Killable
 
     /**
      * Registers the given source and finds a unique name to be displayed while logging from inside that source.
-     * 
+     *
      * @param source
      *            The instance which will use this logger.
      * @return The name of the LogSource.
@@ -583,7 +583,7 @@ public class Logger implements Killable
 
     /**
      * Returns the name of the registered source or null if the source is not registered.
-     * 
+     *
      * @param source
      *            The instance whichs name should be found.
      * @return The name with which the source was registered or null if it was not registere.
@@ -594,7 +594,7 @@ public class Logger implements Killable
         {
             return null;
         }
-        for (LogSource logSource : logSources)
+        for (LogSource logSource : this.logSources)
         {
             if (logSource.getSource() == source)
             {
@@ -606,25 +606,25 @@ public class Logger implements Killable
 
     /**
      * Starts the timer which will log all buffered lines to the dedicated file.
-     * 
+     *
      * The default interval is 30 seconds.
      */
     public void start()
     {
         this.printInstant = false;
 
-        if (!isStarted)
+        if (!this.isStarted)
         {
-            isStarted = true;
-            future = Threads.get().scheduleWithFixedDelayDaemon(new Runnable() {
+            this.isStarted = true;
+            this.future = Threads.get().scheduleWithFixedDelayDaemon(new Runnable() {
                 @Override
                 public void run()
                 {
                     logQueue();
                 }
             },
-                                                                logInterval,
-                                                                logInterval,
+                                                                this.logInterval,
+                                                                this.logInterval,
                                                                 TimeUnit.MILLISECONDS,
                                                                 "LOGGER_QUEUE");
         }
@@ -637,19 +637,19 @@ public class Logger implements Killable
     {
         if (this.enabled && loggingEnabled)
         {
-            ArrayList<String> copy = new ArrayList<String>(queue);
-            queue.clear();
+            ArrayList<String> copy = new ArrayList<>(this.queue);
+            this.queue.clear();
             for (String line : copy)
             {
-                writer.println(line);
+                this.writer.println(line);
             }
-            writer.flush();
+            this.writer.flush();
         }
     }
 
     /**
      * Checks if the given String contains any of the Strings from the filterTexts list.
-     * 
+     *
      * @param line
      *            The line to check.
      * @return true if the line contains any, false otherwise.
@@ -668,9 +668,9 @@ public class Logger implements Killable
 
     /**
      * Adds the given text as a filter.
-     * 
+     *
      * Any lines from the logfile that contains a filter will not be sent to the channel.
-     * 
+     *
      * @param filter
      *            The filter text to be added.
      */
@@ -681,9 +681,9 @@ public class Logger implements Killable
 
     /**
      * Sets the interval at which the logger will print to its file.
-     * 
+     *
      * Calling this after calling {@link #start()} has no effect.
-     * 
+     *
      * @param interval
      *            The interval in miliseconds.
      */
@@ -694,7 +694,7 @@ public class Logger implements Killable
 
     /**
      * Sets whether the logger will log the name of the method it was called from.
-     * 
+     *
      * @param printCaller
      *            true to log additional information about the class, method and line number of the print calls.
      */
@@ -705,11 +705,11 @@ public class Logger implements Killable
 
     /**
      * Sets the index of the method in the call stack that should be used to print caller information.
-     * 
+     *
      * <p>
      * The default value is 2, so it will use the method that called print() as a caller.
      * </p>
-     * 
+     *
      * @param index
      */
     public void setCallerStackIndex(int index)
@@ -781,7 +781,7 @@ public class Logger implements Killable
         {
             if (activeLoggers.contains(this))
             {
-                if (logToSystemOut)
+                if (this.logToSystemOut)
                 {
                     System.out.println("");
                 }
@@ -794,7 +794,7 @@ public class Logger implements Killable
                 {
                     try
                     {
-                        queue.put("");
+                        this.queue.put("");
                     }
                     catch (InterruptedException e)
                     {
@@ -812,7 +812,7 @@ public class Logger implements Killable
     /**
      * Prints the given parameter with the current date to the {@link #logFile} and, if {@link #logToSystemOut} is true,
      * to {@link System#out}.
-     * 
+     *
      * @param source
      *            The source of this logging request.
      * @param s
@@ -861,7 +861,7 @@ public class Logger implements Killable
 
                 if (!containsFilter(text))
                 {
-                    if (logToSystemOut)
+                    if (this.logToSystemOut)
                     {
                         System.out.println(text);
                     }
@@ -873,7 +873,7 @@ public class Logger implements Killable
                     {
                         try
                         {
-                            queue.put(text);
+                            this.queue.put(text);
                         }
                         catch (InterruptedException e)
                         {
@@ -892,7 +892,7 @@ public class Logger implements Killable
     /**
      * Prints the given parameter with the current date to the {@link #logFile} and, if {@link #logToSystemOut} is true,
      * to {@link System#out}.
-     * 
+     *
      * @param source
      *            The source of this logging request.
      * @param b
@@ -906,7 +906,7 @@ public class Logger implements Killable
     /**
      * Prints the given parameter with the current date to the {@link #logFile} and, if {@link #logToSystemOut} is true,
      * to {@link System#out}.
-     * 
+     *
      * @param source
      *            The source of this logging request.
      * @param i
@@ -920,7 +920,7 @@ public class Logger implements Killable
     /**
      * Prints the given parameter with the current date to the {@link #logFile} and, if {@link #logToSystemOut} is true,
      * to {@link System#out}.
-     * 
+     *
      * @param source
      *            The source of this logging request.
      * @param s
@@ -934,7 +934,7 @@ public class Logger implements Killable
     /**
      * Prints the given parameter with the current date to the {@link #logFile} and, if {@link #logToSystemOut} is true,
      * to {@link System#out}.
-     * 
+     *
      * @param source
      *            The source of this logging request.
      * @param l
@@ -948,7 +948,7 @@ public class Logger implements Killable
     /**
      * Prints the given parameter with the current date to the {@link #logFile} and, if {@link #logToSystemOut} is true,
      * to {@link System#out}.
-     * 
+     *
      * @param source
      *            The source of this logging request.
      * @param d
@@ -962,7 +962,7 @@ public class Logger implements Killable
     /**
      * Prints the given parameter with the current date to the {@link #logFile} and, if {@link #logToSystemOut} is true,
      * to {@link System#out}.
-     * 
+     *
      * @param source
      *            The source of this logging request.
      * @param f
@@ -976,7 +976,7 @@ public class Logger implements Killable
     /**
      * Prints the given parameter with the current date to the {@link #logFile} and, if {@link #logToSystemOut} is true,
      * to {@link System#out}.
-     * 
+     *
      * @param source
      *            The source of this logging request.
      * @param c
@@ -990,7 +990,7 @@ public class Logger implements Killable
     /**
      * Prints the given parameter with the current date to the {@link #logFile} and, if {@link #logToSystemOut} is true,
      * to {@link System#out}.
-     * 
+     *
      * @param source
      *            The source of this logging request.
      * @param b
@@ -1004,7 +1004,7 @@ public class Logger implements Killable
     /**
      * Prints the String returned by the given object's {@link Object#toString()} method with the current date to the
      * {@link #logFile} and, if {@link #logToSystemOut} is true, to {@link System#out}.
-     * 
+     *
      * @param source
      *            The source of this logging request.
      * @param o
@@ -1018,7 +1018,7 @@ public class Logger implements Killable
     /**
      * Prints the message of the given throwable with the current date and the stacktrace to the {@link #logFile} and,
      * if {@link #logToSystemOut} is true, to {@link System#out}.
-     * 
+     *
      * @param source
      *            The source of this logging request.
      * @param t
@@ -1064,7 +1064,7 @@ public class Logger implements Killable
 
                 text = str.toString();
 
-                if (logToSystemOut)
+                if (this.logToSystemOut)
                 {
                     System.out.println(text);
                     t.printStackTrace();
@@ -1083,7 +1083,7 @@ public class Logger implements Killable
                         {
                             try
                             {
-                                queue.put(text + System.lineSeparator() + trace);
+                                this.queue.put(text + System.lineSeparator() + trace);
                             }
                             catch (InterruptedException e)
                             {
@@ -1107,7 +1107,7 @@ public class Logger implements Killable
     /**
      * Prints the given parameter with the current date to the {@link #logFile} and, if {@link #logToSystemOut} is true,
      * to {@link System#out}.
-     * 
+     *
      * @param s
      *            The text that should be logged.
      */
@@ -1135,7 +1135,7 @@ public class Logger implements Killable
 
                     String text = str.toString();
 
-                    if (logToSystemOut)
+                    if (this.logToSystemOut)
                     {
                         System.out.println(text);
                     }
@@ -1148,7 +1148,7 @@ public class Logger implements Killable
                     {
                         try
                         {
-                            queue.put(text);
+                            this.queue.put(text);
                         }
                         catch (InterruptedException e)
                         {
@@ -1170,10 +1170,17 @@ public class Logger implements Killable
                             args));
     }
 
+    public void printf(Object source, String s, Object... args)
+    {
+        print(source,
+              String.format(s,
+                            args));
+    }
+
     /**
      * Prints the given parameter with the current date to the {@link #logFile} and, if {@link #logToSystemOut} is true,
      * to {@link System#out}.
-     * 
+     *
      * @param b
      */
     public void print(boolean b)
@@ -1184,7 +1191,7 @@ public class Logger implements Killable
     /**
      * Prints the given parameter with the current date to the {@link #logFile} and, if {@link #logToSystemOut} is true,
      * to {@link System#out}.
-     * 
+     *
      * @param i
      */
     public void print(int i)
@@ -1195,7 +1202,7 @@ public class Logger implements Killable
     /**
      * Prints the given parameter with the current date to the {@link #logFile} and, if {@link #logToSystemOut} is true,
      * to {@link System#out}.
-     * 
+     *
      * @param s
      */
     public void print(short s)
@@ -1206,7 +1213,7 @@ public class Logger implements Killable
     /**
      * Prints the given parameter with the current date to the {@link #logFile} and, if {@link #logToSystemOut} is true,
      * to {@link System#out}.
-     * 
+     *
      * @param l
      */
     public void print(long l)
@@ -1217,7 +1224,7 @@ public class Logger implements Killable
     /**
      * Prints the given parameter with the current date to the {@link #logFile} and, if {@link #logToSystemOut} is true,
      * to {@link System#out}.
-     * 
+     *
      * @param d
      */
     public void print(double d)
@@ -1228,7 +1235,7 @@ public class Logger implements Killable
     /**
      * Prints the given parameter with the current date to the {@link #logFile} and, if {@link #logToSystemOut} is true,
      * to {@link System#out}.
-     * 
+     *
      * @param f
      */
     public void print(float f)
@@ -1239,7 +1246,7 @@ public class Logger implements Killable
     /**
      * Prints the given parameter with the current date to the {@link #logFile} and, if {@link #logToSystemOut} is true,
      * to {@link System#out}.
-     * 
+     *
      * @param c
      */
     public void print(char c)
@@ -1250,7 +1257,7 @@ public class Logger implements Killable
     /**
      * Prints the given parameter with the current date to the {@link #logFile} and, if {@link #logToSystemOut} is true,
      * to {@link System#out}.
-     * 
+     *
      * @param b
      */
     public void print(byte b)
@@ -1261,7 +1268,7 @@ public class Logger implements Killable
     /**
      * Prints the String returned by the given object's {@link Object#toString()} method with the current date to the
      * {@link #logFile} and, if {@link #logToSystemOut} is true, to {@link System#out}.
-     * 
+     *
      * @param o
      */
     public void print(Object o)
@@ -1272,7 +1279,7 @@ public class Logger implements Killable
     /**
      * Prints the message of the given throwable with the current date and the stacktrace to the {@link #logFile} and,
      * if {@link #logToSystemOut} is true, to {@link System#out}.
-     * 
+     *
      * @param t
      */
     public void print(Throwable t)
@@ -1296,7 +1303,7 @@ public class Logger implements Killable
 
                 String text = str.toString();
 
-                if (logToSystemOut)
+                if (this.logToSystemOut)
                 {
                     System.out.println(text);
                     t.printStackTrace();
@@ -1315,7 +1322,7 @@ public class Logger implements Killable
                         {
                             try
                             {
-                                queue.put(text + System.lineSeparator() + trace);
+                                this.queue.put(text + System.lineSeparator() + trace);
                             }
                             catch (InterruptedException e)
                             {
