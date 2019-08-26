@@ -108,13 +108,13 @@ public class SoundSupplier
                       0,
                       this.size);
             clip.addLineListener((e) ->
-            {
-                if (e.getType().equals(LineEvent.Type.STOP))
                 {
-                    Line soundClip = e.getLine();
-                    soundClip.close();
-                }
-            });
+                    if (e.getType().equals(LineEvent.Type.STOP))
+                    {
+                        Line soundClip = e.getLine();
+                        soundClip.close();
+                    }
+                });
         }
         catch (LineUnavailableException e)
         {

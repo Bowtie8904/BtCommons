@@ -409,8 +409,8 @@ public class Logger implements Killable
                     ex.printStackTrace();
                 }
                 this.writer = new PrintWriter(new BufferedWriter(new FileWriter(this.logFile,
-                                                                           true)),
-                                         true);
+                                                                                true)),
+                                              true);
             }
             catch (Exception e)
             {
@@ -623,10 +623,10 @@ public class Logger implements Killable
                     logQueue();
                 }
             },
-                                                                this.logInterval,
-                                                                this.logInterval,
-                                                                TimeUnit.MILLISECONDS,
-                                                                "LOGGER_QUEUE");
+                                                                     this.logInterval,
+                                                                     this.logInterval,
+                                                                     TimeUnit.MILLISECONDS,
+                                                                     "LOGGER_QUEUE");
         }
     }
 

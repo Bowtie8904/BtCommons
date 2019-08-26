@@ -132,15 +132,15 @@ public class Sound
         setupClip();
 
         this.clip.addLineListener((e) ->
-        {
-            if (e.getType().equals(LineEvent.Type.STOP))
             {
-                synchronized (lock)
+                if (e.getType().equals(LineEvent.Type.STOP))
                 {
-                    lock.notifyAll();
+                    synchronized (lock)
+                    {
+                        lock.notifyAll();
+                    }
                 }
-            }
-        });
+            });
 
         this.clip.start();
 
@@ -187,15 +187,15 @@ public class Sound
         setupClip();
 
         this.clip.addLineListener((e) ->
-        {
-            if (e.getType().equals(LineEvent.Type.STOP))
             {
-                synchronized (lock)
+                if (e.getType().equals(LineEvent.Type.STOP))
                 {
-                    lock.notifyAll();
+                    synchronized (lock)
+                    {
+                        lock.notifyAll();
+                    }
                 }
-            }
-        });
+            });
 
         this.clip.loop(count);
 
