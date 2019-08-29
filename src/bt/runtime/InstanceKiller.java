@@ -27,9 +27,9 @@ public final class InstanceKiller
     static
     {
         Runtime.getRuntime().addShutdownHook(new Thread(() ->
-            {
-                kill();
-            }));
+        {
+            kill();
+        }));
     }
 
     /**

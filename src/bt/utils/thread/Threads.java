@@ -96,10 +96,10 @@ public class Threads implements Killable
     public void execute(Runnable task, String threadName)
     {
         new Thread(() ->
-            {
-                Thread.currentThread().setName(threadName);
-                task.run();
-            }).start();
+        {
+            Thread.currentThread().setName(threadName);
+            task.run();
+        }).start();
     }
 
     /**
@@ -125,10 +125,10 @@ public class Threads implements Killable
     public void executeDaemon(Runnable task, String threadName)
     {
         Thread thread = new Thread(() ->
-            {
-                Thread.currentThread().setName(threadName);
-                task.run();
-            });
+        {
+            Thread.currentThread().setName(threadName);
+            task.run();
+        });
         thread.setDaemon(true);
         thread.start();
     }
@@ -156,10 +156,10 @@ public class Threads implements Killable
     public void executeCached(Runnable task, String threadName)
     {
         this.cachedPool.execute(() ->
-            {
-                Thread.currentThread().setName(threadName);
-                task.run();
-            });
+        {
+            Thread.currentThread().setName(threadName);
+            task.run();
+        });
     }
 
     /**
@@ -185,10 +185,10 @@ public class Threads implements Killable
     public void executeCachedDaemon(Runnable task, String threadName)
     {
         this.cachedPoolDaemon.execute(() ->
-            {
-                Thread.currentThread().setName(threadName);
-                task.run();
-            });
+        {
+            Thread.currentThread().setName(threadName);
+            task.run();
+        });
     }
 
     /**
@@ -228,10 +228,10 @@ public class Threads implements Killable
     public ScheduledFuture<?> schedule(Runnable task, long delay, TimeUnit unit, String threadName)
     {
         return this.schedulerPool.schedule(() ->
-            {
-                Thread.currentThread().setName(threadName);
-                task.run();
-            },
+        {
+            Thread.currentThread().setName(threadName);
+            task.run();
+        },
                                            delay,
                                            unit);
     }
@@ -273,10 +273,10 @@ public class Threads implements Killable
     public ScheduledFuture<?> scheduleDaemon(Runnable task, long delay, TimeUnit unit, String threadName)
     {
         return this.schedulerPoolDaemon.schedule(() ->
-            {
-                Thread.currentThread().setName(threadName);
-                task.run();
-            },
+        {
+            Thread.currentThread().setName(threadName);
+            task.run();
+        },
                                                  delay,
                                                  unit);
     }
@@ -334,10 +334,10 @@ public class Threads implements Killable
                                                   String threadName)
     {
         return this.schedulerPool.scheduleAtFixedRate(() ->
-            {
-                Thread.currentThread().setName(threadName);
-                task.run();
-            },
+        {
+            Thread.currentThread().setName(threadName);
+            task.run();
+        },
                                                       initialDelay,
                                                       period,
                                                       unit);
@@ -396,10 +396,10 @@ public class Threads implements Killable
                                                         String threadName)
     {
         return this.schedulerPoolDaemon.scheduleAtFixedRate(() ->
-            {
-                Thread.currentThread().setName(threadName);
-                task.run();
-            },
+        {
+            Thread.currentThread().setName(threadName);
+            task.run();
+        },
                                                             initialDelay,
                                                             period,
                                                             unit);
@@ -454,10 +454,10 @@ public class Threads implements Killable
                                                      String threadName)
     {
         return this.schedulerPool.scheduleWithFixedDelay(() ->
-            {
-                Thread.currentThread().setName(threadName);
-                task.run();
-            },
+        {
+            Thread.currentThread().setName(threadName);
+            task.run();
+        },
                                                          initialDelay,
                                                          delay,
                                                          unit);
@@ -512,10 +512,10 @@ public class Threads implements Killable
                                                            String threadName)
     {
         return this.schedulerPoolDaemon.scheduleWithFixedDelay(() ->
-            {
-                Thread.currentThread().setName(threadName);
-                task.run();
-            },
+        {
+            Thread.currentThread().setName(threadName);
+            task.run();
+        },
                                                                initialDelay,
                                                                delay,
                                                                unit);

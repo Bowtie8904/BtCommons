@@ -616,7 +616,8 @@ public class Logger implements Killable
         if (!this.isStarted)
         {
             this.isStarted = true;
-            this.future = Threads.get().scheduleWithFixedDelayDaemon(new Runnable() {
+            this.future = Threads.get().scheduleWithFixedDelayDaemon(new Runnable()
+            {
                 @Override
                 public void run()
                 {
