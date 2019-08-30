@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 
 /**
  * Dispatches data of a specific type to all subscribers.
- * 
+ *
  * @author &#8904
  * @param <T>
  *            The type of data that this instance will dispatch.
@@ -19,19 +19,33 @@ public class SubDispatcher<T>
     /** A list of {@link Runnable} subscribers. */
     private List<Runnable> runnables;
 
+    /** The subscribed type. */
+    private Class<T> type;
+
     /**
      * Creates a new instance.
      */
-    protected SubDispatcher()
+    protected SubDispatcher(Class<T> type)
     {
+        this.type = type;
         this.consumers = new ArrayList<>();
         this.runnables = new ArrayList<>();
     }
 
     /**
+     * Gets the class type that this instance is subscribed to.
+     *
+     * @return
+     */
+    public Class<T> getType()
+    {
+        return this.type;
+    }
+
+    /**
      * Adds the given consumer to the list of subscribers. That means that the consumer's accept method will be called
      * when this SubDispatcher dispatches data via {@link #dispatch(Object)}.
-     * 
+     *
      * @param consumer
      *            The new subscriber.
      */
@@ -42,11 +56,11 @@ public class SubDispatcher<T>
 
     /**
      * Removes the given consumer from the list of subscribers.
-     * 
+     *
      * <p>
      * After this is called, the given subscriber will no longer receive data via the {@link #dispatch(Object)} method.
      * </p>
-     * 
+     *
      * @param consumer
      *            The subscriber to remove.
      * @return true if the given consumer was subscribed.
@@ -59,7 +73,7 @@ public class SubDispatcher<T>
     /**
      * Adds the given runnable to the list of subscribers. That means that the runnable's run method will be called when
      * this SubDispatcher dispatches data via {@link #dispatch(Object)}.
-     * 
+     *
      * @param runnable
      *            The new subscriber.
      */
@@ -70,11 +84,11 @@ public class SubDispatcher<T>
 
     /**
      * Removes the given runnable from the list of subscribers.
-     * 
+     *
      * <p>
      * After this is called, the given subscriber will no longer be executed via the {@link #dispatch(Object)} method.
      * </p>
-     * 
+     *
      * @param runnable
      *            The subscriber to remove.
      * @return true if the given runnable was subscribed.
@@ -86,14 +100,14 @@ public class SubDispatcher<T>
 
     /**
      * Dispatches the given data to all subscribers.
-     * 
+     *
      * <p>
      * The {@link Consumer} subscribers will be executed before the {@link Runnable} ones.
      * </p>
-     * 
+     *
      * @param data
      *            The object to dispatch.
-     * 
+     *
      * @return The number of subscribers that received the data.
      */
     protected int dispatch(T data)
@@ -113,12 +127,12 @@ public class SubDispatcher<T>
 
     /**
      * Gets a list containing all subscribers of this instance.
-     * 
+     *
      * <p>
      * All elements in the list will be {@link Consumer}s. Any {@link Runnable} subscriber will be wrapped in a new
      * Consumer.
      * </p>
-     * 
+     *
      * @return The list of subscribers.
      */
     public List<Consumer<T>> getSubscribers()
