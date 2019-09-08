@@ -70,6 +70,21 @@ public final class NumberUtils
         }
     }
 
+    public static String decimalToHex(long dec)
+    {
+        return Long.toHexString(dec).toUpperCase();
+    }
+
+    public static String decimalToOctal(long dec)
+    {
+        return Long.toOctalString(dec).toUpperCase();
+    }
+
+    public static String decimalToBinary(long dec)
+    {
+        return Long.toBinaryString(dec).toUpperCase();
+    }
+
     public static long hexToDecimal(String hex)
     {
         return Long.parseLong(hex.trim(), 16);
