@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
@@ -98,6 +99,7 @@ public class Logger implements Killable
 
     /** The date formatter for the logging timestamps. */
     private DateFormat formatter = new SimpleDateFormat("dd MM yyyy HH:mm:ss.SSS");
+    private DateFormat fileDateFormat = new SimpleDateFormat("yyyyMMdd");
 
     /** Indicates whether this instance is already started and actively running. */
     private boolean isStarted = false;
@@ -430,11 +432,13 @@ public class Logger implements Killable
                 this.logFileName = logFile.getAbsolutePath();
                 File file = logFile;
 
+                String dateString = this.fileDateFormat.format(new Date());
+
                 do
                 {
                     String fileName = logFile.getAbsolutePath();
                     fileName = fileName.substring(0, fileName.lastIndexOf("."));
-                    file = new File(fileName + "_" + this.fileNameSequence ++ + ".log");
+                    file = new File(fileName + "_" + dateString + "_" + this.fileNameSequence ++ + ".log");
                     file.getParentFile().mkdirs();
                     file.createNewFile();
                     this.logFile = file;
