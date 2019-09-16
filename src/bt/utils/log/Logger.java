@@ -12,6 +12,7 @@ import java.lang.invoke.MethodType;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -19,9 +20,13 @@ import java.util.TimeZone;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
+import com.google.common.io.Files;
 
 import bt.runtime.InstanceKiller;
 import bt.runtime.Killable;
+import bt.utils.files.FileUtils;
 import bt.utils.thread.Threads;
 
 /**
@@ -42,6 +47,9 @@ public class Logger implements Killable
      */
     private static boolean loggingEnabled = true;
     private static Logger globalLogger;
+
+    private static long maxFileSizeKb = -1;
+    private static int maxNumberOfFiles = -1;
 
     /**
      * The path to the default log file.
@@ -69,6 +77,8 @@ public class Logger implements Killable
 
     /** The file this Logger instance is writing to. */
     private File logFile;
+
+    private String logFileName;
 
     /**
      * Indicates wether this Logger instance should also send its output to {@link System#out}. True by default.
@@ -117,6 +127,9 @@ public class Logger implements Killable
     /** Indicates whether this logger will actually log when its print methods are called. */
     private boolean enabled = true;
 
+    /** File name sequence. */
+    private int fileNameSequence = 1;
+
     /**
      * An instance of the {@link Logger} class that is meant for general logging. By default it will print output to the
      * {@link #DEFAULT_LOG_PATH}. This behavior can however be customized by setting an instance with a different
@@ -143,6 +156,26 @@ public class Logger implements Killable
     public static void setGlobal(Logger logger)
     {
         globalLogger = logger;
+    }
+
+    /**
+     * Sets the maximum size of a logfile in kilobytes.
+     *
+     * @param maxKb
+     */
+    public static void setMaxFileSize(long maxKb)
+    {
+        maxFileSizeKb = maxKb;
+    }
+
+    /**
+     * Sets the max number of logfiles a single Logger instance should keep.
+     *
+     * @param max
+     */
+    public static void setMaxNumberOfFiles(int max)
+    {
+        maxNumberOfFiles = max;
     }
 
     /**
@@ -394,9 +427,49 @@ public class Logger implements Killable
         {
             try
             {
-                this.logFile = logFile;
-                logFile.getParentFile().mkdirs();
-                logFile.createNewFile();
+                this.logFileName = logFile.getAbsolutePath();
+                File file = logFile;
+
+                do
+                {
+                    String fileName = logFile.getAbsolutePath();
+                    fileName = fileName.substring(0, fileName.lastIndexOf("."));
+                    file = new File(fileName + "_" + this.fileNameSequence ++ + ".log");
+                    file.getParentFile().mkdirs();
+                    file.createNewFile();
+                    this.logFile = file;
+                }
+                while (maxFileSizeKb > -1 && file.length() >= maxFileSizeKb * 1000);
+
+                if (maxNumberOfFiles > 0)
+                {
+                    String filePrefix = this.logFile.getParent() + "\\" + Files.getNameWithoutExtension(logFile.getName());
+                    List<File> foundFiles = new ArrayList<>();
+                    var files = FileUtils.getFiles(this.logFile.getParent());
+                    foundFiles = Arrays.stream(files)
+                                       .filter(f ->
+                                       {
+                                           return f.getAbsolutePath().startsWith(filePrefix);
+                                       })
+                                       .sorted((f1, f2) ->
+                                       {
+                                           if (f1.lastModified() > f2.lastModified())
+                                           {
+                                               return 1;
+                                           }
+                                           else
+                                           {
+                                               return 0;
+                                           }
+                                       })
+                                       .collect(Collectors.toList());
+
+                    for (int i = 0; i < foundFiles.size() - maxNumberOfFiles; i ++ )
+                    {
+                        foundFiles.get(i).delete();
+                    }
+                }
+
                 try
                 {
                     if (this.writer != null)
@@ -616,18 +689,20 @@ public class Logger implements Killable
         if (!this.isStarted)
         {
             this.isStarted = true;
-            this.future = Threads.get().scheduleWithFixedDelayDaemon(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    logQueue();
-                }
-            },
-                                                                     this.logInterval,
-                                                                     this.logInterval,
-                                                                     TimeUnit.MILLISECONDS,
-                                                                     "LOGGER_QUEUE");
+            this.future = Threads.get()
+                                 .scheduleWithFixedDelayDaemon(
+                                                               new Runnable()
+                                                               {
+                                                                   @Override
+                                                                   public void run()
+                                                                   {
+                                                                       logQueue();
+                                                                   }
+                                                               },
+                                                               this.logInterval,
+                                                               this.logInterval,
+                                                               TimeUnit.MILLISECONDS,
+                                                               "LOGGER_QUEUE");
         }
     }
 
@@ -773,6 +848,14 @@ public class Logger implements Killable
         return getCallerString(this.callerStackIndex);
     }
 
+    private void checkFileSize()
+    {
+        if (maxFileSizeKb > -1 && this.logFile.length() >= maxFileSizeKb * 1000)
+        {
+            setLoggerFile(new File(this.logFileName));
+        }
+    }
+
     /**
      * Prints an empty line withhout prefix.
      */
@@ -782,6 +865,8 @@ public class Logger implements Killable
         {
             if (activeLoggers.contains(this))
             {
+                checkFileSize();
+
                 if (this.logToSystemOut)
                 {
                     System.out.println("");
@@ -862,6 +947,8 @@ public class Logger implements Killable
 
                 if (!containsFilter(text))
                 {
+                    checkFileSize();
+
                     if (this.logToSystemOut)
                     {
                         System.out.println(text);
@@ -1076,6 +1163,8 @@ public class Logger implements Killable
                     String trace = sw.toString();
                     if (!containsFilter(trace))
                     {
+                        checkFileSize();
+
                         if (this.printInstant)
                         {
                             this.writer.println(text + System.lineSeparator() + trace);
@@ -1120,6 +1209,8 @@ public class Logger implements Killable
             {
                 if (!containsFilter(s))
                 {
+                    checkFileSize();
+
                     var str = new StringBuilder();
                     str.append(getDateString());
                     str.append(" ");
@@ -1315,6 +1406,8 @@ public class Logger implements Killable
                     String trace = sw.toString();
                     if (!containsFilter(trace))
                     {
+                        checkFileSize();
+
                         if (this.printInstant)
                         {
                             this.writer.println(text + System.lineSeparator() + trace);
