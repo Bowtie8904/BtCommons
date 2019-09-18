@@ -10,12 +10,12 @@ import bt.utils.log.Logger;
 
 /**
  * Class to manage the closing of global resources such as databases and global loggers.
- * 
+ *
  * <p>
  * All registered {@link Killable}s will be closed upon Application termination. For a successful kill operation the
  * application should be terminated by calling {@link System#exit(int)} as this class simply uses a shutdown hook.
  * </p>
- * 
+ *
  * @author &#8904
  */
 public final class InstanceKiller
@@ -35,7 +35,7 @@ public final class InstanceKiller
     /**
      * Indicates whether the InstanceKiller is currently looping through all registered Killables to call their kill
      * method.
-     * 
+     *
      * @return true if the InstanceKiller is currently calling kill methods.
      */
     public static boolean isActive()
@@ -53,7 +53,7 @@ public final class InstanceKiller
         {
             isActive = true;
 
-            Logger.global().print("Killing " + killables.size() + " instances.");
+            Logger.global().print("Killing " + killables.size() + (killables.size() > 1 ? " instances." : " instance."));
             killables.sort(Comparator.comparing(Entry::getValue,
                                                 Comparator.reverseOrder()));
 
@@ -69,18 +69,18 @@ public final class InstanceKiller
     /**
      * Registers the given Killable to be killed upon application termination. The killable will only be added if it is
      * not already registered.
-     * 
+     *
      * <p>
      * All Killables added via this method will be killed last, although there is no guarantee that instances which were
      * added will be killed in the same order. The priority attached to the given instance will be
      * {@link Integer#MIN_VALUE} + 1.
      * </p>
-     * 
+     *
      * <p>
      * The application has to either be closed by calling {@link System#exit(int)} or by terminating every non-daemon
      * thread. Any other way of application termination will cause this class to not kill instances properly.
      * </p>
-     * 
+     *
      * @param killable
      *            The instance that should be killed on application exit.
      */
@@ -95,17 +95,17 @@ public final class InstanceKiller
      * earlier the instance will be killed. The killable will only be added if it is not already registered, even if the
      * priority is different. If you want to update the priority on an already registered killable, you should
      * {@link #unregister(Killable) unregister} and re-add it via this method.
-     * 
+     *
      * <p>
      * There is no guarantee that instances with the same priority which were added via this method will be killed in
      * the order of registration.
      * </p>
-     * 
+     *
      * <p>
      * The application has to either be closed by calling {@link System#exit(int)} or by terminating every non-daemon
      * thread. Any other way of application termination will cause this class to not kill instances properly.
      * </p>
-     * 
+     *
      * @param killable
      *            The instance that should be killed on application exit.
      * @param priority
@@ -116,7 +116,7 @@ public final class InstanceKiller
     {
         if (!isRegistered(killable))
         {
-            killables.add(new SimpleEntry<Killable, Integer>(killable,
+            killables.add(new SimpleEntry<>(killable,
                                                              priority));
         }
     }
@@ -124,7 +124,7 @@ public final class InstanceKiller
     /**
      * Unregisteres the given killable. Its {@link Killable#kill() kill} method will not be called by this instance
      * killer.
-     * 
+     *
      * @param killable
      *            The killable to unregister.
      */
@@ -135,7 +135,7 @@ public final class InstanceKiller
 
     /**
      * Indicates whether the given killable is already registered for termination.
-     * 
+     *
      * @param killable
      * @return true if the killable is already registered.
      */
