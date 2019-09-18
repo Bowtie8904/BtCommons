@@ -13,14 +13,14 @@ import bt.utils.log.Logger;
 
 /**
  * A utility class to perform JSON operations.
- * 
+ *
  * @author &#8904
  */
 public final class JSON
 {
     /**
      * Parses the given JSON String to a valid JSONObject.
-     * 
+     *
      * @param json
      *            The json String to parse.
      * @return The parsed JSONObject or null if the String was null or incorrectly formatted.
@@ -41,14 +41,14 @@ public final class JSON
         }
         catch (JSONException e)
         {
-            return null;
+            Logger.global().print(e);
         }
         return object;
     }
 
     /**
      * Parses the given JSON InpuitStream to a valid JSONObject.
-     * 
+     *
      * @param json
      *            The json InputStream to parse.
      * @return The parsed JSONObject or null if the InputStream was null or incorrectly formatted.
@@ -85,7 +85,7 @@ public final class JSON
 
     /**
      * Parses the given JSON file to a valid JSONObject.
-     * 
+     *
      * @param json
      *            The json file to parse.
      * @return The parsed JSONObject or null if the file was null, does not exist or is incorrectly formatted.
