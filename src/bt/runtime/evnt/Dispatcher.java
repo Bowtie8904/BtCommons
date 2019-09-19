@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import bt.types.MutableInt;
+import bt.types.number.MutableInt;
 
 /**
  * A basic data dispatcher for generic dispatching of i.e. events to listeners.
