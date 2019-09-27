@@ -132,4 +132,9 @@ public class XML
     {
         return new XMLBuilder(doc);
     }
+
+    public static String xPathLowerCaseAttribute(String attribute)
+    {
+        return "@*[lower-case(local-name()) = '" + attribute.toLowerCase() + "']";
+    }
 }
