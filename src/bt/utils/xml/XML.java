@@ -154,4 +154,22 @@ public class XML
     {
         return "*[lower-case(local-name()) = '" + node.toLowerCase() + "']";
     }
+
+    /**
+     * Creates a case insensitive xPath String consisting of the given node names joined by '/'.
+     *
+     * @param nodes
+     * @return
+     */
+    public static String createXPath(String... nodes)
+    {
+        String xPath = "";
+
+        for (String node : nodes)
+        {
+            xPath += "/" + lowerNode(node);
+        }
+
+        return xPath;
+    }
 }
