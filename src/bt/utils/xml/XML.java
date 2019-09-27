@@ -137,4 +137,9 @@ public class XML
     {
         return "@*[lower-case(local-name()) = '" + attribute.toLowerCase() + "']";
     }
+
+    public static String xPathLowerCaseNode(String node)
+    {
+        return "*[lower-case(local-name()) = '" + node.toLowerCase() + "']";
+    }
 }
