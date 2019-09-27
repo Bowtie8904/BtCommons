@@ -133,12 +133,24 @@ public class XML
         return new XMLBuilder(doc);
     }
 
-    public static String xPathLowerCaseAttribute(String attribute)
+    /**
+     * XPath attribute conversion to be case-insensitive.
+     *
+     * @param attribute
+     * @return
+     */
+    public static String lowerAttribute(String attribute)
     {
         return "@*[lower-case(local-name()) = '" + attribute.toLowerCase() + "']";
     }
 
-    public static String xPathLowerCaseNode(String node)
+    /**
+     * XPath node conversion to be case-insensitive.
+     *
+     * @param node
+     * @return
+     */
+    public static String lowerNode(String node)
     {
         return "*[lower-case(local-name()) = '" + node.toLowerCase() + "']";
     }
