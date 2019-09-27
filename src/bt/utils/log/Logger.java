@@ -116,10 +116,10 @@ public class Logger implements Killable
     /**
      * Indicates the position of method in the stack that should be printed as caller method.
      * <p>
-     * By default this has the value 2 and will use the method that called print() as the caller.
+     * By default this has the value 3 and will use the method that called print() as the caller.
      * </p>
      */
-    private int callerStackIndex = 2;
+    private int callerStackIndex = 3;
 
     /**
      * Indicates whether the Logger should print line instantly or only output lines at the set {@link #logInterval}.
@@ -787,7 +787,7 @@ public class Logger implements Killable
      * Sets the index of the method in the call stack that should be used to print caller information.
      *
      * <p>
-     * The default value is 2, so it will use the method that called print() as a caller.
+     * The default value is 3, so it will use the method that called print() as a caller.
      * </p>
      *
      * @param index
