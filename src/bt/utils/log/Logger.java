@@ -86,6 +86,11 @@ public class Logger implements Killable
      */
     private boolean logToSystemOut = true;
 
+    /**
+     * Indicates wether this Logger instance should send its output to its file. True by default.
+     */
+    private boolean logToFile = true;
+
     /** The timezone of this logger. */
     private TimeZone timeZone;
 
@@ -355,9 +360,24 @@ public class Logger implements Killable
                                       Integer.MIN_VALUE);
     }
 
+    /**
+     * Sets whether this instance should attempts any logging (System.out or file) at all.
+     *
+     * @param enabled
+     */
     public void setEnabled(boolean enabled)
     {
         this.enabled = enabled;
+    }
+
+    /**
+     * Sets whether this instance should attempts any logging to file at all.
+     *
+     * @param logToFile
+     */
+    public void setLogToFile(boolean logToFile)
+    {
+        this.logToFile = logToFile;
     }
 
     /**
@@ -876,19 +896,22 @@ public class Logger implements Killable
                     System.out.println("");
                 }
 
-                if (this.printInstant)
+                if (this.logToFile)
                 {
-                    this.writer.println();
-                }
-                else
-                {
-                    try
+                    if (this.printInstant)
                     {
-                        this.queue.put("");
+                        this.writer.println();
                     }
-                    catch (InterruptedException e)
+                    else
                     {
-                        e.printStackTrace();
+                        try
+                        {
+                            this.queue.put("");
+                        }
+                        catch (InterruptedException e)
+                        {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
@@ -957,19 +980,23 @@ public class Logger implements Killable
                     {
                         System.out.println(text);
                     }
-                    if (this.printInstant)
+
+                    if (this.logToFile)
                     {
-                        this.writer.println(text);
-                    }
-                    else
-                    {
-                        try
+                        if (this.printInstant)
                         {
-                            this.queue.put(text);
+                            this.writer.println(text);
                         }
-                        catch (InterruptedException e)
+                        else
                         {
-                            e.printStackTrace();
+                            try
+                            {
+                                this.queue.put(text);
+                            }
+                            catch (InterruptedException e)
+                            {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 }
@@ -1161,34 +1188,38 @@ public class Logger implements Killable
                     System.out.println(text);
                     t.printStackTrace();
                 }
-                try (StringWriter sw = new StringWriter(); PrintWriter pw = new PrintWriter(sw))
-                {
-                    t.printStackTrace(pw);
-                    String trace = sw.toString();
-                    if (!containsFilter(trace))
-                    {
-                        checkFileSize();
 
-                        if (this.printInstant)
+                if (this.logToFile)
+                {
+                    try (StringWriter sw = new StringWriter(); PrintWriter pw = new PrintWriter(sw))
+                    {
+                        t.printStackTrace(pw);
+                        String trace = sw.toString();
+                        if (!containsFilter(trace))
                         {
-                            this.writer.println(text + System.lineSeparator() + trace);
-                        }
-                        else
-                        {
-                            try
+                            checkFileSize();
+
+                            if (this.printInstant)
                             {
-                                this.queue.put(text + System.lineSeparator() + trace);
+                                this.writer.println(text + System.lineSeparator() + trace);
                             }
-                            catch (InterruptedException e)
+                            else
                             {
-                                e.printStackTrace();
+                                try
+                                {
+                                    this.queue.put(text + System.lineSeparator() + trace);
+                                }
+                                catch (InterruptedException e)
+                                {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                     }
-                }
-                catch (IOException e)
-                {
-                    e.printStackTrace();
+                    catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
                 }
             }
             else
@@ -1236,19 +1267,22 @@ public class Logger implements Killable
                         System.out.println(text);
                     }
 
-                    if (this.printInstant)
+                    if (this.logToFile)
                     {
-                        this.writer.println(text);
-                    }
-                    else
-                    {
-                        try
+                        if (this.printInstant)
                         {
-                            this.queue.put(text);
+                            this.writer.println(text);
                         }
-                        catch (InterruptedException e)
+                        else
                         {
-                            e.printStackTrace();
+                            try
+                            {
+                                this.queue.put(text);
+                            }
+                            catch (InterruptedException e)
+                            {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 }
@@ -1404,34 +1438,38 @@ public class Logger implements Killable
                     System.out.println(text);
                     t.printStackTrace();
                 }
-                try (StringWriter sw = new StringWriter(); PrintWriter pw = new PrintWriter(sw))
-                {
-                    t.printStackTrace(pw);
-                    String trace = sw.toString();
-                    if (!containsFilter(trace))
-                    {
-                        checkFileSize();
 
-                        if (this.printInstant)
+                if (this.logToFile)
+                {
+                    try (StringWriter sw = new StringWriter(); PrintWriter pw = new PrintWriter(sw))
+                    {
+                        t.printStackTrace(pw);
+                        String trace = sw.toString();
+                        if (!containsFilter(trace))
                         {
-                            this.writer.println(text + System.lineSeparator() + trace);
-                        }
-                        else
-                        {
-                            try
+                            checkFileSize();
+
+                            if (this.printInstant)
                             {
-                                this.queue.put(text + System.lineSeparator() + trace);
+                                this.writer.println(text + System.lineSeparator() + trace);
                             }
-                            catch (InterruptedException e)
+                            else
                             {
-                                e.printStackTrace();
+                                try
+                                {
+                                    this.queue.put(text + System.lineSeparator() + trace);
+                                }
+                                catch (InterruptedException e)
+                                {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                     }
-                }
-                catch (IOException e)
-                {
-                    e.printStackTrace();
+                    catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
                 }
             }
             else
