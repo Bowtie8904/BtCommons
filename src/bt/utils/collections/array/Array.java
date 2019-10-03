@@ -1,15 +1,19 @@
 package bt.utils.collections.array;
 
+import java.util.Arrays;
+import java.util.function.IntFunction;
+import java.util.stream.Stream;
+
 /**
  * Simple array utilities.
- * 
+ *
  * @author &#8904
  */
 public final class Array
 {
     /**
      * Creates an array of the given elements.
-     * 
+     *
      * @param elements
      *            The elements for the array.
      * @return The array.
@@ -21,7 +25,7 @@ public final class Array
 
     /**
      * Creates an array of the given elements.
-     * 
+     *
      * @param elements
      *            The elements for the array.
      * @return The array.
@@ -33,7 +37,7 @@ public final class Array
 
     /**
      * Creates an array of the given elements.
-     * 
+     *
      * @param elements
      *            The elements for the array.
      * @return The array.
@@ -45,7 +49,7 @@ public final class Array
 
     /**
      * Creates an array of the given elements.
-     * 
+     *
      * @param elements
      *            The elements for the array.
      * @return The array.
@@ -57,7 +61,7 @@ public final class Array
 
     /**
      * Creates an array of the given elements.
-     * 
+     *
      * @param elements
      *            The elements for the array.
      * @return The array.
@@ -69,7 +73,7 @@ public final class Array
 
     /**
      * Creates an array of the given elements.
-     * 
+     *
      * @param elements
      *            The elements for the array.
      * @return The array.
@@ -81,7 +85,7 @@ public final class Array
 
     /**
      * Creates an array of the given elements.
-     * 
+     *
      * @param elements
      *            The elements for the array.
      * @return The array.
@@ -93,7 +97,7 @@ public final class Array
 
     /**
      * Creates an array of the given elements.
-     * 
+     *
      * @param elements
      *            The elements for the array.
      * @return The array.
@@ -105,11 +109,11 @@ public final class Array
 
     /**
      * Pushes the given element into the array.
-     * 
+     *
      * <p>
      * The new element will be at the last index in the array after this operation.
      * </p>
-     * 
+     *
      * @param arr
      *            The base array.
      * @param element
@@ -133,11 +137,11 @@ public final class Array
 
     /**
      * Pushes the given element into the array.
-     * 
+     *
      * <p>
      * The new element will be at the last index in the array after this operation.
      * </p>
-     * 
+     *
      * @param arr
      *            The base array.
      * @param element
@@ -160,11 +164,11 @@ public final class Array
 
     /**
      * Pushes the given element into the array.
-     * 
+     *
      * <p>
      * The new element will be at the last index in the array after this operation.
      * </p>
-     * 
+     *
      * @param arr
      *            The base array.
      * @param element
@@ -187,11 +191,11 @@ public final class Array
 
     /**
      * Pushes the given element into the array.
-     * 
+     *
      * <p>
      * The new element will be at the last index in the array after this operation.
      * </p>
-     * 
+     *
      * @param arr
      *            The base array.
      * @param element
@@ -214,11 +218,11 @@ public final class Array
 
     /**
      * Pushes the given element into the array.
-     * 
+     *
      * <p>
      * The new element will be at the last index in the array after this operation.
      * </p>
-     * 
+     *
      * @param arr
      *            The base array.
      * @param element
@@ -241,11 +245,11 @@ public final class Array
 
     /**
      * Pushes the given element into the array.
-     * 
+     *
      * <p>
      * The new element will be at the last index in the array after this operation.
      * </p>
-     * 
+     *
      * @param arr
      *            The base array.
      * @param element
@@ -268,11 +272,11 @@ public final class Array
 
     /**
      * Pushes the given element into the array.
-     * 
+     *
      * <p>
      * The new element will be at the last index in the array after this operation.
      * </p>
-     * 
+     *
      * @param arr
      *            The base array.
      * @param element
@@ -295,11 +299,11 @@ public final class Array
 
     /**
      * Pushes the given element into the array.
-     * 
+     *
      * <p>
      * The new element will be at the last index in the array after this operation.
      * </p>
-     * 
+     *
      * @param arr
      *            The base array.
      * @param element
@@ -322,7 +326,7 @@ public final class Array
 
     /**
      * Removes the element at the given index and returns a new array with reduced size.
-     * 
+     *
      * @param arr
      *            The base array.
      * @param index
@@ -354,7 +358,7 @@ public final class Array
 
     /**
      * Removes the element at the given index and returns a new array with reduced size.
-     * 
+     *
      * @param arr
      *            The base array.
      * @param index
@@ -385,7 +389,7 @@ public final class Array
 
     /**
      * Removes the element at the given index and returns a new array with reduced size.
-     * 
+     *
      * @param arr
      *            The base array.
      * @param index
@@ -416,7 +420,7 @@ public final class Array
 
     /**
      * Removes the element at the given index and returns a new array with reduced size.
-     * 
+     *
      * @param arr
      *            The base array.
      * @param index
@@ -447,7 +451,7 @@ public final class Array
 
     /**
      * Removes the element at the given index and returns a new array with reduced size.
-     * 
+     *
      * @param arr
      *            The base array.
      * @param index
@@ -478,7 +482,7 @@ public final class Array
 
     /**
      * Removes the element at the given index and returns a new array with reduced size.
-     * 
+     *
      * @param arr
      *            The base array.
      * @param index
@@ -509,7 +513,7 @@ public final class Array
 
     /**
      * Removes the element at the given index and returns a new array with reduced size.
-     * 
+     *
      * @param arr
      *            The base array.
      * @param index
@@ -540,7 +544,7 @@ public final class Array
 
     /**
      * Removes the element at the given index and returns a new array with reduced size.
-     * 
+     *
      * @param arr
      *            The base array.
      * @param index
@@ -571,7 +575,7 @@ public final class Array
 
     /**
      * Removes the first element and returns a new array with reduced size.
-     * 
+     *
      * @param arr
      *            The base array.
      * @return The new array with a size of arr.length - 1.
@@ -584,7 +588,7 @@ public final class Array
 
     /**
      * Removes the first element and returns a new array with reduced size.
-     * 
+     *
      * @param arr
      *            The base array.
      * @return The new array with a size of arr.length - 1.
@@ -597,7 +601,7 @@ public final class Array
 
     /**
      * Removes the first element and returns a new array with reduced size.
-     * 
+     *
      * @param arr
      *            The base array.
      * @return The new array with a size of arr.length - 1.
@@ -610,7 +614,7 @@ public final class Array
 
     /**
      * Removes the first element and returns a new array with reduced size.
-     * 
+     *
      * @param arr
      *            The base array.
      * @return The new array with a size of arr.length - 1.
@@ -623,7 +627,7 @@ public final class Array
 
     /**
      * Removes the first element and returns a new array with reduced size.
-     * 
+     *
      * @param arr
      *            The base array.
      * @return The new array with a size of arr.length - 1.
@@ -636,7 +640,7 @@ public final class Array
 
     /**
      * Removes the first element and returns a new array with reduced size.
-     * 
+     *
      * @param arr
      *            The base array.
      * @return The new array with a size of arr.length - 1.
@@ -649,7 +653,7 @@ public final class Array
 
     /**
      * Removes the first element and returns a new array with reduced size.
-     * 
+     *
      * @param arr
      *            The base array.
      * @return The new array with a size of arr.length - 1.
@@ -662,7 +666,7 @@ public final class Array
 
     /**
      * Removes the first element and returns a new array with reduced size.
-     * 
+     *
      * @param arr
      *            The base array.
      * @return The new array with a size of arr.length - 1.
@@ -675,7 +679,7 @@ public final class Array
 
     /**
      * Creates a new array of the given type with the given size.
-     * 
+     *
      * @param type
      *            The type of the array elements.
      * @param size
@@ -686,5 +690,22 @@ public final class Array
     {
         return (T[])java.lang.reflect.Array.newInstance(type,
                                                         size);
+    }
+
+    /**
+     * Concatinates both arrays and returns a new one containing all elements.
+     *
+     * @param <T>
+     * @param a1
+     *            The first array.
+     * @param a2
+     *            The second array.
+     * @param generator
+     *            The array generator, i.e. String[]::new
+     * @return The combined array.
+     */
+    public static <T> T[] concat(T[] a1, T[] a2, IntFunction<T[]> generator)
+    {
+        return Stream.concat(Arrays.stream(a1), Arrays.stream(a2)).toArray(generator);
     }
 }
