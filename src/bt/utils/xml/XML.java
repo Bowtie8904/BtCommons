@@ -13,29 +13,32 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
-import bt.utils.log.Logger;
-
 /**
  * @author &#8904
  *
  */
 public class XML
 {
-    public static Document parse(String xml)
+    /**
+     * Creates an XML document from the given XML String.
+     *
+     * @param xml
+     * @return
+     * @throws DocumentException
+     */
+    public static Document parse(String xml) throws DocumentException
     {
-        Document doc = null;
-        try
-        {
-            doc = DocumentHelper.parseText(xml);
-        }
-        catch (DocumentException e)
-        {
-            Logger.global().print(e);
-        }
-        return doc;
+        return DocumentHelper.parseText(xml);
     }
 
-    public static Document parse(File xml)
+    /**
+     * Creates an XML document from the given XML file.
+     *
+     * @param xml
+     * @return
+     * @throws DocumentException
+     */
+    public static Document parse(File xml) throws DocumentException
     {
         if (xml == null)
         {
@@ -43,21 +46,17 @@ public class XML
         }
 
         SAXReader reader = new SAXReader();
-        Document doc = null;
-
-        try
-        {
-            doc = reader.read(xml);
-        }
-        catch (DocumentException e)
-        {
-            Logger.global().print(e);
-        }
-
-        return doc;
+        return reader.read(xml);
     }
 
-    public static Document parse(InputStream xml)
+    /**
+     * Creates an XML document from the given stream.
+     *
+     * @param xml
+     * @return
+     * @throws DocumentException
+     */
+    public static Document parse(InputStream xml) throws DocumentException
     {
         if (xml == null)
         {
@@ -65,31 +64,24 @@ public class XML
         }
 
         SAXReader reader = new SAXReader();
-        Document doc = null;
-
-        try
-        {
-            doc = reader.read(xml);
-        }
-        catch (DocumentException e)
-        {
-            Logger.global().print(e);
-        }
-
-        return doc;
+        return reader.read(xml);
     }
 
-    public static void save(Document doc, File file)
+    /**
+     * Saves the XML document structure to the given file.
+     *
+     * <p>
+     * The file is created if it does not exist.
+     * </p>
+     *
+     * @param doc
+     * @param file
+     * @throws IOException
+     */
+    public static void save(Document doc, File file) throws IOException
     {
-        try
-        {
-            file.getParentFile().mkdirs();
-            file.createNewFile();
-        }
-        catch (IOException e)
-        {
-            Logger.global().print(e);
-        }
+        file.getParentFile().mkdirs();
+        file.createNewFile();
 
         OutputFormat format = OutputFormat.createPrettyPrint();
         try (FileWriter fileWriter = new FileWriter(file))
@@ -97,37 +89,74 @@ public class XML
             XMLWriter xmlWriter = new XMLWriter(fileWriter, format);
             xmlWriter.write(doc);
         }
-        catch (IOException e)
-        {
-            Logger.global().print(e);
-        }
     }
 
-    public static void save(Document doc, String filePath)
+    /**
+     * Saves the XML document structure to the file at the given path.
+     *
+     * <p>
+     * The file is created if it does not exist.
+     * </p>
+     *
+     *
+     * @param doc
+     * @param filePath
+     * @throws IOException
+     */
+    public static void save(Document doc, String filePath) throws IOException
     {
         save(doc, new File(filePath));
     }
 
+    /**
+     * Creates a new extensible ElemtnBuilder from the given Element.
+     *
+     * @param e
+     * @return
+     */
     public static ElementBuilder element(Element e)
     {
         return new ElementBuilder(e);
     }
 
+    /**
+     * Creates a new extensible ElemtnBuilder for an element with the given name.
+     *
+     * @param name
+     * @return
+     */
     public static ElementBuilder element(String name)
     {
         return new ElementBuilder(name);
     }
 
+    /**
+     * Creates a new extensible ElemtnBuilder for an element with the given name and the given text.
+     *
+     * @param name
+     * @param text
+     * @return
+     */
     public static ElementBuilder element(String name, String text)
     {
         return new ElementBuilder(name, text);
     }
 
+    /**
+     * Creates a new extensible XMLBuilder.
+     *
+     * @return
+     */
     public static XMLBuilder builder()
     {
         return new XMLBuilder();
     }
 
+    /**
+     * Creates a new extensible XMLBuilder from the given Document.
+     *
+     * @return
+     */
     public static XMLBuilder builder(Document doc)
     {
         return new XMLBuilder(doc);

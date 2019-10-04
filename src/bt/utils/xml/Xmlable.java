@@ -3,10 +3,16 @@ package bt.utils.xml;
 import org.dom4j.Document;
 
 /**
- * @author &#8904
+ * Defines an Object that can be saved to an XML structure.
  *
+ * @author &#8904
  */
 public interface Xmlable
 {
+    /**
+     * Creates an XML Document that represents this instance.
+     *
+     * @return
+     */
     public Document toXML();
 }
