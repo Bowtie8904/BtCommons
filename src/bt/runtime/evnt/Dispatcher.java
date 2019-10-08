@@ -150,4 +150,15 @@ public class Dispatcher
         var dispatcher = (SubDispatcher<T>)this.subDispatchers.get(type);
         return dispatcher.getSubscribers();
     }
+
+    /**
+     * Creals all subscribers to the given type.
+     *
+     * @param <T>
+     * @param type
+     */
+    public <T> void clear(Class<T> type)
+    {
+        this.subDispatchers.remove(type);
+    }
 }
