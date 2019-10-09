@@ -2,6 +2,7 @@ package bt.runtime.evnt;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
 /**
@@ -28,8 +29,8 @@ public class SubDispatcher<T>
     protected SubDispatcher(Class<T> type)
     {
         this.type = type;
-        this.consumers = new ArrayList<>();
-        this.runnables = new ArrayList<>();
+        this.consumers = new CopyOnWriteArrayList<>();
+        this.runnables = new CopyOnWriteArrayList<>();
     }
 
     /**
@@ -112,17 +113,21 @@ public class SubDispatcher<T>
      */
     protected int dispatch(T data)
     {
+        int i = 0;
+
         for (var consumer : this.consumers)
         {
             consumer.accept(data);
+            i ++ ;
         }
 
         for (var runnable : this.runnables)
         {
             runnable.run();
+            i ++ ;
         }
 
-        return this.consumers.size() + this.runnables.size();
+        return i;
     }
 
     /**
