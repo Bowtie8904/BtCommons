@@ -130,6 +130,12 @@ public class SubDispatcher<T>
         return i;
     }
 
+    public void clear()
+    {
+        this.consumers.clear();
+        this.runnables.clear();
+    }
+
     /**
      * Gets a list containing all subscribers of this instance.
      *

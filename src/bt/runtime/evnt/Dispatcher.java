@@ -159,6 +159,11 @@ public class Dispatcher
      */
     public <T> void clear(Class<T> type)
     {
-        this.subDispatchers.remove(type);
+        var subDispatcher = this.subDispatchers.get(type);
+
+        if (subDispatcher != null)
+        {
+            subDispatcher.clear();
+        }
     }
 }
