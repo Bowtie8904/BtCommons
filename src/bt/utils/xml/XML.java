@@ -196,7 +196,14 @@ public class XML
 
         for (String node : nodes)
         {
-            xPath += "/" + lowerNode(node);
+            if (node.equals("*"))
+            {
+                xPath += "/*";
+            }
+            else
+            {
+                xPath += "/" + lowerNode(node);
+            }
         }
 
         return xPath;
