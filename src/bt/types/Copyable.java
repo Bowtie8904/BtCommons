@@ -12,6 +12,11 @@ import bt.utils.refl.field.Fields;
  */
 public interface Copyable<T>
 {
+    /**
+     * Creates a field value identical copy of this instance.
+     *
+     * @return
+     */
     default public T copy()
     {
         T copy = null;
