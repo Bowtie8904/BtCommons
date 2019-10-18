@@ -13,25 +13,25 @@ import bt.utils.refl.field.Fields;
 public interface Copyable<T>
 {
     /**
-     * Creates a field value identical copy of this instance.
+     * Creates a field value identical copy of the given instance.
      *
-     * @param <T>
-     *
+     * @param <K>
+     * @param copyable
      * @return
      */
-    default public T copy()
+    public static <K> K copy(K copyable)
     {
-        T copy = null;
+        K copy = null;
         try
         {
-            Constructor<T> construct = (Constructor<T>)getClass().getConstructor();
+            Constructor<K> construct = (Constructor<K>)copyable.getClass().getConstructor();
             construct.setAccessible(true);
             copy = construct.newInstance();
 
-            for (var field : Fields.getAllFields(getClass()))
+            for (var field : Fields.getAllFields(copyable.getClass()))
             {
                 field.setAccessible(true);
-                field.set(copy, field.get(this));
+                field.set(copy, field.get(copyable));
             }
         }
         catch (InstantiationException | IllegalAccessException
@@ -44,7 +44,44 @@ public interface Copyable<T>
     }
 
     /**
-     * Applies the field values of the given instance to this instances field.
+     * Creates a field value identical copy of this instance.
+     *
+     * @param <T>
+     *
+     * @return
+     */
+    default public T copy()
+    {
+        return (T)copy(this);
+    }
+
+    /**
+     * Applies the field values of the given valueProvider to the valueReceivers fields.
+     *
+     * @param <K>
+     * @param valueReceiver
+     *            The instance that should receive the new values.
+     * @param valueProvider
+     *            The instance whichs values should be passed to the receiver.
+     */
+    public static <K> void apply(K valueReceiver, K valueProvider)
+    {
+        for (var field : Fields.getAllFields(valueReceiver.getClass()))
+        {
+            try
+            {
+                field.setAccessible(true);
+                field.set(valueReceiver, field.get(valueProvider));
+            }
+            catch (IllegalArgumentException | IllegalAccessException e)
+            {
+                Logger.global().print(e);
+            }
+        }
+    }
+
+    /**
+     * Applies the field values of the given instance to this instances fields.
      *
      * @param <T>
      *
@@ -52,17 +89,6 @@ public interface Copyable<T>
      */
     default public void apply(T valueProvider)
     {
-        for (var field : Fields.getAllFields(getClass()))
-        {
-            try
-            {
-                field.setAccessible(true);
-                field.set(this, field.get(valueProvider));
-            }
-            catch (IllegalArgumentException | IllegalAccessException e)
-            {
-                Logger.global().print(e);
-            }
-        }
+        apply(this, valueProvider);
     }
 }
