@@ -1,7 +1,11 @@
 package bt.utils.collections;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * Implementes utilities for modifying collections.
@@ -83,5 +87,45 @@ public final class CollectionUtils
         }
 
         return false;
+    }
+
+    /**
+     * Attempts to find the first key in the given map that maps to the given instance so that
+     * <code>Objects.equals(map.get(key), value)</code> returns true.
+     *
+     * @param <K>
+     * @param <V>
+     * @param map
+     * @param value
+     * @return The first found key or null if no key was found.
+     */
+    public static <K, V> K getKeyForValue(Map<K, V> map, V value)
+    {
+        K key = map.keySet()
+                   .stream()
+                   .filter(k -> Objects.equals(map.get(k), value))
+                   .findFirst().orElse(null);
+
+        return key;
+    }
+
+    /**
+     * Attempts to find all keys in the given map that map to the given instance so that
+     * <code>Objects.equals(map.get(key), value)</code> returns true.
+     *
+     * @param <K>
+     * @param <V>
+     * @param map
+     * @param value
+     * @return A list containing all found keys. The list may be empty but will never be null.
+     */
+    public static <K, V> List<K> getKeysForValue(Map<K, V> map, V value)
+    {
+        var keys = map.keySet()
+                      .stream()
+                      .filter(k -> Objects.equals(map.get(k), value))
+                      .collect(Collectors.toList());
+
+        return keys;
     }
 }
