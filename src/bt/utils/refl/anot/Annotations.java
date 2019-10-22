@@ -1,6 +1,7 @@
 package bt.utils.refl.anot;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,7 +12,7 @@ import org.reflections.Reflections;
 
 /**
  * Basic utilities involving annotations.
- * 
+ *
  * @author &#8904
  */
 public final class Annotations
@@ -19,7 +20,7 @@ public final class Annotations
     /**
      * Gets a set of all classes within the given package or within subpackages that are annotated with the given
      * annotation.
-     * 
+     *
      * @param topPackage
      *            The highest package to search from. Subpackages will be searched too.
      * @param anot
@@ -36,7 +37,7 @@ public final class Annotations
     /**
      * Gets a list of methods from the given class (and its super class/es) that are annotated with the given
      * annotation.
-     * 
+     *
      * @param type
      *            The class which methods should be looked through.
      * @param annotation
@@ -45,12 +46,12 @@ public final class Annotations
      */
     public static List<Method> getMethodsAnnotatedWith(Class<?> type, Class<? extends Annotation> annotation)
     {
-        List<Method> methods = new ArrayList<Method>();
+        List<Method> methods = new ArrayList<>();
         Class<?> currentClass = type;
 
         while (currentClass != Object.class)
         {
-            List<Method> allMethods = new ArrayList<Method>(Arrays.asList(currentClass.getDeclaredMethods()));
+            List<Method> allMethods = new ArrayList<>(Arrays.asList(currentClass.getDeclaredMethods()));
 
             for (Method method : allMethods)
             {
@@ -62,5 +63,35 @@ public final class Annotations
             currentClass = currentClass.getSuperclass();
         }
         return methods;
+    }
+
+    /**
+     * Gets a list of fields from the given class (and its super class/es) that are annotated with the given annotation.
+     *
+     * @param type
+     *            The class which fields should be looked through.
+     * @param annotation
+     *            The annotation class to search for.
+     * @return The list of fields.
+     */
+    public static List<Field> getFieldsAnnotatedWith(Class<?> type, Class<? extends Annotation> annotation)
+    {
+        List<Field> fields = new ArrayList<>();
+        Class<?> currentClass = type;
+
+        while (currentClass != Object.class)
+        {
+            List<Field> allFields = new ArrayList<>(Arrays.asList(currentClass.getDeclaredFields()));
+
+            for (Field field : allFields)
+            {
+                if (field.isAnnotationPresent(annotation))
+                {
+                    fields.add(field);
+                }
+            }
+            currentClass = currentClass.getSuperclass();
+        }
+        return fields;
     }
 }
