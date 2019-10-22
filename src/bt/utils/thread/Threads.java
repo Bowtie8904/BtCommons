@@ -17,12 +17,12 @@ import bt.utils.thread.fact.DaemonThreadFactory;
 
 /**
  * Holds multiple threadpools with different purposes.
- * 
+ *
  * @author &#8904
  */
 public class Threads implements Killable
 {
-    private static Threads instance;
+    private static volatile Threads instance;
 
     private final ScheduledThreadPoolExecutor schedulerPool;
     private final ExecutorService cachedPool;
@@ -52,11 +52,11 @@ public class Threads implements Killable
 
     /**
      * Gets the singleton instance.
-     * 
+     *
      * <p>
      * If no instance has been initialized before this method will create a new one.
      * </p>
-     * 
+     *
      * @return The instance.
      */
     public static Threads get()
@@ -75,7 +75,7 @@ public class Threads implements Killable
 
     /**
      * Executes the given runnable in a new non-daemon thread.
-     * 
+     *
      * @param task
      *            The runnable to execute.
      */
@@ -87,7 +87,7 @@ public class Threads implements Killable
 
     /**
      * Executes the given runnable in a new non-daemon thread.
-     * 
+     *
      * @param threadName
      *            The name of the created thread.
      * @param task
@@ -104,7 +104,7 @@ public class Threads implements Killable
 
     /**
      * Executes the given runnable in a new daemon thread.
-     * 
+     *
      * @param task
      *            The runnable to execute.
      */
@@ -116,7 +116,7 @@ public class Threads implements Killable
 
     /**
      * Executes the given runnable in a new daemon thread.
-     * 
+     *
      * @param threadName
      *            The name of the created thread.
      * @param task
@@ -135,7 +135,7 @@ public class Threads implements Killable
 
     /**
      * Executes the given runnable in a non-daemon thread from the cashed thread pool.
-     * 
+     *
      * @param task
      *            The runnable to execute.
      */
@@ -147,7 +147,7 @@ public class Threads implements Killable
 
     /**
      * Executes the given runnable in a non-daemon thread from the cashed thread pool.
-     * 
+     *
      * @param threadName
      *            The name of the used thread.
      * @param task
@@ -164,7 +164,7 @@ public class Threads implements Killable
 
     /**
      * Executes the given runnable in a daemon thread from the cashed thread pool.
-     * 
+     *
      * @param task
      *            The runnable to execute.
      */
@@ -176,7 +176,7 @@ public class Threads implements Killable
 
     /**
      * Executes the given runnable in a daemon thread from the cashed thread pool.
-     * 
+     *
      * @param threadName
      *            The name of the used thread.
      * @param task
@@ -193,7 +193,7 @@ public class Threads implements Killable
 
     /**
      * Executes the given runnable after the set delay in a pooled non-daemon thread.
-     * 
+     *
      * @param task
      *            The runnable to execute.
      * @param delay
@@ -213,7 +213,7 @@ public class Threads implements Killable
 
     /**
      * Executes the given runnable after the set delay in a pooled non-daemon thread.
-     * 
+     *
      * @param task
      *            The runnable to execute.
      * @param delay
@@ -238,7 +238,7 @@ public class Threads implements Killable
 
     /**
      * Executes the given runnable after the set delay in a pooled daemon thread.
-     * 
+     *
      * @param task
      *            The runnable to execute.
      * @param delay
@@ -258,7 +258,7 @@ public class Threads implements Killable
 
     /**
      * Executes the given runnable after the set delay in a pooled daemon thread.
-     * 
+     *
      * @param task
      *            The runnable to execute.
      * @param delay
@@ -288,7 +288,7 @@ public class Threads implements Killable
      * are suppressed.Otherwise, the task will only terminate via cancellation ortermination of the executor. If any
      * execution of this tasktakes longer than its period, then subsequent executionsmay start late, but will not
      * concurrently execute.
-     * 
+     *
      * @param task
      *            The runnable to execute.
      * @param initialDelay
@@ -316,7 +316,7 @@ public class Threads implements Killable
      * are suppressed.Otherwise, the task will only terminate via cancellation ortermination of the executor. If any
      * execution of this tasktakes longer than its period, then subsequent executionsmay start late, but will not
      * concurrently execute.
-     * 
+     *
      * @param task
      *            The runnable to execute.
      * @param initialDelay
@@ -350,7 +350,7 @@ public class Threads implements Killable
      * are suppressed.Otherwise, the task will only terminate via cancellation ortermination of the executor. If any
      * execution of this tasktakes longer than its period, then subsequent executionsmay start late, but will not
      * concurrently execute.
-     * 
+     *
      * @param task
      *            The runnable to execute.
      * @param initialDelay
@@ -378,7 +378,7 @@ public class Threads implements Killable
      * are suppressed.Otherwise, the task will only terminate via cancellation ortermination of the executor. If any
      * execution of this tasktakes longer than its period, then subsequent executionsmay start late, but will not
      * concurrently execute.
-     * 
+     *
      * @param task
      *            The runnable to execute.
      * @param initialDelay
@@ -410,7 +410,7 @@ public class Threads implements Killable
      * with the given delay between the termination of one execution and thecommencement of the next. If any execution
      * of the taskencounters an exception, subsequent executions are suppressed. Otherwise, the task will only terminate
      * via cancellation ortermination of the executor.
-     * 
+     *
      * @param task
      *            The runnable to execute.
      * @param initialDelay
@@ -436,7 +436,7 @@ public class Threads implements Killable
      * with the given delay between the termination of one execution and thecommencement of the next. If any execution
      * of the taskencounters an exception, subsequent executions are suppressed. Otherwise, the task will only terminate
      * via cancellation ortermination of the executor.
-     * 
+     *
      * @param task
      *            The runnable to execute.
      * @param initialDelay
@@ -468,7 +468,7 @@ public class Threads implements Killable
      * with the given delay between the termination of one execution and thecommencement of the next. If any execution
      * of the taskencounters an exception, subsequent executions are suppressed. Otherwise, the task will only terminate
      * via cancellation ortermination of the executor.
-     * 
+     *
      * @param task
      *            The runnable to execute.
      * @param initialDelay
@@ -494,7 +494,7 @@ public class Threads implements Killable
      * with the given delay between the termination of one execution and thecommencement of the next. If any execution
      * of the taskencounters an exception, subsequent executions are suppressed. Otherwise, the task will only terminate
      * via cancellation ortermination of the executor.
-     * 
+     *
      * @param task
      *            The runnable to execute.
      * @param initialDelay
@@ -549,11 +549,11 @@ public class Threads implements Killable
 
     /**
      * Adds another ExecutorService to this instance.
-     * 
+     *
      * <p>
      * The added service will be shut down when this instances kill() is called.
      * </p>
-     * 
+     *
      * @param service
      *            The ExecutorService to add.
      */
