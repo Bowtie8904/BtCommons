@@ -2,7 +2,7 @@ package bt.types;
 
 /**
  * A basic implementation of the {@link Tripple} interface.
- * 
+ *
  * @author &#8904
  *
  * @param <A>
@@ -20,7 +20,7 @@ public class SimpleTripple<A, B, C> implements Tripple<A, B, C>
 
     /**
      * Creates a new instance which holds the given values and the given key.
-     * 
+     *
      * @param key
      *            The key of this Tripple.
      * @param value1
@@ -60,5 +60,32 @@ public class SimpleTripple<A, B, C> implements Tripple<A, B, C>
     public C getSecondValue()
     {
         return this.value2;
+    }
+
+    /**
+     * @see bt.types.Tripple#setKey(java.lang.Object)
+     */
+    @Override
+    public void setKey(A a)
+    {
+        this.key = a;
+    }
+
+    /**
+     * @see bt.types.Tripple#setFirstValue(java.lang.Object)
+     */
+    @Override
+    public void setFirstValue(B b)
+    {
+        this.value1 = b;
+    }
+
+    /**
+     * @see bt.types.Tripple#setSecondValue(java.lang.Object)
+     */
+    @Override
+    public void setSecondValue(C c)
+    {
+        this.value2 = c;
     }
 }
