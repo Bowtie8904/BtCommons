@@ -142,7 +142,6 @@ public class Logger implements Killable
     public static void setBaseLogFolder(String folder)
     {
         baseFolder = folder;
-        defaultLogPath = baseFolder + "/" + defaultLogPath;
     }
 
     /**
