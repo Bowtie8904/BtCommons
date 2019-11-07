@@ -32,7 +32,7 @@ import bt.utils.thread.Threads;
 
 /**
  * A logging class which prints to either a given file or to the default log file which is defined by
- * {@link #DEFAULT_LOG_PATH}.
+ * {@link #defaultLogPath}.
  *
  * <p>
  * All logging from instances of this class can be stopped by calling {@link #setLoggingEnabled(boolean)} with false.
@@ -58,7 +58,9 @@ public class Logger implements Killable
      * 'logs/log.txt'
      * </p>
      */
-    private static final String DEFAULT_LOG_PATH = "logs/default_logfile.log";
+    private static String defaultLogPath = "default_logfile.log";
+
+    private static String baseFolder = "logs";
 
     /** A list which contains all currently active instances of this class. */
     private static ArrayList<Logger> activeLoggers = new ArrayList<>();
@@ -137,9 +139,15 @@ public class Logger implements Killable
     /** File name sequence. */
     private int fileNameSequence = 1;
 
+    public static void setBaseLogFolder(String folder)
+    {
+        baseFolder = folder;
+        defaultLogPath = baseFolder + "/" + defaultLogPath;
+    }
+
     /**
      * An instance of the {@link Logger} class that is meant for general logging. By default it will print output to the
-     * {@link #DEFAULT_LOG_PATH}. This behavior can however be customized by setting an instance with a different
+     * {@link #defaultLogPath}. This behavior can however be customized by setting an instance with a different
      * configuration via {@link #setGlobal(Logger)}.
      *
      * @return The global logger instance.
@@ -200,7 +208,7 @@ public class Logger implements Killable
 
     /**
      * Creates a {@link Logger} instance which uses the default timezone of the system and prints to the default log
-     * file which is defined by {@link #DEFAULT_LOG_PATH}.
+     * file which is defined by {@link #defaultLogPath}.
      *
      * <p>
      * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#killOnShutdown(Killable, int)}
@@ -209,7 +217,7 @@ public class Logger implements Killable
      */
     public Logger()
     {
-        this(DEFAULT_LOG_PATH);
+        this(defaultLogPath);
     }
 
     /**
@@ -226,7 +234,7 @@ public class Logger implements Killable
      */
     public Logger(String logPath)
     {
-        this(new File(logPath));
+        this(new File(baseFolder + "/" + logPath));
     }
 
     /**
@@ -251,7 +259,7 @@ public class Logger implements Killable
 
     /**
      * Creates a {@link Logger} instance which prints to the default log file which is defined by
-     * {@link #DEFAULT_LOG_PATH}. This constructor will set the given timezone as default for the Java VM. Note that
+     * {@link #defaultLogPath}. This constructor will set the given timezone as default for the Java VM. Note that
      * this is affecting all {@link Logger} instances.
      *
      * <p>
@@ -264,7 +272,7 @@ public class Logger implements Killable
      */
     public Logger(TimeZone timeZone)
     {
-        this(DEFAULT_LOG_PATH,
+        this(defaultLogPath,
              timeZone);
     }
 
@@ -285,7 +293,7 @@ public class Logger implements Killable
      */
     public Logger(String logPath, TimeZone timeZone)
     {
-        this(new File(logPath),
+        this(new File(baseFolder + "/" + logPath),
              timeZone);
     }
 
@@ -331,7 +339,7 @@ public class Logger implements Killable
      */
     public Logger(String logPath, String timeZone)
     {
-        this(new File(logPath),
+        this(new File(baseFolder + "/" + logPath),
              timeZone);
     }
 
