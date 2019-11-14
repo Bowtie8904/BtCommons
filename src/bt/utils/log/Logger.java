@@ -84,9 +84,15 @@ public class Logger implements Killable
     private String logFileName;
 
     /**
-     * Indicates wether this Logger instance should also send its output to {@link System#out}. True by default.
+     * Indicates whether this Logger instance should also send its output to {@link System#out}. True by default.
      */
     private boolean logToSystemOut = true;
+
+    /**
+     * Indicates whether this Logger instance should also send its exception stacktraces to {@link System#err}. True by
+     * default.
+     */
+    private boolean logToSystemErr = true;
 
     /**
      * Indicates wether this Logger instance should send its output to its file. True by default.
@@ -258,8 +264,8 @@ public class Logger implements Killable
 
     /**
      * Creates a {@link Logger} instance which prints to the default log file which is defined by
-     * {@link #defaultLogPath}. This constructor will set the given timezone as default for the Java VM. Note that
-     * this is affecting all {@link Logger} instances.
+     * {@link #defaultLogPath}. This constructor will set the given timezone as default for the Java VM. Note that this
+     * is affecting all {@link Logger} instances.
      *
      * <p>
      * This logger will be added to the {@link InstanceKiller} via {@link InstanceKiller#killOnShutdown(Killable, int)}
@@ -365,6 +371,11 @@ public class Logger implements Killable
         activeLoggers.add(this);
         InstanceKiller.killOnShutdown(this,
                                       Integer.MIN_VALUE);
+    }
+
+    public void hookSystemOut()
+    {
+        this.logToSystemOut = false;
     }
 
     /**
@@ -917,7 +928,10 @@ public class Logger implements Killable
                         }
                         catch (InterruptedException e)
                         {
-                            e.printStackTrace();
+                            if (this.logToSystemOut)
+                            {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 }
@@ -1002,7 +1016,10 @@ public class Logger implements Killable
                             }
                             catch (InterruptedException e)
                             {
-                                e.printStackTrace();
+                                if (this.logToSystemOut)
+                                {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                     }
@@ -1218,14 +1235,20 @@ public class Logger implements Killable
                                 }
                                 catch (InterruptedException e)
                                 {
-                                    e.printStackTrace();
+                                    if (this.logToSystemOut)
+                                    {
+                                        e.printStackTrace();
+                                    }
                                 }
                             }
                         }
                     }
                     catch (IOException e)
                     {
-                        e.printStackTrace();
+                        if (this.logToSystemOut)
+                        {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
@@ -1288,7 +1311,10 @@ public class Logger implements Killable
                             }
                             catch (InterruptedException e)
                             {
-                                e.printStackTrace();
+                                if (this.logToSystemOut)
+                                {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                     }
@@ -1468,14 +1494,20 @@ public class Logger implements Killable
                                 }
                                 catch (InterruptedException e)
                                 {
-                                    e.printStackTrace();
+                                    if (this.logToSystemOut)
+                                    {
+                                        e.printStackTrace();
+                                    }
                                 }
                             }
                         }
                     }
                     catch (IOException e)
                     {
-                        e.printStackTrace();
+                        if (this.logToSystemOut)
+                        {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
