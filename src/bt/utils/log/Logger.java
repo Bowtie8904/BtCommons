@@ -378,24 +378,56 @@ public class Logger implements Killable
                                       Integer.MIN_VALUE);
     }
 
+    /**
+     * Hooks this instance into the {@link System#out} stream.
+     *
+     * <p>
+     * This will create a new {@link SystemLogHook} if it does not exist yet. The new instance will then be set via
+     * {@link System#setOut(java.io.PrintStream)}.
+     * </p>
+     *
+     * <p>
+     * Multiple Logger instances can hook into the system stream and receive all print (and println) calls that are done
+     * to {@link System#out}.
+     * </p>
+     */
     public void hookSystemOut()
     {
         SystemLogHook.hookOut(this);
         this.hookedOut = true;
     }
 
+    /**
+     * Hooks this instance into the {@link System#err} stream.
+     *
+     * <p>
+     * This will create a new {@link SystemLogHook} if it does not exist yet. The new instance will then be set via
+     * {@link System#setErr(java.io.PrintStream)}.
+     * </p>
+     *
+     * <p>
+     * Multiple Logger instances can hook into the system stream and receive all print (and println) and
+     * {@link Throwable#printStackTrace()} calls that are done to {@link System#err}.
+     * </p>
+     */
     public void hookSystemErr()
     {
         SystemLogHook.hookErr(this);
         this.hookedErr = true;
     }
 
+    /**
+     * Unhooks this instance from the system out stream.
+     */
     public void unhookSystemOut()
     {
         SystemLogHook.unhookOut(this);
         this.hookedOut = false;
     }
 
+    /**
+     * Unhooks this instance from the system err stream.
+     */
     public void unhookSystemErr()
     {
         SystemLogHook.unhookErr(this);
@@ -549,7 +581,7 @@ public class Logger implements Killable
                     {
                         if (this.hookedErr)
                         {
-                            SystemLogHook.err().printToErr(ex);
+                            SystemLogHook.err().printNormal(ex);
                         }
                         else
                         {
@@ -567,7 +599,7 @@ public class Logger implements Killable
                 {
                     if (this.hookedErr)
                     {
-                        SystemLogHook.err().printToErr(e);
+                        SystemLogHook.err().printNormal(e);
                     }
                     else
                     {
@@ -974,11 +1006,11 @@ public class Logger implements Killable
                     {
                         if (this.printErr)
                         {
-                            SystemLogHook.err().printToOut("");
+                            SystemLogHook.err().printNormal("");
                         }
                         else
                         {
-                            SystemLogHook.out().printToOut("");
+                            SystemLogHook.out().printNormal("");
                         }
                     }
                     else
@@ -1012,7 +1044,7 @@ public class Logger implements Killable
                             {
                                 if (this.hookedErr)
                                 {
-                                    SystemLogHook.err().printToErr(e);
+                                    SystemLogHook.err().printNormal(e);
                                 }
                                 else
                                 {
@@ -1090,11 +1122,11 @@ public class Logger implements Killable
                         {
                             if (this.printErr)
                             {
-                                SystemLogHook.err().printToOut(text);
+                                SystemLogHook.err().printNormal(text);
                             }
                             else
                             {
-                                SystemLogHook.out().printToOut(text);
+                                SystemLogHook.out().printNormal(text);
                             }
                         }
                         else
@@ -1128,7 +1160,7 @@ public class Logger implements Killable
                                 {
                                     if (this.hookedErr)
                                     {
-                                        SystemLogHook.err().printToErr(e);
+                                        SystemLogHook.err().printNormal(e);
                                     }
                                     else
                                     {
@@ -1328,11 +1360,11 @@ public class Logger implements Killable
                     {
                         if (this.printErr)
                         {
-                            SystemLogHook.err().printToOut(text);
+                            SystemLogHook.err().printNormal(text);
                         }
                         else
                         {
-                            SystemLogHook.out().printToOut(text);
+                            SystemLogHook.out().printNormal(text);
                         }
                     }
                     else
@@ -1352,7 +1384,7 @@ public class Logger implements Killable
                 {
                     if (this.hookedErr)
                     {
-                        SystemLogHook.err().printToErr(t);
+                        SystemLogHook.err().printNormal(t);
                     }
                     else
                     {
@@ -1386,7 +1418,7 @@ public class Logger implements Killable
                                     {
                                         if (this.hookedErr)
                                         {
-                                            SystemLogHook.err().printToErr(e);
+                                            SystemLogHook.err().printNormal(e);
                                         }
                                         else
                                         {
@@ -1403,7 +1435,7 @@ public class Logger implements Killable
                         {
                             if (this.hookedErr)
                             {
-                                SystemLogHook.err().printToErr(e);
+                                SystemLogHook.err().printNormal(e);
                             }
                             else
                             {
@@ -1459,11 +1491,11 @@ public class Logger implements Killable
                         {
                             if (this.printErr)
                             {
-                                SystemLogHook.err().printToOut(text);
+                                SystemLogHook.err().printNormal(text);
                             }
                             else
                             {
-                                SystemLogHook.out().printToOut(text);
+                                SystemLogHook.out().printNormal(text);
                             }
                         }
                         else
@@ -1497,7 +1529,7 @@ public class Logger implements Killable
                                 {
                                     if (this.hookedErr)
                                     {
-                                        SystemLogHook.err().printToErr(e);
+                                        SystemLogHook.err().printNormal(e);
                                     }
                                     else
                                     {
@@ -1661,11 +1693,11 @@ public class Logger implements Killable
                     {
                         if (this.printErr)
                         {
-                            SystemLogHook.err().printToOut(text);
+                            SystemLogHook.err().printNormal(text);
                         }
                         else
                         {
-                            SystemLogHook.out().printToOut(text);
+                            SystemLogHook.out().printNormal(text);
                         }
                     }
                     else
@@ -1685,7 +1717,7 @@ public class Logger implements Killable
                 {
                     if (this.hookedErr)
                     {
-                        SystemLogHook.err().printToErr(t);
+                        SystemLogHook.err().printNormal(t);
                     }
                     else
                     {
@@ -1729,7 +1761,7 @@ public class Logger implements Killable
                         {
                             if (this.hookedErr)
                             {
-                                SystemLogHook.err().printToErr(e);
+                                SystemLogHook.err().printNormal(e);
                             }
                             else
                             {
@@ -1746,6 +1778,13 @@ public class Logger implements Killable
         }
     }
 
+    /**
+     * Prints the given parameter with the current date to the {@link #logFile} and, if {@link #logToSystemOut} is true,
+     * to {@link System#err}.
+     *
+     * @param s
+     *            The text that should be logged.
+     */
     public void printErr(String s)
     {
         this.printErr = true;

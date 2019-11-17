@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author &#8904
+ * A {@link PrintStream} extension to send print calls to the out stream aswell as to all subscribed {@link Logger}
+ * instances.
  *
+ * @author &#8904
  */
 public class SystemLogHook extends PrintStream
 {
@@ -24,11 +26,21 @@ public class SystemLogHook extends PrintStream
     private int currentCallerIndex = PRINT_CALLER_STACK_INDEX;
     private boolean forwardOutput;
 
+    /**
+     * Gets the instance that is currently hooked into the {@link System#err} stream, if any has been constructed yet.
+     *
+     * @return
+     */
     public static SystemLogHook err()
     {
         return errHook;
     }
 
+    /**
+     * Gets the instance that is currently hooked into the {@link System#out} stream, if any has been constructed yet.
+     *
+     * @return
+     */
     public static SystemLogHook out()
     {
         return outHook;
@@ -63,21 +75,33 @@ public class SystemLogHook extends PrintStream
         this.subscribedLoggers = new ArrayList<>();
     }
 
+    /**
+     * Sets whether this hook should forward any call to its print methods to the default out stream.
+     *
+     * <p>
+     * The default value is false to avoid duplicate printing from both this hook and all subscribed Loggers.
+     * </p>
+     *
+     * @param forward
+     */
     public void forwardOutput(boolean forward)
     {
         this.forwardOutput = forward;
     }
 
-    public void subscribe(Logger log)
+    protected void subscribe(Logger log)
     {
         this.subscribedLoggers.add(log);
     }
 
-    public void unsubscribe(Logger log)
+    protected void unsubscribe(Logger log)
     {
         this.subscribedLoggers.remove(log);
     }
 
+    /**
+     * Resets the {@link System#out} stream to its old value.
+     */
     public static void resetSystemOut()
     {
         if (outHook != null)
@@ -86,6 +110,9 @@ public class SystemLogHook extends PrintStream
         }
     }
 
+    /**
+     * Resets the {@link System#err} stream to its old value.
+     */
     public static void resetSystemErr()
     {
         if (errHook != null)
@@ -94,26 +121,45 @@ public class SystemLogHook extends PrintStream
         }
     }
 
-    public static void hookOut(Logger log)
+    protected static void hookOut(Logger log)
     {
         initOutHook();
         outHook.subscribe(log);
     }
 
-    public static void hookErr(Logger log)
+    protected static void hookErr(Logger log)
     {
         initErrHook();
         errHook.subscribe(log);
     }
 
-    public static void unhookOut(Logger log)
+    protected static void unhookOut(Logger log)
     {
         outHook.unsubscribe(log);
     }
 
-    public static void unhookErr(Logger log)
+    protected static void unhookErr(Logger log)
     {
         errHook.unsubscribe(log);
+    }
+
+    /**
+     * Unhooks all subscribed Logger instances by calling their respective {@link Logger#unhookSystemOut()} or
+     * {@link Logger#unhookSystemErr()}.
+     */
+    public void clear()
+    {
+        for (var log : this.subscribedLoggers)
+        {
+            if (this == outHook)
+            {
+                log.unhookSystemOut();
+            }
+            else
+            {
+                log.unhookSystemErr();
+            }
+        }
     }
 
     private void printThroughLoggers(String s)
@@ -387,13 +433,23 @@ public class SystemLogHook extends PrintStream
         }
     }
 
-    public void printToOut(String s)
+    /**
+     * Prints to the out stream without calling the subscribed Loggers print methods.
+     *
+     * @param s
+     */
+    public void printNormal(String s)
     {
         super.print(s);
         super.print(System.lineSeparator());
     }
 
-    public void printToErr(Throwable t)
+    /**
+     * Prints to the out stream without calling the subscribed Loggers print methods.
+     *
+     * @param s
+     */
+    public void printNormal(Throwable t)
     {
         t.printStackTrace(this.outStream);
     }
