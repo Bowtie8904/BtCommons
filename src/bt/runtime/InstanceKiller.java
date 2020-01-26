@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import bt.utils.log.Logger;
+import bt.utils.nulls.Null;
 
 /**
  * Class to manage the closing of global resources such as databases and global loggers.
@@ -59,7 +60,7 @@ public final class InstanceKiller
 
             for (Entry<Killable, Integer> killable : killables)
             {
-                killable.getKey().kill();
+                Null.check(killable.getKey(), killable.getKey()::kill);
             }
 
             isActive = false;

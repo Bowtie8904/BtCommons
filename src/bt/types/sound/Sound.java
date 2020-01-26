@@ -5,11 +5,12 @@ import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineEvent;
 
 import bt.utils.log.Logger;
+import bt.utils.nulls.Null;
 import bt.utils.num.NumberUtils;
 
 /**
  * A class wrapping a repeatable {@link Clip}.
- * 
+ *
  * @author &#8904
  */
 public class Sound
@@ -21,7 +22,7 @@ public class Sound
 
     /**
      * Sets the master volume for all sounds.
-     * 
+     *
      * @param volume
      *            A volume value between 0 (no volume) and 1 (highest volume). Values that are below 0 or above 1 will
      *            be clamped to their clostest bound, i. e. -5 becomes 0 and 14 becomes 1.
@@ -36,7 +37,7 @@ public class Sound
 
     /**
      * Gets the currently set master volume for all sounds.
-     * 
+     *
      * @return A volume value between 0 (no volume) and 1 (highest volume).
      */
     public static float getMasterVolume()
@@ -46,7 +47,7 @@ public class Sound
 
     /**
      * Creates a new instance.
-     * 
+     *
      * @param supplier
      *            The sound supplier that will offer a new clip whenever this sound is played.
      */
@@ -57,11 +58,11 @@ public class Sound
 
     /**
      * Sets the volume of the sound.
-     * 
+     *
      * <p>
      * The given volume will be multiplied with the {@link #getMasterVolume() master volume}.
      * </p>
-     * 
+     *
      * @param volume
      *            A volume value between 0 (no volume) and 1 (highest volume). Values that are below 0 or above 1 will
      *            be clamped to their clostest bound, i. e. -5 becomes 0 and 14 becomes 1.
@@ -84,7 +85,7 @@ public class Sound
 
     /**
      * Gets the volume of this sound.
-     * 
+     *
      * @return A volume value between 0 (no volume) and 1 (highest volume).
      */
     public float getVolume()
@@ -94,18 +95,14 @@ public class Sound
 
     /**
      * Sets up a new clip and sets its volume by calling {@link #setVolume(float)}.
-     * 
+     *
      * <p>
      * If an old clip exists it will be stopped.
      * </p>
      */
     private void setupClip()
     {
-        if (this.clip != null)
-        {
-            this.clip.stop();
-        }
-
+        stop();
         this.clip = this.supplier.getClip();
         setVolume(this.volume);
     }
@@ -121,7 +118,7 @@ public class Sound
 
     /**
      * Plays the sound once.
-     * 
+     *
      * <p>
      * This method will not return until the sound has ended.
      * </p>
@@ -165,7 +162,7 @@ public class Sound
 
     /**
      * Plays the sound <i>count + 1</i> times.
-     * 
+     *
      * @param count
      */
     public void loop(int count)
@@ -176,7 +173,7 @@ public class Sound
 
     /**
      * Plays the sound <i>count + 1</i> times.
-     * 
+     *
      * <p>
      * This method will not return until the loop has finished playing the sound <i>count + 1</i> times.
      * </p>
@@ -217,15 +214,12 @@ public class Sound
      */
     public void stop()
     {
-        if (this.clip != null)
-        {
-            this.clip.stop();
-        }
+        Null.check(this.clip, this.clip::stop);
     }
 
     /**
      * Indicates whether this sound is currently playing.
-     * 
+     *
      * @return True if this sound is currently playing.
      */
     public boolean isRunning()

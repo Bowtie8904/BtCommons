@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 import bt.types.number.MutableInt;
+import bt.utils.nulls.Null;
 
 /**
  * A basic data dispatcher for generic dispatching of i.e. events to listeners.
@@ -160,10 +161,6 @@ public class Dispatcher
     public <T> void clear(Class<T> type)
     {
         var subDispatcher = this.subDispatchers.get(type);
-
-        if (subDispatcher != null)
-        {
-            subDispatcher.clear();
-        }
+        Null.check(subDispatcher, subDispatcher::clear);
     }
 }
