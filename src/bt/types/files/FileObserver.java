@@ -25,6 +25,7 @@ import bt.types.files.evnt.FileDeleteEvent;
 import bt.types.files.evnt.FileModifyEvent;
 import bt.types.files.evnt.FileObserverEvent;
 import bt.utils.log.Logger;
+import bt.utils.nulls.Null;
 import bt.utils.thread.Threads;
 
 /**
@@ -196,11 +197,7 @@ public class FileObserver implements Killable
     {
         if (!file.isDirectory())
         {
-            if (this.observedFiles == null)
-            {
-                this.observedFiles = new HashMap<>();
-            }
-
+            this.observedFiles = Null.nullValue(this.observedFiles, new HashMap<WatchKey, File>());
             this.observedFiles.put(key, file);
         }
     }
@@ -251,11 +248,7 @@ public class FileObserver implements Killable
         // register directory to observe
         WatchKey key = observePath.register(this.watchService, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_DELETE, StandardWatchEventKinds.ENTRY_MODIFY);
 
-        if (this.paths == null)
-        {
-            this.paths = new HashMap<>();
-        }
-
+        this.paths = Null.nullValue(this.paths, new HashMap<WatchKey, Path>());
         this.paths.put(key, observePath);
 
         // save single file if the desired observe object is not a directory
@@ -264,11 +257,7 @@ public class FileObserver implements Killable
         // compile regex patterns
         if (regex != null && regex.length != 0)
         {
-            if (this.filters == null)
-            {
-                this.filters = new HashMap<>();
-            }
-
+            this.filters = Null.nullValue(this.filters, new HashMap<WatchKey, Pattern[]>());
             this.filters.put(key, Stream.of(regex)
                                         .map(Pattern::compile)
                                         .toArray(Pattern[]::new));
@@ -452,21 +441,9 @@ public class FileObserver implements Killable
     @Override
     public void kill()
     {
-        if (this.watchService != null)
-        {
-            Logger.global().print("Killing FileObserver.");
-
-            this.observe = false;
-
-            try
-            {
-                this.watchService.close();
-            }
-            catch (IOException e)
-            {
-                Logger.global().print(e);
-            }
-        }
+        Logger.global().print("Killing FileObserver.");
+        this.observe = false;
+        Null.close(this.watchService);
     }
 
     /**

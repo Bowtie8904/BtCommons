@@ -19,6 +19,7 @@ import bt.types.files.evnt.FileDeleteEvent;
 import bt.types.files.evnt.FileModifyEvent;
 import bt.types.files.evnt.FileObserverEvent;
 import bt.utils.log.Logger;
+import bt.utils.nulls.Null;
 
 /**
  * An extension of {@link FileObserver} which offers additional functions to receive events for changes in file sizes
@@ -33,7 +34,7 @@ import bt.utils.log.Logger;
  */
 public class FileContentObserver extends FileObserver
 {
-    private Map<File, Long> fileSizes = new HashMap<>();
+    private Map<File, Long> fileSizes;
 
     /**
      * Creates a new instance.
@@ -235,6 +236,7 @@ public class FileContentObserver extends FileObserver
             }
         }
 
+        this.fileSizes = Null.nullValue(this.fileSizes, new HashMap<File, Long>());
         this.fileSizes.put(file, length);
     }
 
