@@ -3,12 +3,16 @@ package bt.types.files;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+import bt.runtime.InstanceKiller;
+import bt.runtime.Killable;
 import bt.types.files.evnt.FileContentEvent;
 import bt.types.files.evnt.FileCreateEvent;
 import bt.types.files.evnt.FileDeleteEvent;
@@ -29,12 +33,144 @@ import bt.utils.log.Logger;
  */
 public class FileContentObserver extends FileObserver
 {
-    private Map<File, Long> fileSizes;
+    private Map<File, Long> fileSizes = new HashMap<>();
 
+    /**
+     * Creates a new instance.
+     *
+     * <p>
+     * Creates a new {@link WatchService}. Adds this instance to the {@link InstanceKiller} via
+     * {@link InstanceKiller#killOnShutdown(Killable)}.
+     * </p>
+     *
+     * <p>
+     * This instance will observe registered files or the files inside registered directories (contents inside
+     * sub-directories are not observed). Events will be fired for file creations, file deletions, file modifications
+     * and for increassed file content size.
+     * </p>
+     *
+     * <p>
+     * Determination of changed textual content only works if the content was added to the very end of the file as this
+     * class does only compare file sizes and creates a substring instead of comparing the true text values.
+     * </p>
+     */
     public FileContentObserver()
     {
         super();
-        this.fileSizes = new HashMap<>();
+    }
+
+    /**
+     * Creates a new instance.
+     *
+     * <p>
+     * Creates a new {@link WatchService}. Adds this instance to the {@link InstanceKiller} via
+     * {@link InstanceKiller#killOnShutdown(Killable)}.
+     * </p>
+     *
+     * <p>
+     * Registers the file or directory for the given path to the {@link WatchService}.
+     * </p>
+     *
+     * <p>
+     * Regular expressions can be passed to limit the files that will trigger events.
+     * </p>
+     *
+     * <p>
+     * This instance will observe the given file or the files inside the given directories (contents inside
+     * sub-directories are not observed). Events will be fired for file creations, file deletions, file modifications
+     * and for increassed file content size.
+     * </p>
+     *
+     * <p>
+     * Determination of changed textual content only works if the content was added to the very end of the file as this
+     * class does only compare file sizes and creates a substring instead of comparing the true text values.
+     * </p>
+     *
+     * @param path
+     *            The path to the file or directory that should be observed.
+     * @param regex
+     *            An array of regular expressions of which at least one has to match the simple file name + file
+     *            extension ('example.txt') so that an event will be fired for that file.
+     */
+    public FileContentObserver(Path path, String... regex) throws IOException
+    {
+        super(path, regex);
+    }
+
+    /**
+     * Creates a new instance.
+     *
+     * <p>
+     * Creates a new {@link WatchService}. Adds this instance to the {@link InstanceKiller} via
+     * {@link InstanceKiller#killOnShutdown(Killable)}.
+     * </p>
+     *
+     * <p>
+     * Registers the file or directory to the {@link WatchService}.
+     * </p>
+     *
+     * <p>
+     * Regular expressions can be passed to limit the files that will trigger events.
+     * </p>
+     *
+     * <p>
+     * This instance will observe the given file or the files inside the given directories (contents inside
+     * sub-directories are not observed). Events will be fired for file creations, file deletions, file modifications
+     * and for increassed file content size.
+     * </p>
+     *
+     * <p>
+     * Determination of changed textual content only works if the content was added to the very end of the file as this
+     * class does only compare file sizes and creates a substring instead of comparing the true text values.
+     * </p>
+     *
+     * @param file
+     *            The file or directory that should be observed.
+     * @param regex
+     *            An array of regular expressions of which at least one has to match the simple file name + file
+     *            extension ('example.txt') so that an event will be fired for that file.
+     */
+    public FileContentObserver(File file, String... regex) throws IOException
+    {
+        super(file, regex);
+    }
+
+    /**
+     * Creates a new instance.
+     *
+     * <p>
+     * Creates a new {@link WatchService}. Adds this instance to the {@link InstanceKiller} via
+     * {@link InstanceKiller#killOnShutdown(Killable)}.
+     * </p>
+     *
+     * <p>
+     * Registers the file or directory for the given path to the {@link WatchService}.
+     * </p>
+     *
+     * <p>
+     * Regular expressions can be passed to limit the files that will trigger events.
+     * </p>
+     *
+     * <p>
+     * This instance will observe the given file or the files inside the given directories (contents inside
+     * sub-directories are not observed). Events will be fired for file creations, file deletions, file modifications
+     * and for increassed file content size.
+     * </p>
+     *
+     * <p>
+     * Determination of changed textual content only works if the content was added to the very end of the file as this
+     * class does only compare file sizes and creates a substring instead of comparing the true text values.
+     * </p>
+     *
+     * @param filePath
+     *            The path to the file or directory that should be observed.
+     * @param regex
+     *            An array of regular expressions of which at least one has to match the simple file name + file
+     *            extension ('example.txt') so that an event will be fired for that file.
+     */
+    public FileContentObserver(String filePath, String... regex) throws IOException
+    {
+        super(filePath, regex);
     }
 
     /**
@@ -88,6 +224,7 @@ public class FileContentObserver extends FileObserver
         }
         catch (IOException e)
         {
+            // non text based files cant be read to string
             try
             {
                 length = Files.size(file.toPath());

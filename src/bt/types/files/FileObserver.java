@@ -51,6 +51,12 @@ public class FileObserver implements Killable
      * Creates a new {@link WatchService}. Adds this instance to the {@link InstanceKiller} via
      * {@link InstanceKiller#killOnShutdown(Killable)}.
      * </p>
+     *
+     * <p>
+     * This instance will observe registered files or the files inside registered directories (contents inside
+     * sub-directories are not observed). Events will be fired for file creations, file deletions and file
+     * modifications.
+     * </p>
      */
     public FileObserver()
     {
@@ -65,6 +71,108 @@ public class FileObserver implements Killable
         }
 
         this.eventDispatcher = new Dispatcher();
+    }
+
+    /**
+     * Creates a new instance.
+     *
+     * <p>
+     * Creates a new {@link WatchService}. Adds this instance to the {@link InstanceKiller} via
+     * {@link InstanceKiller#killOnShutdown(Killable)}.
+     * </p>
+     *
+     * <p>
+     * Registers the file or directory for the given path to the {@link WatchService}.
+     * </p>
+     *
+     * <p>
+     * Regular expressions can be passed to limit the files that will trigger events.
+     * </p>
+     *
+     * <p>
+     * This instance will observe the given file or the files inside the given directory (contents inside
+     * sub-directories are not observed). Events will be fired for file creations, file deletions and file
+     * modifications.
+     * </p>
+     *
+     * @param path
+     *            The path to the file or directory that should be observed.
+     * @param regex
+     *            An array of regular expressions of which at least one has to match the simple file name + file
+     *            extension ('example.txt') so that an event will be fired for that file.
+     */
+    public FileObserver(Path path, String... regex) throws IOException
+    {
+        this();
+        register(path, regex);
+    }
+
+    /**
+     * Creates a new instance.
+     *
+     * <p>
+     * Creates a new {@link WatchService}. Adds this instance to the {@link InstanceKiller} via
+     * {@link InstanceKiller#killOnShutdown(Killable)}.
+     * </p>
+     *
+     * <p>
+     * Registers the file or directory to the {@link WatchService}.
+     * </p>
+     *
+     * <p>
+     * Regular expressions can be passed to limit the files that will trigger events.
+     * </p>
+     *
+     * <p>
+     * This instance will observe the given file or the files inside the given directory (contents inside
+     * sub-directories are not observed). Events will be fired for file creations, file deletions and file
+     * modifications.
+     * </p>
+     *
+     * @param file
+     *            The file or directory that should be observed.
+     * @param regex
+     *            An array of regular expressions of which at least one has to match the simple file name + file
+     *            extension ('example.txt') so that an event will be fired for that file.
+     */
+    public FileObserver(File file, String... regex) throws IOException
+    {
+        this();
+        register(file, regex);
+    }
+
+    /**
+     * Creates a new instance.
+     *
+     * <p>
+     * Creates a new {@link WatchService}. Adds this instance to the {@link InstanceKiller} via
+     * {@link InstanceKiller#killOnShutdown(Killable)}.
+     * </p>
+     *
+     * <p>
+     * Registers the file or directory for the given path to the {@link WatchService}.
+     * </p>
+     *
+     * <p>
+     * Regular expressions can be passed to limit the files that will trigger events.
+     * </p>
+     *
+     * <p>
+     * This instance will observe the given file or the files inside the given directory (contents inside
+     * sub-directories are not observed). Events will be fired for file creations, file deletions and file
+     * modifications.
+     * </p>
+     *
+     * @param filePath
+     *            The path to the file or directory that should be observed.
+     * @param regex
+     *            An array of regular expressions of which at least one has to match the simple file name + file
+     *            extension ('example.txt') so that an event will be fired for that file.
+     */
+    public FileObserver(String filePath, String... regex) throws IOException
+    {
+        this();
+        register(filePath, regex);
     }
 
     /**
