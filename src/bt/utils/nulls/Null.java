@@ -275,7 +275,7 @@ public final class Null
      * be called.
      *
      * <p>
-     * This is just a wrapper method of {@link #checkRun(Object, Runnable) nullCheck(action, action::run);}.
+     * This is just a wrapper method of {@link #checkRun(Object, Runnable) checkRun(action, () -> action.run());}.
      * </p>
      *
      * @param action
@@ -283,16 +283,12 @@ public final class Null
      */
     public static void checkRun(Runnable action)
     {
-        checkRun(action, action::run);
+        checkRun(action, () -> action.run());
     }
 
     /**
      * Checks if the given {@link Closeable} is null. If it is not null then the {@link Closeable#close() close} method
      * will be called. The possible {@link IOException} will be caught and logged to {@link Logger#global()}.
-     *
-     * <p>
-     * This is just a wrapper method of {@link #checkRun(Object, Runnable) nullCheck(closeable, closeable::close);}.
-     * </p>
      *
      * @param closeable
      *            The instance to close.
@@ -317,7 +313,7 @@ public final class Null
      * be called.
      *
      * <p>
-     * This is just a wrapper method of {@link #checkRun(Object, Runnable) nullCheck(killable, killable::kill);}.
+     * This is just a wrapper method of {@link #checkRun(Object, Runnable) checkRun(killable, () -> killable.kill());}.
      * </p>
      *
      * @param killable
@@ -325,7 +321,7 @@ public final class Null
      */
     public static void checkKill(Killable killable)
     {
-        checkRun(killable, killable::kill);
+        checkRun(killable, () -> killable.kill());
     }
 
     /**
@@ -333,7 +329,8 @@ public final class Null
      * method will be called.
      *
      * <p>
-     * This is just a wrapper method of {@link #checkRun(Object, Runnable) nullCheck(collection, collection::clear);}.
+     * This is just a wrapper method of {@link #checkRun(Object, Runnable) checkRun(collection, () ->
+     * collection.clear());}.
      * </p>
      *
      * @param collection
@@ -341,6 +338,6 @@ public final class Null
      */
     public static void checkClear(Collection collection)
     {
-        checkRun(collection, collection::clear);
+        checkRun(collection, () -> collection.clear());
     }
 }
