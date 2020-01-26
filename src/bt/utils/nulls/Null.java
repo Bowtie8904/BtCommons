@@ -2,6 +2,7 @@ package bt.utils.nulls;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -325,5 +326,21 @@ public final class Null
     public static void kill(Killable killable)
     {
         check(killable, killable::kill);
+    }
+
+    /**
+     * Checks if the given {@link Collection} is null. If it is not null then the {@link Collection#clear() clear}
+     * method will be called.
+     *
+     * <p>
+     * This is just a wrapper method of {@link #check(Object, Runnable) nullCheck(collection, collection::clear);}.
+     * </p>
+     *
+     * @param collection
+     *            The instance to clear.
+     */
+    public static void clear(Collection collection)
+    {
+        check(collection, collection::clear);
     }
 }
