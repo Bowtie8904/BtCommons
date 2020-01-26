@@ -214,7 +214,7 @@ public class Sound
      */
     public void stop()
     {
-        Null.check(this.clip, this.clip::stop);
+        Null.checkRun(this.clip, this.clip::stop);
     }
 
     /**

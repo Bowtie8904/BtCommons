@@ -443,7 +443,7 @@ public class FileObserver implements Killable
     {
         Logger.global().print("Killing FileObserver.");
         this.observe = false;
-        Null.close(this.watchService);
+        Null.checkClose(this.watchService);
     }
 
     /**

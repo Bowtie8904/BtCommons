@@ -60,7 +60,7 @@ public final class InstanceKiller
 
             for (Entry<Killable, Integer> killable : killables)
             {
-                Null.check(killable.getKey(), killable.getKey()::kill);
+                Null.checkRun(killable.getKey(), killable.getKey()::kill);
             }
 
             isActive = false;

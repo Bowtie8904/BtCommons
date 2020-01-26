@@ -161,6 +161,6 @@ public class Dispatcher
     public <T> void clear(Class<T> type)
     {
         var subDispatcher = this.subDispatchers.get(type);
-        Null.check(subDispatcher, subDispatcher::clear);
+        Null.checkRun(subDispatcher, subDispatcher::clear);
     }
 }
