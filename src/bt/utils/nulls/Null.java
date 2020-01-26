@@ -27,7 +27,7 @@ import bt.utils.log.Logger;
  * </p>
  *
  * <pre>
- * Null.check(value, value::doSomething);
+ * Null.checkRun(value, () -> value.doSomething());
  * </pre>
  *
  * <p>
