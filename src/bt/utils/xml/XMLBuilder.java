@@ -39,35 +39,35 @@ public class XMLBuilder
         return this;
     }
 
-    public XMLBuilder addElement(Document element)
+    public XMLBuilder addElement(Document document)
     {
-        this.doc.add(element.getRootElement().createCopy());
+        this.doc.add(document.getRootElement().createCopy());
 
         return this;
     }
 
-    public XMLBuilder addElements(Document... elements)
+    public XMLBuilder addElements(Document... documents)
     {
-        for (Document e : elements)
+        for (Document doc : documents)
         {
-            addElement(e);
+            addElement(doc);
         }
 
         return this;
     }
 
-    public XMLBuilder addElement(Xmlable element)
+    public XMLBuilder addElement(Xmlable xmlable)
     {
-        this.doc.add(element.toXML().getRootElement().createCopy());
+        this.doc.add(xmlable.toXML().getRootElement().createCopy());
 
         return this;
     }
 
-    public XMLBuilder addElements(Xmlable... elements)
+    public XMLBuilder addElements(Xmlable... xmlables)
     {
-        for (Xmlable e : elements)
+        for (Xmlable xmlable : xmlables)
         {
-            addElement(e);
+            addElement(xmlable);
         }
 
         return this;
@@ -87,6 +87,12 @@ public class XMLBuilder
             addElement(e);
         }
 
+        return this;
+    }
+
+    public XMLBuilder addComment(String comment)
+    {
+        this.doc.addComment(comment);
         return this;
     }
 

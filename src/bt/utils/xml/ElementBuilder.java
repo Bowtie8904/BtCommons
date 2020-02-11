@@ -108,6 +108,12 @@ public class ElementBuilder
         return this;
     }
 
+    public ElementBuilder addComment(String comment)
+    {
+        this.element.addComment(comment);
+        return this;
+    }
+
     public Element toXML()
     {
         return this.element;
