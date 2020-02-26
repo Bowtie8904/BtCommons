@@ -12,7 +12,7 @@ import bt.utils.exc.Exceptions;
  * @author &#8904
  */
 @FunctionalInterface
-public interface IgnoreThrowCaller
+public interface IgnoreThrowRunnable
 {
-    public void call() throws Exception;
+    public void run() throws Exception;
 }
