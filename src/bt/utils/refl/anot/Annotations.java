@@ -74,6 +74,7 @@ public final class Annotations
                     if (method.isAnnotationPresent(annotation))
                     {
                         methods.add(method);
+                        break;
                     }
                 }
             }
@@ -109,6 +110,7 @@ public final class Annotations
                     if (field.isAnnotationPresent(annotation))
                     {
                         fields.add(field);
+                        break;
                     }
                 }
 
