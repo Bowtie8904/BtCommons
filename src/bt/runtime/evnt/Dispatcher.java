@@ -1,9 +1,9 @@
 package bt.runtime.evnt;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 import bt.types.number.MutableInt;
@@ -25,7 +25,7 @@ public class Dispatcher
      */
     public Dispatcher()
     {
-        this.subDispatchers = new HashMap<>();
+        this.subDispatchers = new ConcurrentHashMap<>();
     }
 
     /**
