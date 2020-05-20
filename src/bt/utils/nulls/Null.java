@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import bt.runtime.Killable;
 import bt.utils.log.Logger;
@@ -100,6 +101,72 @@ public final class Null
                 if (element != null)
                 {
                     return element;
+                }
+            }
+
+            return null;
+        }
+    }
+
+    /**
+     * Checks if the first parameters get method returns null and if so, returns the second parameters get method as
+     * default value.
+     *
+     * @param <T>
+     *            Type of the values.
+     * @param checkValue
+     *            The supplier for the value to be checked for null.
+     * @param defaultValue
+     *            The default supplier for the value that is returned if the checkValue is null.
+     * @return Either the checkValue if it is not null or the defaultValue.
+     */
+    public static <T> T nullValue(Supplier<T> checkValue, Supplier<T> defaultValue)
+    {
+        T value = checkValue.get();
+
+        if (value != null)
+        {
+            return value;
+        }
+
+        return defaultValue.get();
+    }
+
+    /**
+     * Checks if the first parameters get method returns null and if so, returns the first non null get method value
+     * from the given defaultValues array.
+     *
+     * <p>
+     * The elements will be checked in the given order.
+     * </p>
+     *
+     * @param <T>
+     *            Type of the values.
+     * @param checkValue
+     *            The supplier for the value to be checked for null.
+     * @param defaultValues
+     *            The an array of value suppliers whichs get method returns will be checked if the checkValue is null.
+     *            The first element of this that is not null will be returned.
+     * @return Either the checkValue if it is not null, the first element of the given default values that is not null
+     *         or null if no non-null values where found.
+     */
+    public static <T> T nullValue(Supplier<T> checkValue, Supplier<T>... defaultValues)
+    {
+        T value = checkValue.get();
+
+        if (value != null)
+        {
+            return value;
+        }
+        else
+        {
+            for (Supplier<T> element : defaultValues)
+            {
+                value = element.get();
+
+                if (value != null)
+                {
+                    return value;
                 }
             }
 

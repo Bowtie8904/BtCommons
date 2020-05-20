@@ -1,6 +1,7 @@
 package bt.utils.json;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -89,8 +90,10 @@ public final class JSON
      * @param json
      *            The json file to parse.
      * @return The parsed JSONObject or null if the file was null, does not exist or is incorrectly formatted.
+     * @throws IOException
+     * @throws FileNotFoundException
      */
-    public static JSONObject parse(File json)
+    public static JSONObject parse(File json) throws FileNotFoundException, IOException
     {
         return parse(FileUtils.readFile(json));
     }

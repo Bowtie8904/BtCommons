@@ -10,9 +10,10 @@ import bt.utils.exc.Exceptions;
  * </p>
  *
  * @author &#8904
+ * @param <T>
  */
 @FunctionalInterface
-public interface IgnoreThrowRunnable
+public interface ThrowConsumer<T>
 {
-    public void run() throws Exception;
+    public void accept(T consumable) throws Exception;
 }

@@ -14,50 +14,43 @@ import java.util.Base64;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
-import bt.utils.log.Logger;
-
 /**
  * Utilities for simple image converting/scaling.
- * 
+ *
  * @author &#8904
  */
 public class ImageUtils
 {
     /**
      * Converts the given base64 String to a {@link BufferedImgae}.
-     * 
+     *
      * @param base64String
      *            The base64 String to convert.
      * @return The converted image.
+     * @throws IOException
      */
-    public static Image getImageFromBase64(String base64String)
+    public static Image getImageFromBase64(String base64String) throws IOException
     {
         BufferedImage image = null;
         byte[] imageByte;
-        try
-        {
-            imageByte = Base64.getDecoder().decode(base64String);
-            ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
-            image = ImageIO.read(bis);
-            bis.close();
-        }
-        catch (IOException e)
-        {
-            Logger.global().print(e);
-        }
+        imageByte = Base64.getDecoder().decode(base64String);
+        ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
+        image = ImageIO.read(bis);
+        bis.close();
         return image;
     }
 
     /**
      * Converts the given image to a base64 String.
-     * 
+     *
      * @param image
      *            The image to convert.
      * @param fileEnding
      *            The file ending of the image file.
      * @return The converted base64 String.
+     * @throws IOException
      */
-    public static String getBase64String(BufferedImage image, String fileEnding)
+    public static String getBase64String(BufferedImage image, String fileEnding) throws IOException
     {
         String base64 = null;
 
@@ -68,10 +61,6 @@ public class ImageUtils
                           out);
             base64 = Base64.getEncoder().encodeToString(out.toByteArray());
         }
-        catch (IOException e)
-        {
-            Logger.global().print(e);
-        }
 
         return base64;
     }
@@ -79,7 +68,7 @@ public class ImageUtils
     /**
      * Scales the image to keep its height and width within the given maxHeight and maxWidth while maintaining its
      * aspect ratio.
-     * 
+     *
      * @param srcImg
      *            The image to scale.
      * @param maxWidth
@@ -155,47 +144,27 @@ public class ImageUtils
 
     /**
      * Creates a new ImageIcon from the given file.
-     * 
+     *
      * @param file
      *            The file to create the icon from.
      * @return The created icon.
+     * @throws MalformedURLException
      */
-    public static ImageIcon getImageIcon(File file)
+    public static ImageIcon getImageIcon(File file) throws MalformedURLException
     {
-        ImageIcon icon = null;
-
-        try
-        {
-            icon = new ImageIcon(file.toURI().toURL());
-        }
-        catch (MalformedURLException e)
-        {
-            Logger.global().print(e);
-        }
-
-        return icon;
+        return new ImageIcon(file.toURI().toURL());
     }
 
     /**
      * Creates a new ImageIcon from the given file.
-     * 
+     *
      * @param stream
      *            The stream to create the icon from.
      * @return The created icon.
+     * @throws IOException
      */
-    public static ImageIcon getImageIcon(InputStream stream)
+    public static ImageIcon getImageIcon(InputStream stream) throws IOException
     {
-        ImageIcon icon = null;
-
-        try
-        {
-            icon = new ImageIcon(ImageIO.read(stream));
-        }
-        catch (IOException e)
-        {
-            Logger.global().print(e);
-        }
-
-        return icon;
+        return new ImageIcon(ImageIO.read(stream));
     }
 }

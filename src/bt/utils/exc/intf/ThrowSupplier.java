@@ -13,7 +13,7 @@ import bt.utils.exc.Exceptions;
  * @param <T>
  */
 @FunctionalInterface
-public interface IgnoreThrowConsumer<T>
+public interface ThrowSupplier<T>
 {
-    public void accept(T consumable) throws Exception;
+    public T get() throws Exception;
 }

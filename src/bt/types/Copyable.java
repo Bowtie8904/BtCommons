@@ -24,7 +24,7 @@ public interface Copyable<T>
         K copy = null;
         try
         {
-            Constructor<K> construct = (Constructor<K>)copyable.getClass().getConstructor();
+            Constructor<K> construct = (Constructor<K>)copyable.getClass().getDeclaredConstructor();
             construct.setAccessible(true);
             copy = construct.newInstance();
 
