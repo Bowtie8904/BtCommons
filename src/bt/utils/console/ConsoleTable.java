@@ -32,10 +32,10 @@ public class ConsoleTable
         this.rowLength = row.length();
     }
 
-    public void addRow(boolean centered, Object... data)
+    public void addCenteredRow(Object... data)
     {
         ConsoleRow row = this.formatter.formatRow(data,
-                                                  centered);
+                                                  true);
         this.rows.add(row);
         this.rowLength = row.length();
     }
@@ -47,17 +47,17 @@ public class ConsoleTable
         this.rowLength = row.length();
     }
 
-    public void setTitle(boolean centered, Object... data)
+    public void setCenteredTitle(Object... data)
     {
         ConsoleRow row = this.formatter.formatRow(data,
-                                                  centered);
+                                                  true);
         this.titleRow = row;
         this.rowLength = row.length();
     }
 
     /**
      * Removes the row at the given index. Pass -1 to remove the title row.
-     * 
+     *
      * @param index
      */
     public void removeRow(int index)
@@ -75,7 +75,7 @@ public class ConsoleTable
     /**
      * Returns the row at the given index (zero index based, top down). The title row can be accessed by passing -1 as
      * index.
-     * 
+     *
      * @param index
      *            The index of the row. -1 for the title row.
      * @return
@@ -99,7 +99,7 @@ public class ConsoleTable
     /**
      * Returns the data array of the row at the given index (zero index based, top down). The title row can be accessed
      * by passing -1 as index.
-     * 
+     *
      * @param index
      *            The index of the row. -1 for the title row.
      * @return The data array of the selected row.
@@ -112,11 +112,11 @@ public class ConsoleTable
     /**
      * Sets the data array of the row at the given index (zero index based, top down). The title row can be accessed by
      * passing -1 as index.
-     * 
+     *
      * <p>
      * The passed data array must have the same length as the used format of this instance.
      * </p>
-     * 
+     *
      * @param index
      *            The index of the row. -1 for the title row.
      * @param data
@@ -130,7 +130,7 @@ public class ConsoleTable
     /**
      * Returns whether the row at the given index (zero index based, top down) is centered. The title row can be
      * accessed by passing -1 as index.
-     * 
+     *
      * @param index
      *            The index of the row. -1 for the title row.
      * @return true if the row is centered, false otherwise.
@@ -143,7 +143,7 @@ public class ConsoleTable
     /**
      * Sets whether the values of the row at the given index (zero index based, top down) will be centered during
      * formatting. The title row can be accessed by passing -1 as index.
-     * 
+     *
      * @param index
      *            The index of the row. -1 for the title row.
      * @param centered
