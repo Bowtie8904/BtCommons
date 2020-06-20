@@ -1,4 +1,4 @@
-package bt.utils.log;
+package bt.log;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -26,9 +26,9 @@ import java.util.stream.Collectors;
 import com.google.common.io.Files;
 
 import bt.runtime.InstanceKiller;
-import bt.runtime.Killable;
-import bt.utils.files.FileUtils;
-import bt.utils.thread.Threads;
+import bt.scheduler.Threads;
+import bt.types.Killable;
+import bt.utils.file.FileUtils;
 
 /**
  * A logging class which prints to either a given file or to the default log file which is defined by

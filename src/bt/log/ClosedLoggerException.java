@@ -1,4 +1,4 @@
-package bt.utils.log;
+package bt.log;
 
 /**
  * Thrown when a print method of a closed {@link Log} instance is called.

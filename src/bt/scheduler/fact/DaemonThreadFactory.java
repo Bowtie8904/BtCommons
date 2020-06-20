@@ -1,4 +1,4 @@
-package bt.utils.thread.fact;
+package bt.scheduler.fact;
 
 import java.util.concurrent.ThreadFactory;
 

@@ -1,4 +1,4 @@
-package bt.utils.files;
+package bt.utils.file;
 
 import java.io.BufferedReader;
 import java.io.File;

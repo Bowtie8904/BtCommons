@@ -1,4 +1,4 @@
-package bt.utils.thread;
+package bt.scheduler;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -9,11 +9,11 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
+import bt.log.Logger;
 import bt.runtime.InstanceKiller;
-import bt.runtime.Killable;
+import bt.scheduler.fact.DaemonThreadFactory;
+import bt.types.Killable;
 import bt.utils.id.StringID;
-import bt.utils.log.Logger;
-import bt.utils.thread.fact.DaemonThreadFactory;
 
 /**
  * Holds multiple threadpools with different purposes.

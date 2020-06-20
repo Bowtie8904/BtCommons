@@ -1,4 +1,4 @@
-package bt.utils.log;
+package bt.log;
 
 import java.io.PrintStream;
 import java.util.ArrayList;

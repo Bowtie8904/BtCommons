@@ -1,4 +1,4 @@
-package bt.utils.log;
+package bt.log;
 
 /**
  * @author &#8904

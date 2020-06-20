@@ -7,9 +7,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import bt.runtime.Killable;
-import bt.utils.log.Logger;
-
 /**
  * Offers utility methods to avoid all kinds of Javas very cool null checks to make code less cluttered.
  *
@@ -359,36 +356,14 @@ public final class Null
      *
      * @param closeable
      *            The instance to close.
+     * @throws IOException
      */
-    public static void checkClose(Closeable closeable)
+    public static void checkClose(Closeable closeable) throws IOException
     {
-        checkRun(closeable, () ->
+        if (closeable != null)
         {
-            try
-            {
-                closeable.close();
-            }
-            catch (IOException e1)
-            {
-                Logger.global().print(e1);
-            }
-        });
-    }
-
-    /**
-     * Checks if the given {@link Killable} is null. If it is not null then the {@link Killable#kill() kill} method will
-     * be called.
-     *
-     * <p>
-     * This is just a wrapper method of {@link #checkRun(Object, Runnable) checkRun(killable, () -> killable.kill());}.
-     * </p>
-     *
-     * @param killable
-     *            The instance to kill.
-     */
-    public static void checkKill(Killable killable)
-    {
-        checkRun(killable, () -> killable.kill());
+            closeable.close();
+        }
     }
 
     /**

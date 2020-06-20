@@ -3,8 +3,7 @@ package bt.types;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import bt.utils.log.Logger;
-import bt.utils.refl.field.Fields;
+import bt.reflect.field.Fields;
 
 /**
  * @author &#8904
@@ -22,6 +21,7 @@ public interface Copyable<T>
     public static <K> K copy(K copyable)
     {
         K copy = null;
+
         try
         {
             Constructor<K> construct = (Constructor<K>)copyable.getClass().getDeclaredConstructor();
@@ -37,7 +37,6 @@ public interface Copyable<T>
         catch (InstantiationException | IllegalAccessException
                | InvocationTargetException | SecurityException | NoSuchMethodException e1)
         {
-            Logger.global().print(e1);
         }
 
         return copy;
@@ -75,7 +74,6 @@ public interface Copyable<T>
             }
             catch (IllegalArgumentException | IllegalAccessException e)
             {
-                Logger.global().print(e);
             }
         }
     }

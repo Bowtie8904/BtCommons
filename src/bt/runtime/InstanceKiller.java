@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import bt.utils.log.Logger;
+import bt.log.Logger;
+import bt.types.Killable;
 import bt.utils.nulls.Null;
 
 /**

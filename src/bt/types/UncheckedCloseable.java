@@ -1,4 +1,4 @@
-package bt.types.close;
+package bt.types;
 
 /**
  * @author &#8904
