@@ -7,6 +7,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import bt.types.Killable;
+
 /**
  * Offers utility methods to avoid all kinds of Javas very cool null checks to make code less cluttered.
  *
@@ -381,5 +383,13 @@ public final class Null
     public static void checkClear(Collection collection)
     {
         checkRun(collection, () -> collection.clear());
+    }
+
+    public static void checkKill(Killable killable)
+    {
+        if (killable != null)
+        {
+            killable.kill();
+        }
     }
 }

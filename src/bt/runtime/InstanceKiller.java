@@ -61,7 +61,9 @@ public final class InstanceKiller
 
             for (Entry<Killable, Integer> killable : killables)
             {
-                Null.checkRun(killable.getKey(), killable.getKey()::kill);
+                Logger.global().setCallerStackIndex(0);
+                Null.checkKill(killable.getKey());
+                Logger.global().setCallerStackIndex(3);
             }
 
             isActive = false;

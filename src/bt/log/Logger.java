@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 
 import com.google.common.io.Files;
 
+import bt.reflect.methods.Caller;
 import bt.runtime.InstanceKiller;
 import bt.scheduler.Threads;
 import bt.types.Killable;
@@ -470,17 +471,20 @@ public class Logger implements Killable
             logQueue();
         }
 
-        print(this,
-              "Closing logger.");
+        print(this, "Closing logger.");
+
         if (this.writer != null)
         {
             this.writer.close();
         }
+
         activeLoggers.remove(this);
+
         if (this.future != null)
         {
             this.future.cancel(true);
         }
+
         this.isStarted = false;
     }
 
@@ -968,7 +972,9 @@ public class Logger implements Killable
 
         String result = str.toString();
 
-        if (result.contains(getClass().getName()))
+        if (result.contains(getClass().getName() + ".print")
+            || result.contains(getClass().getName() + ".getCallerString")
+            || result.contains(getClass().getName() + ".entry"))
         {
             result = getCallerString(stackIndex + 2);
         }
@@ -1060,6 +1066,11 @@ public class Logger implements Killable
                 throw new ClosedLoggerException("Closed loggers can't print.");
             }
         }
+    }
+
+    public void entry(Object... parameterValues)
+    {
+        print("ENTRY " + Caller.formatParameterValuesAtIndex(2, parameterValues));
     }
 
     /**
