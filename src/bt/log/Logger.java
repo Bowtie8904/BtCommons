@@ -974,7 +974,8 @@ public class Logger implements Killable
 
         if (result.contains(getClass().getName() + ".print")
             || result.contains(getClass().getName() + ".getCallerString")
-            || result.contains(getClass().getName() + ".entry"))
+            || result.contains(getClass().getName() + ".entry")
+            || result.contains(getClass().getName() + ".exit"))
         {
             result = getCallerString(stackIndex + 2);
         }
@@ -1071,6 +1072,17 @@ public class Logger implements Killable
     public void entry(Object... parameterValues)
     {
         print("ENTRY " + Caller.formatParameterValuesAtIndex(2, parameterValues));
+    }
+
+    public void exit()
+    {
+        print("EXIT");
+    }
+
+    public void exit(Throwable e)
+    {
+        print("EXIT");
+        print(e);
     }
 
     /**
