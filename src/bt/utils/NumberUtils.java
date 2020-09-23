@@ -1,4 +1,4 @@
-package bt.utils.num;
+package bt.utils;
 
 /**
  * @author &#8904

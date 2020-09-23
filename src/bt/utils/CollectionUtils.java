@@ -1,4 +1,4 @@
-package bt.utils.collections;
+package bt.utils;
 
 import java.util.Collection;
 import java.util.List;

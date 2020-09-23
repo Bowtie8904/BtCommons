@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 import bt.types.number.MutableInt;
-import bt.utils.nulls.Null;
+import bt.utils.Null;
 
 /**
  * A basic data dispatcher for generic dispatching of i.e. events to listeners.

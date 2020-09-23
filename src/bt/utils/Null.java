@@ -1,4 +1,4 @@
-package bt.utils.nulls;
+package bt.utils;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -354,7 +354,7 @@ public final class Null
 
     /**
      * Checks if the given {@link Closeable} is null. If it is not null then the {@link Closeable#close() close} method
-     * will be called. The possible {@link IOException} will be caught and logged to {@link Logger#global()}.
+     * will be called.
      *
      * @param closeable
      *            The instance to close.

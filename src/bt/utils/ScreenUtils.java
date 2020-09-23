@@ -1,4 +1,4 @@
-package bt.utils.screen;
+package bt.utils;
 
 import java.awt.Dimension;
 import java.awt.DisplayMode;

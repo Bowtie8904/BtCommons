@@ -8,7 +8,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import bt.log.Logger;
 import bt.types.Killable;
-import bt.utils.nulls.Null;
+import bt.utils.Null;
 
 /**
  * Class to manage the closing of global resources such as databases and global loggers.

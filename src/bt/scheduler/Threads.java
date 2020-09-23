@@ -13,7 +13,7 @@ import bt.log.Logger;
 import bt.runtime.InstanceKiller;
 import bt.scheduler.fact.DaemonThreadFactory;
 import bt.types.Killable;
-import bt.utils.id.StringID;
+import bt.utils.StringID;
 
 /**
  * Holds multiple threadpools with different purposes.

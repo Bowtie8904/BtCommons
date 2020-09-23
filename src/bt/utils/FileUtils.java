@@ -1,4 +1,4 @@
-package bt.utils.file;
+package bt.utils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -8,8 +8,6 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import bt.utils.exc.Exceptions;
 
 /**
  * Simple utilities for finding and reading files.

@@ -1,4 +1,4 @@
-package bt.utils.collections.array;
+package bt.utils;
 
 import java.util.Arrays;
 import java.util.function.IntFunction;

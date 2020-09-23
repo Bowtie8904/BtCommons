@@ -1,6 +1,4 @@
-package bt.utils.exc.intf;
-
-import bt.utils.exc.Exceptions;
+package bt.utils;
 
 /**
  * Offers a functional interface to hide a thrown exception.
@@ -13,7 +11,7 @@ import bt.utils.exc.Exceptions;
  * @param <T>
  */
 @FunctionalInterface
-public interface ThrowSupplier<T>
+public interface ThrowFunction<T, K>
 {
-    public T get() throws Exception;
+    public T apply(K value) throws Exception;
 }

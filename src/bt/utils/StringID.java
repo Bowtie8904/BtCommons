@@ -1,4 +1,4 @@
-package bt.utils.id;
+package bt.utils;
 
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;

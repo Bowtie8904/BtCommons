@@ -29,7 +29,7 @@ import bt.reflect.methods.Caller;
 import bt.runtime.InstanceKiller;
 import bt.scheduler.Threads;
 import bt.types.Killable;
-import bt.utils.file.FileUtils;
+import bt.utils.FileUtils;
 
 /**
  * A logging class which prints to either a given file or to the default log file which is defined by

@@ -1,6 +1,4 @@
-package bt.utils.exc.intf;
-
-import bt.utils.exc.Exceptions;
+package bt.utils;
 
 /**
  * Offers a functional interface to hide a thrown exception.

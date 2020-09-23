@@ -1,4 +1,4 @@
-package bt.utils.id;
+package bt.utils;
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;

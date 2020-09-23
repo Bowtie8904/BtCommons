@@ -1,4 +1,4 @@
-package bt.utils.date;
+package bt.utils;
 
 import java.sql.Date;
 import java.sql.Time;

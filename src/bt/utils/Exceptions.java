@@ -1,10 +1,6 @@
-package bt.utils.exc;
+package bt.utils;
 
 import bt.log.Logger;
-import bt.utils.exc.intf.ThrowConsumer;
-import bt.utils.exc.intf.ThrowFunction;
-import bt.utils.exc.intf.ThrowRunnable;
-import bt.utils.exc.intf.ThrowSupplier;
 
 /**
  * @author &#8904
