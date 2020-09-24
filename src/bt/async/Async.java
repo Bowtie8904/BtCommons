@@ -35,7 +35,7 @@ public class Async<T>
      *
      * @return
      */
-    public Data<T> get()
+    public T get()
     {
         Thread.currentThread().setName("Return " + this.id);
 
@@ -52,7 +52,7 @@ public class Async<T>
             }
         }
 
-        return this.data;
+        return this.data.getData();
     }
 
     /**
@@ -66,7 +66,7 @@ public class Async<T>
      *            The amount of milliseconds to wait before throwing an {@link AsyncException}.
      * @return
      */
-    public Data<T> get(long maxWait) throws AsyncException
+    public T get(long maxWait) throws AsyncException
     {
         Thread.currentThread().setName("Return " + this.id);
 
@@ -88,7 +88,7 @@ public class Async<T>
             }
         }
 
-        return this.data;
+        return this.data.getData();
     }
 
     /**
