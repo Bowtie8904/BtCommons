@@ -52,7 +52,7 @@ public class Async<T>
             }
         }
 
-        return this.data.getData();
+        return this.data.get();
     }
 
     /**
@@ -89,7 +89,7 @@ public class Async<T>
             }
         }
 
-        return this.data.getData();
+        return this.data.get();
     }
 
     /**

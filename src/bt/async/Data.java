@@ -39,17 +39,17 @@ public class Data<T> implements Serializable
         return this.id;
     }
 
-    public T getData()
+    public T get()
     {
         return this.dataType.cast(this.data);
     }
 
-    public <C> C getData(Class<C> type)
+    public <C> C get(Class<C> type)
     {
         return type.cast(this.data);
     }
 
-    public Class<T> getDataType()
+    public Class<T> getType()
     {
         return this.dataType;
     }
