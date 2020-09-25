@@ -23,7 +23,6 @@ public class Async<T>
     public Async(String id)
     {
         this.id = id;
-        AsyncManager.get().addAsync(this);
     }
 
     /**
@@ -38,6 +37,7 @@ public class Async<T>
     public T get()
     {
         Thread.currentThread().setName("Return " + this.id);
+        AsyncManager.get().addAsync(this);
 
         if (this.data == null)
         {
@@ -69,6 +69,7 @@ public class Async<T>
     public T get(long maxWait) throws AsyncException
     {
         Thread.currentThread().setName("Return " + this.id);
+        AsyncManager.get().addAsync(this);
 
         if (this.data == null)
         {
