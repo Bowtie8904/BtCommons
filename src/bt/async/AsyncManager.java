@@ -1,7 +1,9 @@
 package bt.async;
 
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
+import bt.scheduler.Threads;
 import bt.types.Singleton;
 
 /**
@@ -11,8 +13,9 @@ import bt.types.Singleton;
  */
 public class AsyncManager
 {
-    private ConcurrentHashMap<String, Async> asyncs;
-    private ConcurrentHashMap<String, Data> datapool;
+    private volatile ConcurrentHashMap<String, Async> asyncs;
+    private volatile ConcurrentHashMap<String, Data> datapool;
+    private long timeBeforeCleanUp = 600000;
 
     public static AsyncManager get()
     {
@@ -23,6 +26,7 @@ public class AsyncManager
     {
         this.datapool = new ConcurrentHashMap<>();
         this.asyncs = new ConcurrentHashMap<>();
+        Threads.get().scheduleAtFixedRateDaemon(this::cleanUpUnsatisfiedEntries, 3, 3, TimeUnit.SECONDS);
     }
 
     /**
@@ -33,6 +37,7 @@ public class AsyncManager
      */
     public synchronized void addData(Data data)
     {
+        data.setAddTime(System.currentTimeMillis());
         Async async = this.asyncs.get(data.getID());
 
         if (async != null)
@@ -54,6 +59,7 @@ public class AsyncManager
      */
     public synchronized void addAsync(Async async)
     {
+        async.setAddTime(System.currentTimeMillis());
         Data data = this.datapool.get(async.getID());
 
         if (data != null)
@@ -65,5 +71,42 @@ public class AsyncManager
         {
             this.asyncs.put(async.getID(), async);
         }
+    }
+
+    private synchronized void cleanUpUnsatisfiedEntries()
+    {
+        for (var async : this.asyncs.values())
+        {
+            if (async.getAddTime() + this.timeBeforeCleanUp <= System.currentTimeMillis())
+            {
+                this.asyncs.remove(async.getID());
+                async.removedFromManager();
+            }
+        }
+
+        for (var data : this.datapool.values())
+        {
+            if (data.getAddTime() + this.timeBeforeCleanUp <= System.currentTimeMillis())
+            {
+                this.datapool.remove(data.getID());
+            }
+        }
+    }
+
+    /**
+     * @return the timeBeforeCleanUp
+     */
+    public long getTimeBeforeCleanUp()
+    {
+        return this.timeBeforeCleanUp;
+    }
+
+    /**
+     * @param timeBeforeCleanUp
+     *            the timeBeforeCleanUp to set
+     */
+    public void setTimeBeforeCleanUp(long timeBeforeCleanUp)
+    {
+        this.timeBeforeCleanUp = timeBeforeCleanUp;
     }
 }

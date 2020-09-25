@@ -13,6 +13,9 @@ public class Async<T>
     private final String id;
     private Data<T> data = null;
     private Object lock = new Object();
+    private long addTime;
+    private Thread thread;
+    private boolean removedFromManager;
 
     /**
      * Creates a new instance.
@@ -23,6 +26,7 @@ public class Async<T>
     public Async(String id)
     {
         this.id = id;
+        AsyncManager.get().addAsync(this);
     }
 
     /**
@@ -34,10 +38,10 @@ public class Async<T>
      *
      * @return
      */
-    public T get()
+    public T get() throws AsyncException
     {
         Thread.currentThread().setName("Return " + this.id);
-        AsyncManager.get().addAsync(this);
+        this.thread = Thread.currentThread();
 
         if (this.data == null)
         {
@@ -48,8 +52,14 @@ public class Async<T>
                     this.lock.wait();
                 }
                 catch (InterruptedException e1)
-                {}
+                {
+                    throw new AsyncException("Async (" + this.id + ") was removed from the AsyncManager and will not receive any Data.");
+                }
             }
+        }
+        else if (this.removedFromManager)
+        {
+            throw new AsyncException("Async (" + this.id + ") was removed from the AsyncManager and will not receive any Data.");
         }
 
         return this.data.get();
@@ -69,7 +79,7 @@ public class Async<T>
     public T get(long maxWait) throws AsyncException
     {
         Thread.currentThread().setName("Return " + this.id);
-        AsyncManager.get().addAsync(this);
+        this.thread = Thread.currentThread();
 
         if (this.data == null)
         {
@@ -80,16 +90,32 @@ public class Async<T>
                     this.lock.wait(maxWait);
                 }
                 catch (InterruptedException e1)
-                {}
+                {
+                    throw new AsyncException("Async (" + this.id + ") was removed from the AsyncManager and will not receive any Data.");
+                }
             }
 
             if (this.data == null)
             {
-                throw new AsyncException("Return (" + this.id + ") has timed out after waiting for " + maxWait + " milliseconds.");
+                throw new AsyncException("Async (" + this.id + ") has timed out after waiting for " + maxWait + " milliseconds.");
             }
+        }
+        else if (this.removedFromManager)
+        {
+            throw new AsyncException("Async (" + this.id + ") was removed from the AsyncManager and will not receive any Data.");
         }
 
         return this.data.get();
+    }
+
+    public void removedFromManager()
+    {
+        this.removedFromManager = true;
+
+        if (this.thread != null)
+        {
+            this.thread.interrupt();
+        }
     }
 
     /**
@@ -115,5 +141,41 @@ public class Async<T>
     public String getID()
     {
         return this.id;
+    }
+
+    /**
+     * @return the addTime
+     */
+    public long getAddTime()
+    {
+        return this.addTime;
+    }
+
+    /**
+     * @param addTime
+     *            the addTime to set
+     */
+    public void setAddTime(long addTime)
+    {
+        this.addTime = addTime;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o == this)
+        {
+            return true;
+        }
+        else if (this.id != null && this.id.equals(o))
+        {
+            return true;
+        }
+        else if (this.id != null && o instanceof Async && this.id.equals(((Async)o).getID()))
+        {
+            return true;
+        }
+
+        return false;
     }
 }

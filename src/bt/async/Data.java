@@ -12,6 +12,7 @@ public class Data<T> implements Serializable
     private final Class<T> dataType;
     private final T data;
     private final String id;
+    private long addTime;
 
     public Data(Class<T> dataType, T data)
     {
@@ -52,5 +53,22 @@ public class Data<T> implements Serializable
     public Class<T> getType()
     {
         return this.dataType;
+    }
+
+    /**
+     * @return the addTime
+     */
+    public long getAddTime()
+    {
+        return this.addTime;
+    }
+
+    /**
+     * @param addTime
+     *            the addTime to set
+     */
+    public void setAddTime(long addTime)
+    {
+        this.addTime = addTime;
     }
 }

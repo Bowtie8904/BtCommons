@@ -6,7 +6,8 @@ package bt.async;
  *
  * @author &#8904
  */
-public class AsyncException extends Exception{
+public class AsyncException extends RuntimeException
+{
     private static final long serialVersionUID = 1L;
 
     /**
