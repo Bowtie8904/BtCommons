@@ -466,6 +466,8 @@ public class SystemLogHook extends PrintStream
             log.setCallerStackIndex(oldCallerIndex);
         }
 
+        this.currentCallerIndex = PRINT_CALLER_STACK_INDEX;
+
         if (this.forwardOutput)
         {
             return super.printf(format, args);
