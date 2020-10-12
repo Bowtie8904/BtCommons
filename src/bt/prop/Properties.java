@@ -10,8 +10,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import bt.log.Logger;
-
 /**
  * A utility class to get and set property values.
  *
@@ -76,7 +74,7 @@ public final class Properties
             }
             catch (Exception e)
             {
-                Logger.global().print(e);
+                e.printStackTrace();
             }
         }
 
@@ -97,7 +95,7 @@ public final class Properties
         }
         catch (Exception e)
         {
-            Logger.global().print(e);
+            e.printStackTrace();
         }
         return values.toArray(new String[] {});
     }
@@ -159,7 +157,7 @@ public final class Properties
             }
             catch (Exception e)
             {
-                Logger.global().print(e);
+                e.printStackTrace();
             }
         }
         List<String> values = new ArrayList<>();
@@ -179,7 +177,7 @@ public final class Properties
         }
         catch (Exception e)
         {
-            Logger.global().print(e);
+            e.printStackTrace();
         }
         return values.toArray(new String[] {});
     }
@@ -245,7 +243,7 @@ public final class Properties
             }
             catch (Exception e)
             {
-                Logger.global().print(e);
+                e.printStackTrace();
             }
         }
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file),
@@ -263,7 +261,7 @@ public final class Properties
         }
         catch (Exception e)
         {
-            Logger.global().print(e);
+            e.printStackTrace();
         }
         return null;
     }
@@ -329,7 +327,7 @@ public final class Properties
             }
             catch (Exception e)
             {
-                Logger.global().print(e);
+                e.printStackTrace();
                 return false;
             }
         }
@@ -360,7 +358,7 @@ public final class Properties
         }
         catch (Exception e)
         {
-            Logger.global().print(e);
+            e.printStackTrace();
             return false;
         }
         try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(file))))
@@ -369,7 +367,7 @@ public final class Properties
         }
         catch (Exception e)
         {
-            Logger.global().print(e);
+            e.printStackTrace();
             return false;
         }
         return true;

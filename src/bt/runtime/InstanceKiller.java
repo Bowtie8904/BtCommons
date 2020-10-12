@@ -55,7 +55,7 @@ public final class InstanceKiller
         {
             isActive = true;
 
-            Logger.global().print("Killing " + killables.size() + (killables.size() > 1 ? " instances." : " instance."));
+            System.out.println("Killing " + killables.size() + (killables.size() > 1 ? " instances." : " instance."));
             killables.sort(Comparator.comparing(Entry::getValue,
                                                 Comparator.reverseOrder()));
 

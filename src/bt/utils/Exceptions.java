@@ -1,7 +1,5 @@
 package bt.utils;
 
-import bt.log.Logger;
-
 /**
  * @author &#8904
  *
@@ -52,8 +50,7 @@ public class Exceptions
      * Calls the {@link ThrowRunnable#run() run} method of the given implementation.
      *
      * <p>
-     * Any thrown exception will be caught and logged via the {@link Logger#global() global logger} and its
-     * {@link Logger#print(Throwable)} method.
+     * Any thrown exception will be caught and logged via printStackTrace.
      * </p>
      *
      * @param run
@@ -66,7 +63,7 @@ public class Exceptions
         }
         catch (Exception e)
         {
-            Logger.global().print(e);
+            e.printStackTrace();
         }
     }
 
@@ -115,12 +112,11 @@ public class Exceptions
     }
 
     /**
-     * Calls the {@link ThrowConsumer#accept() accept} method of the given implementation with the given
-     * consumable parameter.
+     * Calls the {@link ThrowConsumer#accept() accept} method of the given implementation with the given consumable
+     * parameter.
      *
      * <p>
-     * Any thrown exception will be caught and logged via the {@link Logger#global() global logger} and its
-     * {@link Logger#print(Throwable)} method.
+     * Any thrown exception will be caught and logged via printStackTrace.
      * </p>
      *
      * @param <T>
@@ -135,7 +131,7 @@ public class Exceptions
         }
         catch (Exception e)
         {
-            Logger.global().print(e);
+            e.printStackTrace();
         }
     }
 
@@ -187,8 +183,7 @@ public class Exceptions
      * Calls the {@link ThrowSupplier#get() get} method of the given implementation.
      *
      * <p>
-     * Any thrown exception will be caught and logged via the {@link Logger#global() global logger} and its
-     * {@link Logger#print(Throwable)} method.
+     * Any thrown exception will be caught and logged via printStackTrace.
      * </p>
      *
      * @param <T>
@@ -203,7 +198,7 @@ public class Exceptions
         }
         catch (Exception e)
         {
-            Logger.global().print(e);
+            e.printStackTrace();
         }
 
         return null;
@@ -254,12 +249,10 @@ public class Exceptions
     }
 
     /**
-     * Calls the {@link ThrowFunction#apply() apply} method of the given implementation with the given value
-     * parameter.
+     * Calls the {@link ThrowFunction#apply() apply} method of the given implementation with the given value parameter.
      *
      * <p>
-     * Any thrown exception will be caught and logged via the {@link Logger#global() global logger} and its
-     * {@link Logger#print(Throwable)} method.
+     * Any thrown exception will be caught and logged via printStackTrace.
      * </p>
      *
      * @param <T>
@@ -274,7 +267,7 @@ public class Exceptions
         }
         catch (Exception e)
         {
-            Logger.global().print(e);
+            e.printStackTrace();
         }
 
         return null;

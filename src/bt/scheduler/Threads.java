@@ -9,7 +9,6 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
-import bt.log.Logger;
 import bt.runtime.InstanceKiller;
 import bt.scheduler.fact.DaemonThreadFactory;
 import bt.types.Killable;
@@ -64,9 +63,6 @@ public class Threads implements Killable
         if (instance == null)
         {
             instance = new Threads();
-            Logger.global()
-                  .registerSource(instance,
-                                  "THREADS");
             InstanceKiller.killOnShutdown(instance,
                                           Integer.MIN_VALUE + 2);
         }
@@ -527,9 +523,7 @@ public class Threads implements Killable
     @Override
     public void kill()
     {
-        Logger.global()
-              .print(this,
-                     "Shutting down thread pools.");
+        System.out.println("Shutting down thread pools.");
         Thread.currentThread().setName("THREADS_SHUTDOWN");
         this.schedulerPool.shutdown();
         this.schedulerPool.shutdownNow();
