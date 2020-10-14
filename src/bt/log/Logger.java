@@ -975,7 +975,10 @@ public class Logger implements Killable
         if (result.contains(getClass().getName() + ".print")
             || result.contains(getClass().getName() + ".getCallerString")
             || result.contains(getClass().getName() + ".entry")
-            || result.contains(getClass().getName() + ".exit"))
+            || result.contains(getClass().getName() + ".exit")
+            || result.contains("java.io.PrintStream")
+            || result.contains("java.lang.Throwable")
+            || result.contains("printStackTrace"))
         {
             result = getCallerString(stackIndex + 2);
         }
