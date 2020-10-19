@@ -1,5 +1,9 @@
 package bt.async;
 
+import java.util.function.Consumer;
+
+import bt.utils.Null;
+
 /**
  * Enables blocking calls to receive data asynchronously.
  *
@@ -16,6 +20,7 @@ public class Async<T>
     private long addTime;
     private Thread thread;
     private boolean removedFromManager;
+    private Consumer<T> dataConsumer;
 
     /**
      * Creates a new instance.
@@ -108,6 +113,16 @@ public class Async<T>
         return this.data.get();
     }
 
+    public synchronized void onReceive(Consumer<T> dataConsumer)
+    {
+        this.dataConsumer = dataConsumer;
+
+        if (this.data != null)
+        {
+            Null.checkConsume(this.dataConsumer, this.data.get());
+        }
+    }
+
     public void removedFromManager()
     {
         this.removedFromManager = true;
@@ -123,9 +138,11 @@ public class Async<T>
      *
      * @param data
      */
-    public void set(Data<T> data)
+    public synchronized void set(Data<T> data)
     {
         this.data = data;
+
+        Null.checkConsume(this.dataConsumer, this.data.get());
 
         synchronized (this.lock)
         {
