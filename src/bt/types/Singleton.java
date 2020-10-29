@@ -16,7 +16,7 @@ public class Singleton
 {
     private static Map<Class<?>, Object> instances;
 
-    public static <T> T of(Class<T> type)
+    public synchronized static <T> T of(Class<T> type)
     {
         instances = Null.nullValue(() -> instances,
                                    () -> new ConcurrentHashMap<>());
