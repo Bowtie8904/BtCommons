@@ -14,7 +14,7 @@ import java.util.Base64;
 
 public class Encryption
 {
-    private SecretKey getKeyFromPassword(String password, String salt) throws NoSuchAlgorithmException, InvalidKeySpecException
+    private static SecretKey getKeyFromPassword(String password, String salt) throws NoSuchAlgorithmException, InvalidKeySpecException
     {
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
         KeySpec spec = new PBEKeySpec(password.toCharArray(), salt.getBytes(), 65536, 256);
@@ -22,7 +22,7 @@ public class Encryption
         return secret;
     }
 
-    private IvParameterSpec generateIv()
+    private static IvParameterSpec generateIv()
     {
         byte[] iv = new byte[16];
         new SecureRandom().nextBytes(iv);
@@ -37,14 +37,14 @@ public class Encryption
      * @param salt     The salt used for the key.
      * @return An array with 2 elements. THe first element will be the randomly generated IV, the second element will be the encrypted text.
      */
-    public String[] encrypt(String input, String password, String salt) throws NoSuchPaddingException, NoSuchAlgorithmException,
-                                                                               InvalidAlgorithmParameterException, InvalidKeyException,
-                                                                               BadPaddingException, IllegalBlockSizeException, InvalidKeySpecException
+    public static String[] encrypt(String input, String password, String salt) throws NoSuchPaddingException, NoSuchAlgorithmException,
+                                                                                      InvalidAlgorithmParameterException, InvalidKeyException,
+                                                                                      BadPaddingException, IllegalBlockSizeException, InvalidKeySpecException
     {
-        IvParameterSpec iv = generateIv();
+        IvParameterSpec iv = Encryption.generateIv();
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         cipher.init(Cipher.ENCRYPT_MODE,
-                    getKeyFromPassword(password, salt),
+                    Encryption.getKeyFromPassword(password, salt),
                     iv);
         byte[] cipherText = cipher.doFinal(input.getBytes());
 
@@ -62,13 +62,13 @@ public class Encryption
      * @param salt       The salt for the key.
      * @return The decrpyted text.
      */
-    public String decrypt(String cipherText, String iv, String password, String salt) throws NoSuchPaddingException, NoSuchAlgorithmException,
-                                                                                             InvalidAlgorithmParameterException, InvalidKeyException,
-                                                                                             BadPaddingException, IllegalBlockSizeException, InvalidKeySpecException
+    public static String decrypt(String cipherText, String iv, String password, String salt) throws NoSuchPaddingException, NoSuchAlgorithmException,
+                                                                                                    InvalidAlgorithmParameterException, InvalidKeyException,
+                                                                                                    BadPaddingException, IllegalBlockSizeException, InvalidKeySpecException
     {
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         cipher.init(Cipher.DECRYPT_MODE,
-                    getKeyFromPassword(password, salt),
+                    Encryption.getKeyFromPassword(password, salt),
                     new IvParameterSpec(Base64.getDecoder().decode(iv)));
         byte[] plainText = cipher.doFinal(Base64.getDecoder().decode(cipherText));
         return new String(plainText);
