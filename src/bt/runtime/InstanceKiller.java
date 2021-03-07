@@ -1,14 +1,14 @@
 package bt.runtime;
 
+import bt.log.Logger;
+import bt.types.Killable;
+import bt.utils.Null;
+
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.CopyOnWriteArrayList;
-
-import bt.log.Logger;
-import bt.types.Killable;
-import bt.utils.Null;
 
 /**
  * Class to manage the closing of global resources such as databases and global loggers.
@@ -25,13 +25,14 @@ public final class InstanceKiller
     private static List<Entry<Killable, Integer>> killables = new CopyOnWriteArrayList<>();
 
     private volatile static boolean isActive;
+    private static boolean logActivity = true;
 
     static
     {
         Runtime.getRuntime().addShutdownHook(new Thread(() ->
-        {
-            kill();
-        }));
+                                                        {
+                                                            InstanceKiller.kill();
+                                                        }));
     }
 
     /**
@@ -42,7 +43,17 @@ public final class InstanceKiller
      */
     public static boolean isActive()
     {
-        return isActive;
+        return InstanceKiller.isActive;
+    }
+
+    /**
+     * Indicates whether logs should be written whenever an instance is registered or unregistered.
+     *
+     * @param log
+     */
+    public static void logActivity(boolean log)
+    {
+        InstanceKiller.logActivity = log;
     }
 
     /**
@@ -51,22 +62,22 @@ public final class InstanceKiller
     private static void kill()
     {
         Thread.currentThread().setName("INSTANCE_KILLER");
-        if (killables.size() > 0)
+        if (InstanceKiller.killables.size() > 0)
         {
-            isActive = true;
+            InstanceKiller.isActive = true;
 
-            System.out.println("Killing " + killables.size() + (killables.size() > 1 ? " instances." : " instance."));
-            killables.sort(Comparator.comparing(Entry::getValue,
-                                                Comparator.reverseOrder()));
+            System.out.println("Killing " + InstanceKiller.killables.size() + (InstanceKiller.killables.size() > 1 ? " instances." : " instance."));
+            InstanceKiller.killables.sort(Comparator.comparing(Entry::getValue,
+                                                               Comparator.reverseOrder()));
 
-            for (Entry<Killable, Integer> killable : killables)
+            for (Entry<Killable, Integer> killable : InstanceKiller.killables)
             {
                 Logger.global().setCallerStackIndex(0);
                 Null.checkKill(killable.getKey());
                 Logger.global().setCallerStackIndex(3);
             }
 
-            isActive = false;
+            InstanceKiller.isActive = false;
         }
     }
 
@@ -85,13 +96,11 @@ public final class InstanceKiller
      * thread. Any other way of application termination will cause this class to not kill instances properly.
      * </p>
      *
-     * @param killable
-     *            The instance that should be killed on application exit.
+     * @param killable The instance that should be killed on application exit.
      */
     public static synchronized void killOnShutdown(Killable killable)
     {
-        killOnShutdown(killable,
-                       Integer.MIN_VALUE + 1);
+        InstanceKiller.killOnShutdown(killable, Integer.MIN_VALUE + 1);
     }
 
     /**
@@ -110,18 +119,20 @@ public final class InstanceKiller
      * thread. Any other way of application termination will cause this class to not kill instances properly.
      * </p>
      *
-     * @param killable
-     *            The instance that should be killed on application exit.
-     * @param priority
-     *            An arbitrary number which determines the order of termination. The higher the priority, the earlier
-     *            the instance will be killed.
+     * @param killable The instance that should be killed on application exit.
+     * @param priority An arbitrary number which determines the order of termination. The higher the priority, the earlier
+     *                 the instance will be killed.
      */
     public static synchronized void killOnShutdown(Killable killable, int priority)
     {
-        if (!isRegistered(killable))
+        if (!InstanceKiller.isRegistered(killable))
         {
-            killables.add(new SimpleEntry<>(killable,
-                                                             priority));
+            InstanceKiller.killables.add(new SimpleEntry<>(killable, priority));
+
+            if (InstanceKiller.logActivity)
+            {
+                System.out.println("Registered type " + killable.getClass().getName() + " for killing with a priority of " + priority + ".");
+            }
         }
     }
 
@@ -129,12 +140,16 @@ public final class InstanceKiller
      * Unregisteres the given killable. Its {@link Killable#kill() kill} method will not be called by this instance
      * killer.
      *
-     * @param killable
-     *            The killable to unregister.
+     * @param killable The killable to unregister.
      */
     public static synchronized void unregister(Killable killable)
     {
-        killables.removeIf(k -> k.getKey().equals(killable));
+        boolean removed = InstanceKiller.killables.removeIf(k -> k.getKey().equals(killable));
+
+        if (removed && InstanceKiller.logActivity)
+        {
+            System.out.println("Unregistered type " + killable.getClass().getName() + " from killing.");
+        }
     }
 
     /**
@@ -145,6 +160,6 @@ public final class InstanceKiller
      */
     public static synchronized boolean isRegistered(Killable killable)
     {
-        return killables.stream().anyMatch(k -> k.getKey().equals(killable));
+        return InstanceKiller.killables.stream().anyMatch(k -> k.getKey().equals(killable));
     }
 }

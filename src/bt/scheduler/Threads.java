@@ -1,18 +1,12 @@
 package bt.scheduler;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
-
 import bt.runtime.InstanceKiller;
 import bt.scheduler.fact.DaemonThreadFactory;
 import bt.types.Killable;
 import bt.utils.StringID;
+
+import java.util.List;
+import java.util.concurrent.*;
 
 /**
  * Holds multiple threadpools with different purposes.
@@ -36,6 +30,7 @@ public class Threads implements Killable
     {
         this.schedulerPool = (ScheduledThreadPoolExecutor)Executors.newScheduledThreadPool(10);
         this.schedulerPool.setRemoveOnCancelPolicy(true);
+        this.schedulerPool.allowCoreThreadTimeOut(true);
         this.cachedPool = Executors.newCachedThreadPool();
 
         // factory purely to create daemon threads
@@ -60,20 +55,19 @@ public class Threads implements Killable
      */
     public static Threads get()
     {
-        if (instance == null)
+        if (Threads.instance == null)
         {
-            instance = new Threads();
-            InstanceKiller.killOnShutdown(instance,
+            Threads.instance = new Threads();
+            InstanceKiller.killOnShutdown(Threads.instance,
                                           Integer.MIN_VALUE + 2);
         }
-        return instance;
+        return Threads.instance;
     }
 
     /**
      * Executes the given runnable in a new non-daemon thread.
      *
-     * @param task
-     *            The runnable to execute.
+     * @param task The runnable to execute.
      */
     public void execute(Runnable task)
     {
@@ -84,25 +78,22 @@ public class Threads implements Killable
     /**
      * Executes the given runnable in a new non-daemon thread.
      *
-     * @param threadName
-     *            The name of the created thread.
-     * @param task
-     *            The runnable to execute.
+     * @param threadName The name of the created thread.
+     * @param task       The runnable to execute.
      */
     public void execute(Runnable task, String threadName)
     {
         new Thread(() ->
-        {
-            Thread.currentThread().setName(threadName);
-            task.run();
-        }).start();
+                   {
+                       Thread.currentThread().setName(threadName);
+                       task.run();
+                   }).start();
     }
 
     /**
      * Executes the given runnable in a new daemon thread.
      *
-     * @param task
-     *            The runnable to execute.
+     * @param task The runnable to execute.
      */
     public void executeDaemon(Runnable task)
     {
@@ -113,18 +104,16 @@ public class Threads implements Killable
     /**
      * Executes the given runnable in a new daemon thread.
      *
-     * @param threadName
-     *            The name of the created thread.
-     * @param task
-     *            The runnable to execute.
+     * @param threadName The name of the created thread.
+     * @param task       The runnable to execute.
      */
     public void executeDaemon(Runnable task, String threadName)
     {
         Thread thread = new Thread(() ->
-        {
-            Thread.currentThread().setName(threadName);
-            task.run();
-        });
+                                   {
+                                       Thread.currentThread().setName(threadName);
+                                       task.run();
+                                   });
         thread.setDaemon(true);
         thread.start();
     }
@@ -132,8 +121,7 @@ public class Threads implements Killable
     /**
      * Executes the given runnable in a non-daemon thread from the cashed thread pool.
      *
-     * @param task
-     *            The runnable to execute.
+     * @param task The runnable to execute.
      */
     public void executeCached(Runnable task)
     {
@@ -144,25 +132,22 @@ public class Threads implements Killable
     /**
      * Executes the given runnable in a non-daemon thread from the cashed thread pool.
      *
-     * @param threadName
-     *            The name of the used thread.
-     * @param task
-     *            The runnable to execute.
+     * @param threadName The name of the used thread.
+     * @param task       The runnable to execute.
      */
     public void executeCached(Runnable task, String threadName)
     {
         this.cachedPool.execute(() ->
-        {
-            Thread.currentThread().setName(threadName);
-            task.run();
-        });
+                                {
+                                    Thread.currentThread().setName(threadName);
+                                    task.run();
+                                });
     }
 
     /**
      * Executes the given runnable in a daemon thread from the cashed thread pool.
      *
-     * @param task
-     *            The runnable to execute.
+     * @param task The runnable to execute.
      */
     public void executeCachedDaemon(Runnable task)
     {
@@ -173,31 +158,26 @@ public class Threads implements Killable
     /**
      * Executes the given runnable in a daemon thread from the cashed thread pool.
      *
-     * @param threadName
-     *            The name of the used thread.
-     * @param task
-     *            The runnable to execute.
+     * @param threadName The name of the used thread.
+     * @param task       The runnable to execute.
      */
     public void executeCachedDaemon(Runnable task, String threadName)
     {
         this.cachedPoolDaemon.execute(() ->
-        {
-            Thread.currentThread().setName(threadName);
-            task.run();
-        });
+                                      {
+                                          Thread.currentThread().setName(threadName);
+                                          task.run();
+                                      });
     }
 
     /**
      * Executes the given runnable after the set delay in a pooled non-daemon thread.
      *
-     * @param task
-     *            The runnable to execute.
-     * @param delay
-     *            The delay after which the task will be executed.
-     * @param unit
-     *            The time unit of the delay.
+     * @param task  The runnable to execute.
+     * @param delay The delay after which the task will be executed.
+     * @param unit  The time unit of the delay.
      * @return A ScheduledFuture representing pending completion ofthe task and whose get() method will return null upon
-     *         completion.
+     * completion.
      */
     public ScheduledFuture<?> schedule(Runnable task, long delay, TimeUnit unit)
     {
@@ -210,24 +190,20 @@ public class Threads implements Killable
     /**
      * Executes the given runnable after the set delay in a pooled non-daemon thread.
      *
-     * @param task
-     *            The runnable to execute.
-     * @param delay
-     *            The delay after which the task will be executed.
-     * @param unit
-     *            The time unit of the delay.
-     * @param threadName
-     *            The name of the used thread.
+     * @param task       The runnable to execute.
+     * @param delay      The delay after which the task will be executed.
+     * @param unit       The time unit of the delay.
+     * @param threadName The name of the used thread.
      * @return A ScheduledFuture representing pending completion ofthe task and whose get() method will return null upon
-     *         completion.
+     * completion.
      */
     public ScheduledFuture<?> schedule(Runnable task, long delay, TimeUnit unit, String threadName)
     {
         return this.schedulerPool.schedule(() ->
-        {
-            Thread.currentThread().setName(threadName);
-            task.run();
-        },
+                                           {
+                                               Thread.currentThread().setName(threadName);
+                                               task.run();
+                                           },
                                            delay,
                                            unit);
     }
@@ -235,14 +211,11 @@ public class Threads implements Killable
     /**
      * Executes the given runnable after the set delay in a pooled daemon thread.
      *
-     * @param task
-     *            The runnable to execute.
-     * @param delay
-     *            The delay after which the task will be executed.
-     * @param unit
-     *            The time unit of the delay.
+     * @param task  The runnable to execute.
+     * @param delay The delay after which the task will be executed.
+     * @param unit  The time unit of the delay.
      * @return A ScheduledFuture representing pending completion ofthe task and whose get() method will return null upon
-     *         completion.
+     * completion.
      */
     public ScheduledFuture<?> scheduleDaemon(Runnable task, long delay, TimeUnit unit)
     {
@@ -255,24 +228,20 @@ public class Threads implements Killable
     /**
      * Executes the given runnable after the set delay in a pooled daemon thread.
      *
-     * @param task
-     *            The runnable to execute.
-     * @param delay
-     *            The delay after which the task will be executed.
-     * @param unit
-     *            The time unit of the delay.
-     * @param threadName
-     *            The name of the used thread.
+     * @param task       The runnable to execute.
+     * @param delay      The delay after which the task will be executed.
+     * @param unit       The time unit of the delay.
+     * @param threadName The name of the used thread.
      * @return A ScheduledFuture representing pending completion ofthe task and whose get() method will return null upon
-     *         completion.
+     * completion.
      */
     public ScheduledFuture<?> scheduleDaemon(Runnable task, long delay, TimeUnit unit, String threadName)
     {
         return this.schedulerPoolDaemon.schedule(() ->
-        {
-            Thread.currentThread().setName(threadName);
-            task.run();
-        },
+                                                 {
+                                                     Thread.currentThread().setName(threadName);
+                                                     task.run();
+                                                 },
                                                  delay,
                                                  unit);
     }
@@ -285,16 +254,12 @@ public class Threads implements Killable
      * execution of this tasktakes longer than its period, then subsequent executionsmay start late, but will not
      * concurrently execute.
      *
-     * @param task
-     *            The runnable to execute.
-     * @param initialDelay
-     *            The delay before the first execution.
-     * @param period
-     *            The period between executions.
-     * @param unit
-     *            The time unit of the delays.
+     * @param task         The runnable to execute.
+     * @param initialDelay The delay before the first execution.
+     * @param period       The period between executions.
+     * @param unit         The time unit of the delays.
      * @return A ScheduledFuture representing pending completion ofthe task and whose get() method will return null upon
-     *         completion.
+     * completion.
      */
     public ScheduledFuture<?> scheduleAtFixedRate(Runnable task, long initialDelay, long period, TimeUnit unit)
     {
@@ -313,27 +278,22 @@ public class Threads implements Killable
      * execution of this tasktakes longer than its period, then subsequent executionsmay start late, but will not
      * concurrently execute.
      *
-     * @param task
-     *            The runnable to execute.
-     * @param initialDelay
-     *            The delay before the first execution.
-     * @param period
-     *            The period between executions.
-     * @param unit
-     *            The time unit of the delays.
-     * @param threadName
-     *            The name of the used thread.
+     * @param task         The runnable to execute.
+     * @param initialDelay The delay before the first execution.
+     * @param period       The period between executions.
+     * @param unit         The time unit of the delays.
+     * @param threadName   The name of the used thread.
      * @return A ScheduledFuture representing pending completion ofthe task and whose get() method will return null upon
-     *         completion.
+     * completion.
      */
     public ScheduledFuture<?> scheduleAtFixedRate(Runnable task, long initialDelay, long period, TimeUnit unit,
                                                   String threadName)
     {
         return this.schedulerPool.scheduleAtFixedRate(() ->
-        {
-            Thread.currentThread().setName(threadName);
-            task.run();
-        },
+                                                      {
+                                                          Thread.currentThread().setName(threadName);
+                                                          task.run();
+                                                      },
                                                       initialDelay,
                                                       period,
                                                       unit);
@@ -347,16 +307,12 @@ public class Threads implements Killable
      * execution of this tasktakes longer than its period, then subsequent executionsmay start late, but will not
      * concurrently execute.
      *
-     * @param task
-     *            The runnable to execute.
-     * @param initialDelay
-     *            The delay before the first execution.
-     * @param period
-     *            The period between executions.
-     * @param unit
-     *            The time unit of the delays.
+     * @param task         The runnable to execute.
+     * @param initialDelay The delay before the first execution.
+     * @param period       The period between executions.
+     * @param unit         The time unit of the delays.
      * @return A ScheduledFuture representing pending completion ofthe task and whose get() method will return null upon
-     *         completion.
+     * completion.
      */
     public ScheduledFuture<?> scheduleAtFixedRateDaemon(Runnable task, long initialDelay, long period, TimeUnit unit)
     {
@@ -375,27 +331,22 @@ public class Threads implements Killable
      * execution of this tasktakes longer than its period, then subsequent executionsmay start late, but will not
      * concurrently execute.
      *
-     * @param task
-     *            The runnable to execute.
-     * @param initialDelay
-     *            The delay before the first execution.
-     * @param period
-     *            The period between executions.
-     * @param unit
-     *            The time unit of the delays.
-     * @param threadName
-     *            The name of the used thread.
+     * @param task         The runnable to execute.
+     * @param initialDelay The delay before the first execution.
+     * @param period       The period between executions.
+     * @param unit         The time unit of the delays.
+     * @param threadName   The name of the used thread.
      * @return A ScheduledFuture representing pending completion ofthe task and whose get() method will return null upon
-     *         completion.
+     * completion.
      */
     public ScheduledFuture<?> scheduleAtFixedRateDaemon(Runnable task, long initialDelay, long period, TimeUnit unit,
                                                         String threadName)
     {
         return this.schedulerPoolDaemon.scheduleAtFixedRate(() ->
-        {
-            Thread.currentThread().setName(threadName);
-            task.run();
-        },
+                                                            {
+                                                                Thread.currentThread().setName(threadName);
+                                                                task.run();
+                                                            },
                                                             initialDelay,
                                                             period,
                                                             unit);
@@ -407,16 +358,12 @@ public class Threads implements Killable
      * of the taskencounters an exception, subsequent executions are suppressed. Otherwise, the task will only terminate
      * via cancellation ortermination of the executor.
      *
-     * @param task
-     *            The runnable to execute.
-     * @param initialDelay
-     *            The delay before the first execution.
-     * @param delay
-     *            The delay between executions.
-     * @param unit
-     *            The time unit of the delays.
+     * @param task         The runnable to execute.
+     * @param initialDelay The delay before the first execution.
+     * @param delay        The delay between executions.
+     * @param unit         The time unit of the delays.
      * @return A ScheduledFuture representing pending completion ofthe task and whose get() method will return null upon
-     *         completion.
+     * completion.
      */
     public ScheduledFuture<?> scheduleWithFixedDelay(Runnable task, long initialDelay, long delay, TimeUnit unit)
     {
@@ -433,27 +380,22 @@ public class Threads implements Killable
      * of the taskencounters an exception, subsequent executions are suppressed. Otherwise, the task will only terminate
      * via cancellation ortermination of the executor.
      *
-     * @param task
-     *            The runnable to execute.
-     * @param initialDelay
-     *            The delay before the first execution.
-     * @param delay
-     *            The delay between executions.
-     * @param unit
-     *            The time unit of the delays.
-     * @param threadName
-     *            The name of the used thread.
+     * @param task         The runnable to execute.
+     * @param initialDelay The delay before the first execution.
+     * @param delay        The delay between executions.
+     * @param unit         The time unit of the delays.
+     * @param threadName   The name of the used thread.
      * @return A ScheduledFuture representing pending completion ofthe task and whose get() method will return null upon
-     *         completion.
+     * completion.
      */
     public ScheduledFuture<?> scheduleWithFixedDelay(Runnable task, long initialDelay, long delay, TimeUnit unit,
                                                      String threadName)
     {
         return this.schedulerPool.scheduleWithFixedDelay(() ->
-        {
-            Thread.currentThread().setName(threadName);
-            task.run();
-        },
+                                                         {
+                                                             Thread.currentThread().setName(threadName);
+                                                             task.run();
+                                                         },
                                                          initialDelay,
                                                          delay,
                                                          unit);
@@ -465,16 +407,12 @@ public class Threads implements Killable
      * of the taskencounters an exception, subsequent executions are suppressed. Otherwise, the task will only terminate
      * via cancellation ortermination of the executor.
      *
-     * @param task
-     *            The runnable to execute.
-     * @param initialDelay
-     *            The delay before the first execution.
-     * @param delay
-     *            The delay between executions.
-     * @param unit
-     *            The time unit of the delays.
+     * @param task         The runnable to execute.
+     * @param initialDelay The delay before the first execution.
+     * @param delay        The delay between executions.
+     * @param unit         The time unit of the delays.
      * @return A ScheduledFuture representing pending completion ofthe task and whose get() method will return null upon
-     *         completion.
+     * completion.
      */
     public ScheduledFuture<?> scheduleWithFixedDelayDaemon(Runnable task, long initialDelay, long delay, TimeUnit unit)
     {
@@ -491,27 +429,22 @@ public class Threads implements Killable
      * of the taskencounters an exception, subsequent executions are suppressed. Otherwise, the task will only terminate
      * via cancellation ortermination of the executor.
      *
-     * @param task
-     *            The runnable to execute.
-     * @param initialDelay
-     *            The delay before the first execution.
-     * @param delay
-     *            The delay between executions.
-     * @param unit
-     *            The time unit of the delays.
-     * @param threadName
-     *            The name of the used thread.
+     * @param task         The runnable to execute.
+     * @param initialDelay The delay before the first execution.
+     * @param delay        The delay between executions.
+     * @param unit         The time unit of the delays.
+     * @param threadName   The name of the used thread.
      * @return A ScheduledFuture representing pending completion ofthe task and whose get() method will return null upon
-     *         completion.
+     * completion.
      */
     public ScheduledFuture<?> scheduleWithFixedDelayDaemon(Runnable task, long initialDelay, long delay, TimeUnit unit,
                                                            String threadName)
     {
         return this.schedulerPoolDaemon.scheduleWithFixedDelay(() ->
-        {
-            Thread.currentThread().setName(threadName);
-            task.run();
-        },
+                                                               {
+                                                                   Thread.currentThread().setName(threadName);
+                                                                   task.run();
+                                                               },
                                                                initialDelay,
                                                                delay,
                                                                unit);
@@ -548,8 +481,7 @@ public class Threads implements Killable
      * The added service will be shut down when this instances kill() is called.
      * </p>
      *
-     * @param service
-     *            The ExecutorService to add.
+     * @param service The ExecutorService to add.
      */
     public synchronized void add(ExecutorService service)
     {
