@@ -1140,63 +1140,66 @@ public class Logger implements Killable
 
                 text = str.toString();
 
-                if (!containsFilter(text + s))
+                for (String line : s.split(System.lineSeparator()))
                 {
-                    checkFileSize();
-
-                    if (this.logToSystemOut)
+                    if (!containsFilter(text + line))
                     {
-                        String finalText = Style.apply(text + s, "default_text");
+                        checkFileSize();
 
-                        if (this.hookedOut)
+                        if (this.logToSystemOut)
                         {
-                            if (this.printErr)
-                            {
-                                SystemLogHook.err().printNormal(Style.apply(finalText, "red", "bold"));
-                            }
-                            else
-                            {
-                                SystemLogHook.out().printNormal(finalText);
-                            }
-                        }
-                        else
-                        {
-                            if (this.printErr)
-                            {
-                                System.err.println(Style.apply(finalText, "red", "bold"));
-                            }
-                            else
-                            {
-                                System.out.println(finalText);
-                            }
-                        }
-                    }
+                            String finalText = Style.apply(text + line, "default_text");
 
-                    if (this.logToFile)
-                    {
-                        String finalText = Style.destyle(text + s);
-
-                        if (this.printInstant)
-                        {
-                            this.writer.println(finalText);
-                        }
-                        else
-                        {
-                            try
+                            if (this.hookedOut)
                             {
-                                this.queue.put(finalText);
-                            }
-                            catch (InterruptedException e)
-                            {
-                                if (this.logToSystemErr)
+                                if (this.printErr)
                                 {
-                                    if (this.hookedErr)
+                                    SystemLogHook.err().printNormal(Style.apply(finalText, "red", "bold"));
+                                }
+                                else
+                                {
+                                    SystemLogHook.out().printNormal(finalText);
+                                }
+                            }
+                            else
+                            {
+                                if (this.printErr)
+                                {
+                                    System.err.println(Style.apply(finalText, "red", "bold"));
+                                }
+                                else
+                                {
+                                    System.out.println(finalText);
+                                }
+                            }
+                        }
+
+                        if (this.logToFile)
+                        {
+                            String finalText = Style.destyle(text + line);
+
+                            if (this.printInstant)
+                            {
+                                this.writer.println(finalText);
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    this.queue.put(finalText);
+                                }
+                                catch (InterruptedException e)
+                                {
+                                    if (this.logToSystemErr)
                                     {
-                                        SystemLogHook.err().printNormal(Style.apply(e));
-                                    }
-                                    else
-                                    {
-                                        System.err.println(Style.apply(e));
+                                        if (this.hookedErr)
+                                        {
+                                            SystemLogHook.err().printNormal(Style.apply(e));
+                                        }
+                                        else
+                                        {
+                                            System.err.println(Style.apply(e));
+                                        }
                                     }
                                 }
                             }
@@ -1495,61 +1498,64 @@ public class Logger implements Killable
 
                 String text = str.toString();
 
-                if (!containsFilter(text + s))
+                for (String line : s.split(System.lineSeparator()))
                 {
-                    if (this.logToSystemOut)
+                    if (!containsFilter(text + line))
                     {
-                        String finalText = Style.apply(text + s, "default_text");
+                        if (this.logToSystemOut)
+                        {
+                            String finalText = Style.apply(text + line, "default_text");
 
-                        if (this.hookedOut)
-                        {
-                            if (this.printErr)
+                            if (this.hookedOut)
                             {
-                                SystemLogHook.err().printNormal(Style.apply(finalText, "red", "bold"));
-                            }
-                            else
-                            {
-                                SystemLogHook.out().printNormal(finalText);
-                            }
-                        }
-                        else
-                        {
-                            if (this.printErr)
-                            {
-                                System.err.println(Style.apply(finalText, "red", "bold"));
-                            }
-                            else
-                            {
-                                System.out.println(finalText);
-                            }
-                        }
-                    }
-
-                    if (this.logToFile)
-                    {
-                        String finalText = text + Style.destyle(s);
-
-                        if (this.printInstant)
-                        {
-                            this.writer.println(finalText);
-                        }
-                        else
-                        {
-                            try
-                            {
-                                this.queue.put(finalText);
-                            }
-                            catch (InterruptedException e)
-                            {
-                                if (this.logToSystemErr)
+                                if (this.printErr)
                                 {
-                                    if (this.hookedErr)
+                                    SystemLogHook.err().printNormal(Style.apply(finalText, "red", "bold"));
+                                }
+                                else
+                                {
+                                    SystemLogHook.out().printNormal(finalText);
+                                }
+                            }
+                            else
+                            {
+                                if (this.printErr)
+                                {
+                                    System.err.println(Style.apply(finalText, "red", "bold"));
+                                }
+                                else
+                                {
+                                    System.out.println(finalText);
+                                }
+                            }
+                        }
+
+                        if (this.logToFile)
+                        {
+                            String finalText = text + Style.destyle(line);
+
+                            if (this.printInstant)
+                            {
+                                this.writer.println(finalText);
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    this.queue.put(finalText);
+                                }
+                                catch (InterruptedException e)
+                                {
+                                    if (this.logToSystemErr)
                                     {
-                                        SystemLogHook.err().printNormal(Style.apply(e));
-                                    }
-                                    else
-                                    {
-                                        System.err.println(Style.apply(e));
+                                        if (this.hookedErr)
+                                        {
+                                            SystemLogHook.err().printNormal(Style.apply(e));
+                                        }
+                                        else
+                                        {
+                                            System.err.println(Style.apply(e));
+                                        }
                                     }
                                 }
                             }
