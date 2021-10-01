@@ -1,5 +1,6 @@
 package bt.log;
 
+import bt.console.output.styled.Style;
 import bt.reflect.methods.Caller;
 import bt.runtime.InstanceKiller;
 import bt.scheduler.Threads;
@@ -1124,68 +1125,66 @@ public class Logger implements Killable
 
                 str.append(this.prefix);
 
-                if (source == null)
-                {
-                    str.append(s);
-                }
-                else if (sourceName == null)
+                if (source != null && sourceName == null)
                 {
                     str.append("[");
-                    str.append(source.toString());
+                    str.append(Style.apply(source.toString(), "-red", "yellow"));
                     str.append("] ");
-                    str.append(s);
                 }
                 else
                 {
                     str.append("[");
-                    str.append(sourceName);
+                    str.append(Style.apply(sourceName, "-red", "yellow"));
                     str.append("] ");
-                    str.append(s);
                 }
 
                 text = str.toString();
 
-                if (!containsFilter(text))
+                if (!containsFilter(text + s))
                 {
                     checkFileSize();
 
                     if (this.logToSystemOut)
                     {
+                        String finalText = Style.apply(text + s, "default_text");
+
                         if (this.hookedOut)
                         {
                             if (this.printErr)
                             {
-                                SystemLogHook.err().printNormal(text);
+                                SystemLogHook.err().printNormal(Style.apply(finalText, "red", "bold"));
                             }
                             else
                             {
-                                SystemLogHook.out().printNormal(text);
+                                SystemLogHook.out().printNormal(finalText);
                             }
                         }
                         else
                         {
                             if (this.printErr)
                             {
-                                System.err.println(text);
+                                System.err.println(Style.apply(finalText, "red", "bold"));
                             }
                             else
                             {
-                                System.out.println(text);
+                                System.out.println(finalText);
                             }
                         }
                     }
 
                     if (this.logToFile)
                     {
+                        String finalText = Style.destyle(text + s);
+
                         if (this.printInstant)
                         {
-                            this.writer.println(text);
+                            this.writer.println(finalText);
                         }
                         else
                         {
                             try
                             {
-                                this.queue.put(text);
+                                this.queue.put(finalText);
                             }
                             catch (InterruptedException e)
                             {
@@ -1193,11 +1192,11 @@ public class Logger implements Killable
                                 {
                                     if (this.hookedErr)
                                     {
-                                        SystemLogHook.err().printNormal(e);
+                                        SystemLogHook.err().printNormal(Style.apply(e));
                                     }
                                     else
                                     {
-                                        e.printStackTrace();
+                                        System.err.println(Style.apply(e));
                                     }
                                 }
                             }
@@ -1363,7 +1362,7 @@ public class Logger implements Killable
                 else if (sourceName == null)
                 {
                     str.append("[");
-                    str.append(source.toString());
+                    str.append(source);
                     str.append("] ");
                     str.append(" ERROR");
                 }
@@ -1377,92 +1376,83 @@ public class Logger implements Killable
 
                 text = str.toString();
 
-                if (this.logToSystemOut)
+                if (!containsFilter(text))
                 {
-                    if (this.hookedOut)
+                    String finalText = Style.apply(text, "red", "bold");
+
+                    if (this.logToSystemOut)
                     {
-                        if (this.printErr)
+                        if (this.hookedErr)
                         {
-                            SystemLogHook.err().printNormal(text);
+                            SystemLogHook.err().printNormal(finalText);
                         }
                         else
                         {
-                            SystemLogHook.out().printNormal(text);
+                            System.err.println(finalText);
                         }
                     }
-                    else
+
+                    if (this.logToSystemErr)
                     {
-                        if (this.printErr)
+                        if (this.hookedErr)
                         {
-                            System.err.println(text);
+                            SystemLogHook.err().printNormal(Style.apply(t));
                         }
                         else
                         {
-                            System.out.println(text);
+                            System.err.println(Style.apply(t));
                         }
                     }
-                }
 
-                if (this.logToSystemErr)
-                {
-                    if (this.hookedErr)
+                    if (this.logToFile)
                     {
-                        SystemLogHook.err().printNormal(t);
-                    }
-                    else
-                    {
-                        t.printStackTrace();
-                    }
-                }
-
-                if (this.logToFile)
-                {
-                    try (StringWriter sw = new StringWriter(); PrintWriter pw = new PrintWriter(sw))
-                    {
-                        t.printStackTrace(pw);
-                        String trace = sw.toString();
-                        if (!containsFilter(trace))
+                        try (StringWriter sw = new StringWriter(); PrintWriter pw = new PrintWriter(sw))
                         {
-                            checkFileSize();
+                            t.printStackTrace(pw);
+                            String trace = sw.toString();
+                            if (!containsFilter(trace))
+                            {
+                                checkFileSize();
 
-                            if (this.printInstant)
-                            {
-                                this.writer.println(text + System.lineSeparator() + trace);
-                            }
-                            else
-                            {
-                                try
+                                if (this.printInstant)
                                 {
-                                    this.queue.put(text + System.lineSeparator() + trace);
+                                    this.writer.println(text + System.lineSeparator() + trace);
                                 }
-                                catch (InterruptedException e)
+                                else
                                 {
-                                    if (this.logToSystemErr)
+                                    try
                                     {
-                                        if (this.hookedErr)
+                                        this.queue.put(text + System.lineSeparator() + trace);
+                                    }
+                                    catch (InterruptedException e)
+                                    {
+                                        if (this.logToSystemErr)
                                         {
-                                            SystemLogHook.err().printNormal(e);
-                                        }
-                                        else
-                                        {
-                                            e.printStackTrace();
+                                            if (this.hookedErr)
+                                            {
+                                                SystemLogHook.err().printNormal(Style.apply(e));
+                                            }
+                                            else
+                                            {
+                                                System.err.println(Style.apply(e));
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
-                    }
-                    catch (IOException e)
-                    {
-                        if (this.logToSystemErr)
+                        catch (IOException e)
                         {
-                            if (this.hookedErr)
+                            if (this.logToSystemErr)
                             {
-                                SystemLogHook.err().printNormal(e);
-                            }
-                            else
-                            {
-                                e.printStackTrace();
+                                if (this.hookedErr)
+                                {
+                                    SystemLogHook.err().printNormal(Style.apply(e));
+                                }
+                                else
+                                {
+                                    System.err.println(Style.apply(e));
+                                }
                             }
                         }
                     }
@@ -1487,63 +1477,67 @@ public class Logger implements Killable
         {
             if (Logger.activeLoggers.contains(this))
             {
-                if (!containsFilter(s))
+
+                checkFileSize();
+
+                var str = new StringBuilder();
+                str.append(getDateString());
+                str.append(" ");
+
+                if (this.printCaller)
                 {
-                    checkFileSize();
-
-                    var str = new StringBuilder();
-                    str.append(getDateString());
+                    str.append(getCallerString());
                     str.append(" ");
+                }
 
-                    if (this.printCaller)
-                    {
-                        str.append(getCallerString());
-                        str.append(" ");
-                    }
+                str.append(this.prefix);
+                str.append(" ");
 
-                    str.append(this.prefix);
-                    str.append(" ");
-                    str.append(s);
+                String text = str.toString();
 
-                    String text = str.toString();
-
+                if (!containsFilter(text + s))
+                {
                     if (this.logToSystemOut)
                     {
+                        String finalText = Style.apply(text + s, "default_text");
+
                         if (this.hookedOut)
                         {
                             if (this.printErr)
                             {
-                                SystemLogHook.err().printNormal(text);
+                                SystemLogHook.err().printNormal(Style.apply(finalText, "red", "bold"));
                             }
                             else
                             {
-                                SystemLogHook.out().printNormal(text);
+                                SystemLogHook.out().printNormal(finalText);
                             }
                         }
                         else
                         {
                             if (this.printErr)
                             {
-                                System.err.println(text);
+                                System.err.println(Style.apply(finalText, "red", "bold"));
                             }
                             else
                             {
-                                System.out.println(text);
+                                System.out.println(finalText);
                             }
                         }
                     }
 
                     if (this.logToFile)
                     {
+                        String finalText = text + Style.destyle(s);
+
                         if (this.printInstant)
                         {
-                            this.writer.println(text);
+                            this.writer.println(finalText);
                         }
                         else
                         {
                             try
                             {
-                                this.queue.put(text);
+                                this.queue.put(finalText);
                             }
                             catch (InterruptedException e)
                             {
@@ -1551,11 +1545,11 @@ public class Logger implements Killable
                                 {
                                     if (this.hookedErr)
                                     {
-                                        SystemLogHook.err().printNormal(e);
+                                        SystemLogHook.err().printNormal(Style.apply(e));
                                     }
                                     else
                                     {
-                                        e.printStackTrace();
+                                        System.err.println(Style.apply(e));
                                     }
                                 }
                             }
@@ -1709,85 +1703,83 @@ public class Logger implements Killable
 
                 String text = str.toString();
 
-                if (this.logToSystemOut)
+                if (!containsFilter(text))
                 {
-                    if (this.hookedOut)
+                    String finalText = Style.apply(text, "red", "bold");
+
+                    if (this.logToSystemOut)
                     {
-                        if (this.printErr)
+                        if (this.hookedErr)
                         {
-                            SystemLogHook.err().printNormal(text);
+                            SystemLogHook.err().printNormal(finalText);
                         }
                         else
                         {
-                            SystemLogHook.out().printNormal(text);
+                            System.err.println(finalText);
                         }
                     }
-                    else
+
+                    if (this.logToSystemErr)
                     {
-                        if (this.printErr)
+                        if (this.hookedErr)
                         {
-                            System.err.println(text);
+                            SystemLogHook.err().printNormal(Style.apply(t));
                         }
                         else
                         {
-                            System.out.println(text);
+                            System.err.println(Style.apply(t));
                         }
                     }
-                }
 
-                if (this.logToSystemErr)
-                {
-                    if (this.hookedErr)
+                    if (this.logToFile)
                     {
-                        SystemLogHook.err().printNormal(t);
-                    }
-                    else
-                    {
-                        t.printStackTrace();
-                    }
-                }
-
-                if (this.logToFile)
-                {
-                    try (StringWriter sw = new StringWriter(); PrintWriter pw = new PrintWriter(sw))
-                    {
-                        t.printStackTrace(pw);
-                        String trace = sw.toString();
-                        if (!containsFilter(trace))
+                        try (StringWriter sw = new StringWriter(); PrintWriter pw = new PrintWriter(sw))
                         {
-                            checkFileSize();
+                            t.printStackTrace(pw);
+                            String trace = sw.toString();
+                            if (!containsFilter(trace))
+                            {
+                                checkFileSize();
 
-                            if (this.printInstant)
-                            {
-                                this.writer.println(text + System.lineSeparator() + trace);
-                            }
-                            else
-                            {
-                                try
+                                if (this.printInstant)
                                 {
-                                    this.queue.put(text + System.lineSeparator() + trace);
+                                    this.writer.println(text + System.lineSeparator() + trace);
                                 }
-                                catch (InterruptedException e)
+                                else
                                 {
-                                    if (this.logToSystemOut)
+                                    try
                                     {
-                                        e.printStackTrace();
+                                        this.queue.put(text + System.lineSeparator() + trace);
+                                    }
+                                    catch (InterruptedException e)
+                                    {
+                                        if (this.logToSystemErr)
+                                        {
+                                            if (this.hookedErr)
+                                            {
+                                                SystemLogHook.err().printNormal(Style.apply(e));
+                                            }
+                                            else
+                                            {
+                                                System.err.println(Style.apply(e));
+                                            }
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
-                    catch (IOException e)
-                    {
-                        if (this.logToSystemErr)
+                        catch (IOException e)
                         {
-                            if (this.hookedErr)
+                            if (this.logToSystemErr)
                             {
-                                SystemLogHook.err().printNormal(e);
-                            }
-                            else
-                            {
-                                e.printStackTrace();
+                                if (this.hookedErr)
+                                {
+                                    SystemLogHook.err().printNormal(Style.apply(e));
+                                }
+                                else
+                                {
+                                    System.err.println(Style.apply(e));
+                                }
                             }
                         }
                     }

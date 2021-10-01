@@ -44,5 +44,10 @@
             <artifactId>BtReflection</artifactId>
             <version>21e4fe990e</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.Bowtie8904</groupId>
+            <artifactId>BtConsole</artifactId>
+            <version>44f26c5d</version>
+        </dependency>
     </dependencies>
 </project>
