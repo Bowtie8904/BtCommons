@@ -141,6 +141,11 @@ public class Logger implements Killable
     private boolean printCaller = true;
 
     /**
+     * Indicates whether the logger should print information about the time of the logentry.
+     */
+    private boolean printTimestamp = true;
+
+    /**
      * Indicates the position of method in the stack that should be printed as caller method.
      * <p>
      * By default this has the value 3 and will use the method that called print() as the caller.
@@ -913,6 +918,16 @@ public class Logger implements Killable
     }
 
     /**
+     * Sets whether the logger will log the time of the logentry.
+     *
+     * @param printCaller true to log a timestamp.
+     */
+    public void setPrintTimestamp(boolean printTimestamp)
+    {
+        this.printTimestamp = printTimestamp;
+    }
+
+    /**
      * Sets the index of the method in the call stack that should be used to print caller information.
      *
      * <p>
@@ -1114,8 +1129,12 @@ public class Logger implements Killable
                 String text;
                 String sourceName = getSourceName(source);
                 var str = new StringBuilder();
-                str.append(getDateString());
-                str.append(" ");
+
+                if (this.printTimestamp)
+                {
+                    str.append(getDateString());
+                    str.append(" ");
+                }
 
                 if (this.printCaller)
                 {
@@ -1347,8 +1366,12 @@ public class Logger implements Killable
                 String text;
                 String sourceName = getSourceName(source);
                 var str = new StringBuilder();
-                str.append(getDateString());
-                str.append(" ");
+
+                if (this.printTimestamp)
+                {
+                    str.append(getDateString());
+                    str.append(" ");
+                }
 
                 if (this.printCaller)
                 {
@@ -1484,8 +1507,12 @@ public class Logger implements Killable
                 checkFileSize();
 
                 var str = new StringBuilder();
-                str.append(getDateString());
-                str.append(" ");
+
+                if (this.printTimestamp)
+                {
+                    str.append(getDateString());
+                    str.append(" ");
+                }
 
                 if (this.printCaller)
                 {
@@ -1695,8 +1722,12 @@ public class Logger implements Killable
             if (Logger.activeLoggers.contains(this))
             {
                 var str = new StringBuilder();
-                str.append(getDateString());
-                str.append(" ");
+
+                if (this.printTimestamp)
+                {
+                    str.append(getDateString());
+                    str.append(" ");
+                }
 
                 if (this.printCaller)
                 {
