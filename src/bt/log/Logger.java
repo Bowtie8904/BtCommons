@@ -1142,7 +1142,7 @@ public class Logger implements Killable
                     str.append(" ");
                 }
 
-                str.append(this.prefix);
+                str.append(this.prefix != null ? this.prefix : "");
 
                 if (source != null && sourceName == null)
                 {
@@ -1379,11 +1379,11 @@ public class Logger implements Killable
                     str.append(" ");
                 }
 
-                str.append(this.prefix);
+                str.append(this.prefix != null ? this.prefix : "");
 
                 if (source == null)
                 {
-                    str.append(" ERROR");
+                    str.append("ERROR");
                 }
                 else if (sourceName == null)
                 {
@@ -1520,8 +1520,7 @@ public class Logger implements Killable
                     str.append(" ");
                 }
 
-                str.append(this.prefix);
-                str.append(" ");
+                str.append(this.prefix != null ? this.prefix : "");
 
                 String text = str.toString();
 
@@ -1735,8 +1734,8 @@ public class Logger implements Killable
                     str.append(" ");
                 }
 
-                str.append(this.prefix);
-                str.append(" ERROR");
+                str.append(this.prefix != null ? this.prefix : "");
+                str.append("ERROR");
 
                 String text = str.toString();
 
