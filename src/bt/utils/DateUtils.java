@@ -7,7 +7,6 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author &#8904
- *
  */
 public final class DateUtils
 {
@@ -81,5 +80,17 @@ public final class DateUtils
     {
         timestamp.setTime(timestamp.getTime() + TimeUnit.SECONDS.toMillis(seconds));
         return timestamp;
+    }
+
+    public static Timestamp toDate(long millisSinceEpoch)
+    {
+        if (millisSinceEpoch >= 0)
+        {
+            return new Timestamp(millisSinceEpoch);
+        }
+        else
+        {
+            return null;
+        }
     }
 }
