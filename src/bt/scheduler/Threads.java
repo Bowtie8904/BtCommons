@@ -1,5 +1,6 @@
 package bt.scheduler;
 
+import bt.log.Log;
 import bt.runtime.InstanceKiller;
 import bt.scheduler.fact.DaemonThreadFactory;
 import bt.types.Killable;
@@ -176,6 +177,7 @@ public class Threads implements Killable
      * @param task  The runnable to execute.
      * @param delay The delay after which the task will be executed.
      * @param unit  The time unit of the delay.
+     *
      * @return A ScheduledFuture representing pending completion ofthe task and whose get() method will return null upon
      * completion.
      */
@@ -194,6 +196,7 @@ public class Threads implements Killable
      * @param delay      The delay after which the task will be executed.
      * @param unit       The time unit of the delay.
      * @param threadName The name of the used thread.
+     *
      * @return A ScheduledFuture representing pending completion ofthe task and whose get() method will return null upon
      * completion.
      */
@@ -214,6 +217,7 @@ public class Threads implements Killable
      * @param task  The runnable to execute.
      * @param delay The delay after which the task will be executed.
      * @param unit  The time unit of the delay.
+     *
      * @return A ScheduledFuture representing pending completion ofthe task and whose get() method will return null upon
      * completion.
      */
@@ -232,6 +236,7 @@ public class Threads implements Killable
      * @param delay      The delay after which the task will be executed.
      * @param unit       The time unit of the delay.
      * @param threadName The name of the used thread.
+     *
      * @return A ScheduledFuture representing pending completion ofthe task and whose get() method will return null upon
      * completion.
      */
@@ -258,6 +263,7 @@ public class Threads implements Killable
      * @param initialDelay The delay before the first execution.
      * @param period       The period between executions.
      * @param unit         The time unit of the delays.
+     *
      * @return A ScheduledFuture representing pending completion ofthe task and whose get() method will return null upon
      * completion.
      */
@@ -283,6 +289,7 @@ public class Threads implements Killable
      * @param period       The period between executions.
      * @param unit         The time unit of the delays.
      * @param threadName   The name of the used thread.
+     *
      * @return A ScheduledFuture representing pending completion ofthe task and whose get() method will return null upon
      * completion.
      */
@@ -311,6 +318,7 @@ public class Threads implements Killable
      * @param initialDelay The delay before the first execution.
      * @param period       The period between executions.
      * @param unit         The time unit of the delays.
+     *
      * @return A ScheduledFuture representing pending completion ofthe task and whose get() method will return null upon
      * completion.
      */
@@ -336,6 +344,7 @@ public class Threads implements Killable
      * @param period       The period between executions.
      * @param unit         The time unit of the delays.
      * @param threadName   The name of the used thread.
+     *
      * @return A ScheduledFuture representing pending completion ofthe task and whose get() method will return null upon
      * completion.
      */
@@ -362,6 +371,7 @@ public class Threads implements Killable
      * @param initialDelay The delay before the first execution.
      * @param delay        The delay between executions.
      * @param unit         The time unit of the delays.
+     *
      * @return A ScheduledFuture representing pending completion ofthe task and whose get() method will return null upon
      * completion.
      */
@@ -385,6 +395,7 @@ public class Threads implements Killable
      * @param delay        The delay between executions.
      * @param unit         The time unit of the delays.
      * @param threadName   The name of the used thread.
+     *
      * @return A ScheduledFuture representing pending completion ofthe task and whose get() method will return null upon
      * completion.
      */
@@ -411,6 +422,7 @@ public class Threads implements Killable
      * @param initialDelay The delay before the first execution.
      * @param delay        The delay between executions.
      * @param unit         The time unit of the delays.
+     *
      * @return A ScheduledFuture representing pending completion ofthe task and whose get() method will return null upon
      * completion.
      */
@@ -434,6 +446,7 @@ public class Threads implements Killable
      * @param delay        The delay between executions.
      * @param unit         The time unit of the delays.
      * @param threadName   The name of the used thread.
+     *
      * @return A ScheduledFuture representing pending completion ofthe task and whose get() method will return null upon
      * completion.
      */
@@ -456,7 +469,7 @@ public class Threads implements Killable
     @Override
     public void kill()
     {
-        System.out.println("Shutting down thread pools.");
+        Log.info("Shutting down thread pools.");
         Thread.currentThread().setName("THREADS_SHUTDOWN");
         this.schedulerPool.shutdown();
         this.schedulerPool.shutdownNow();

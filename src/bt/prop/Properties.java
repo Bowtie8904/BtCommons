@@ -1,12 +1,8 @@
 package bt.prop;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import bt.log.Log;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,11 +51,11 @@ public final class Properties
      * Gets all fieldnames that start with the given fieldstring inside the given file. If the file does not exist it
      * will instead search in the default property file which is defined by {@link #DEFAULT_PROPERTY_PATH}.
      *
-     * @param field
-     *            The name of the field whichs similar fieldnames you want to get.
-     * @param file
-     *            The file which should be searched for the field.
+     * @param field The name of the field whichs similar fieldnames you want to get.
+     * @param file  The file which should be searched for the field.
+     *
      * @return An array containing all fieldnames whichs start with the given fieldstring.
+     *
      * @see #getAllFieldsLike(String)
      * @see #getAllFieldsLike(String, String)
      */
@@ -74,14 +70,13 @@ public final class Properties
             }
             catch (Exception e)
             {
-                e.printStackTrace();
+                Log.error("Failed to create properties file", e);
             }
         }
 
         List<String> values = new ArrayList<>();
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file),
-                                                                          "UTF-8")))
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8")))
         {
             String line;
             while ((line = br.readLine()) != null)
@@ -95,8 +90,9 @@ public final class Properties
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            Log.error("Failed to read properties line", e);
         }
+
         return values.toArray(new String[] {});
     }
 
@@ -104,45 +100,44 @@ public final class Properties
      * Gets all fieldnames that start with the given fieldstring inside the file at the given path. If the file does not
      * exist it will instead search in the default property file which is defined by {@link #DEFAULT_PROPERTY_PATH}.
      *
-     * @param field
-     *            The name of the field whichs similar fieldnames you want to get.
-     * @param path
-     *            The path to the file.
+     * @param field The name of the field whichs similar fieldnames you want to get.
+     * @param path  The path to the file.
+     *
      * @return An array containing all fieldnames whichs start with the given fieldstring.
+     *
      * @see #getAllFieldsLike(String, File)
      * @see #getAllFieldsLike(String)
      */
     public static String[] getAllFieldsLike(String field, String path)
     {
-        return getAllFieldsLike(field,
-                                new File(path));
+        return Properties.getAllFieldsLike(field, new File(path));
     }
 
     /**
      * Gets all fieldnames that start with the given fieldstring inside the default property file. If the file does not
      * exist it will instead search in the default property file which is defined by {@link #DEFAULT_PROPERTY_PATH}.
      *
-     * @param field
-     *            The name of the field whichs similar fieldnames you want to get.
+     * @param field The name of the field whichs similar fieldnames you want to get.
+     *
      * @return An array containing all fieldnames whichs start with the given fieldstring.
+     *
      * @see #getAllFieldsLike(String, File)
      * @see #getAllFieldsLike(String, String)
      */
     public static String[] getAllFieldsLike(String field)
     {
-        return getAllFieldsLike(field,
-                                DEFAULT_PROPERTY_PATH);
+        return Properties.getAllFieldsLike(field, Properties.DEFAULT_PROPERTY_PATH);
     }
 
     /**
      * Gets all values whichs fieldnames start with the given fieldstring inside the given file. If the file does not
      * exist it will instead search in the default property file which is defined by {@link #DEFAULT_PROPERTY_PATH}.
      *
-     * @param field
-     *            The name of the field whichs values you want to get.
-     * @param file
-     *            The file which should be searched for the field.
+     * @param field The name of the field whichs values you want to get.
+     * @param file  The file which should be searched for the field.
+     *
      * @return An array containing all Strings whichs fieldnames start with the given fieldstring.
+     *
      * @see #getAllLike(String)
      * @see #getAllLike(String, String)
      */
@@ -157,13 +152,12 @@ public final class Properties
             }
             catch (Exception e)
             {
-                e.printStackTrace();
+                Log.error("Failed to create properties file", e);
             }
         }
         List<String> values = new ArrayList<>();
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file),
-                                                                          "UTF-8")))
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8")))
         {
             String line;
             while ((line = br.readLine()) != null)
@@ -177,7 +171,7 @@ public final class Properties
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            Log.error("Failed to read properties line", e);
         }
         return values.toArray(new String[] {});
     }
@@ -187,18 +181,17 @@ public final class Properties
      * does not exist it will instead search in the default property file which is defined by
      * {@link #DEFAULT_PROPERTY_PATH}.
      *
-     * @param field
-     *            The name of the field whichs values you want to get.
-     * @param path
-     *            The path to the file.
+     * @param field The name of the field whichs values you want to get.
+     * @param path  The path to the file.
+     *
      * @return An array containing all Strings whichs fieldnames start with the given fieldstring.
+     *
      * @see #getAllLike(String, File)
      * @see #getAllLike(String)
      */
     public static String[] getAllLike(String field, String path)
     {
-        return getAllLike(field,
-                          new File(path));
+        return Properties.getAllLike(field, new File(path));
     }
 
     /**
@@ -206,16 +199,16 @@ public final class Properties
      * does not exist it will instead search in the default property file which is defined by
      * {@link #DEFAULT_PROPERTY_PATH}.
      *
-     * @param field
-     *            The name of the field whichs values you want to get.
+     * @param field The name of the field whichs values you want to get.
+     *
      * @return An array containing all Strings whichs fieldnames start with the given fieldstring.
+     *
      * @see #getAllLike(String, File)
      * @see #getAllLike(String, String)
      */
     public static String[] getAllLike(String field)
     {
-        return getAllLike(field,
-                          DEFAULT_PROPERTY_PATH);
+        return Properties.getAllLike(field, Properties.DEFAULT_PROPERTY_PATH);
     }
 
     /**
@@ -223,12 +216,12 @@ public final class Properties
      * file does not exist it will instead search in the default property file which is defined by
      * {@link #DEFAULT_PROPERTY_PATH}.
      *
-     * @param field
-     *            The name of the field whichs value you want to get.
-     * @param file
-     *            The file which should be searched for the field.
+     * @param field The name of the field whichs value you want to get.
+     * @param file  The file which should be searched for the field.
+     *
      * @return The String value of the given field or null if the field does not exist in the given file and the default
-     *         property file.
+     * property file.
+     *
      * @see #getValueOf(String)
      * @see #getValueOf(String, String)
      */
@@ -243,11 +236,10 @@ public final class Properties
             }
             catch (Exception e)
             {
-                e.printStackTrace();
+                Log.error("Failed to create properties file", e);
             }
         }
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file),
-                                                                          "UTF-8")))
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8")))
         {
             String line;
             while ((line = br.readLine()) != null)
@@ -261,7 +253,7 @@ public final class Properties
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            Log.error("Failed to read properties line", e);
         }
         return null;
     }
@@ -271,48 +263,46 @@ public final class Properties
      * the file. If the file does not exist at the given location it will instead search in the default property file
      * which is defined by {@link #DEFAULT_PROPERTY_PATH}.
      *
-     * @param field
-     *            The name of the field whichs value you want to get.
-     * @param path
-     *            The path to a file which should be searched for the field.
+     * @param field The name of the field whichs value you want to get.
+     * @param path  The path to a file which should be searched for the field.
+     *
      * @return The String value of the given field or null if the field does not exist in the file at the given location
-     *         and the default property file.
+     * and the default property file.
+     *
      * @see #getValueOf(String, File)
      * @see #getValueOf(String)
      */
     public static String getValueOf(String field, String path)
     {
-        return getValueOf(field,
-                          new File(path));
+        return Properties.getValueOf(field, new File(path));
     }
 
     /**
      * Gets the value of the given field inside the default property file whichs path is defined by
      * {@link #DEFAULT_PROPERTY_PATH}.
      *
-     * @param field
-     *            The name of the field whichs value you want to get.
+     * @param field The name of the field whichs value you want to get.
+     *
      * @return The String value of the given field or null if the field does not exist in the default property file.
+     *
      * @see #getValueOf(String, File)
      * @see #getValueOf(String, String)
      */
     public static String getValueOf(String field)
     {
-        return getValueOf(field,
-                          new File(DEFAULT_PROPERTY_PATH));
+        return Properties.getValueOf(field, new File(Properties.DEFAULT_PROPERTY_PATH));
     }
 
     /**
      * Updates the value of the given field with the given value inside the given file. If the field does not exist it
      * will be added with the given value. If the file does not exist it will be created.
      *
-     * @param field
-     *            The name of the field whichs value should be updated or which should be added.
-     * @param value
-     *            The new value for the given field.
-     * @param file
-     *            The file which should be updated.
+     * @param field The name of the field whichs value should be updated or which should be added.
+     * @param value The new value for the given field.
+     * @param file  The file which should be updated.
+     *
      * @return true if successfull.
+     *
      * @see #setValueOf(String, String)
      * @see #setValueOf(String, String, String)
      */
@@ -327,14 +317,13 @@ public final class Properties
             }
             catch (Exception e)
             {
-                e.printStackTrace();
+                Log.error("Failed to create properties file", e);
                 return false;
             }
         }
 
         StringBuilder sb = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file),
-                                                                          "UTF-8")))
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8")))
         {
             String line;
             boolean exists = false;
@@ -358,18 +347,20 @@ public final class Properties
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            Log.error("Failed to read properties line", e);
             return false;
         }
+
         try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(file))))
         {
-            writer.print(sb.toString());
+            writer.print(sb);
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            Log.error("Failed to write properties line", e);
             return false;
         }
+
         return true;
     }
 
@@ -377,39 +368,38 @@ public final class Properties
      * Updates the value of the given field with the given value inside the file at the given location. If the field
      * does not exist it will be added with the given value. If the file does not exist it will be created.
      *
-     * @param field
-     *            The name of the field whichs value should be updated or which should be added.
-     * @param value
-     *            The new value for the given field.
-     * @param path
-     *            The path to the file which should be updated.
+     * @param field The name of the field whichs value should be updated or which should be added.
+     * @param value The new value for the given field.
+     * @param path  The path to the file which should be updated.
+     *
      * @return true if successfull.
+     *
      * @see #setValueOf(String, String)
      * @see #setValueOf(String, String, File)
      */
     public static boolean setValueOf(String field, String value, String path)
     {
-        return setValueOf(field,
-                          value,
-                          new File(path));
+        return Properties.setValueOf(field,
+                                     value,
+                                     new File(path));
     }
 
     /**
      * Updates the value of the given field with the given value inside the default property file whichs path is defined
      * by {@link #DEFAULT_PROPERTY_PATH}.
      *
-     * @param field
-     *            The name of the field whichs value should be updated or which should be added.
-     * @param value
-     *            The new value for the given field.
+     * @param field The name of the field whichs value should be updated or which should be added.
+     * @param value The new value for the given field.
+     *
      * @return true if successfull.
+     *
      * @see #setValueOf(String, String, File)
      * @see #setValueOf(String, String, String)
      */
     public static boolean setValueOf(String field, String value)
     {
-        return setValueOf(field,
-                          value,
-                          new File(DEFAULT_PROPERTY_PATH));
+        return Properties.setValueOf(field,
+                                     value,
+                                     new File(Properties.DEFAULT_PROPERTY_PATH));
     }
 }

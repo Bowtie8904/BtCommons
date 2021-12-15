@@ -1,16 +1,16 @@
 package bt.async;
 
-import java.util.function.Consumer;
-
+import bt.log.Log;
 import bt.utils.Null;
+
+import java.util.function.Consumer;
 
 /**
  * Enables blocking calls to receive data asynchronously.
  *
- * @author &#8904
+ * @param <T> The type of expected data.
  *
- * @param <T>
- *            The type of expected data.
+ * @author &#8904
  */
 public class Async<T>
 {
@@ -25,8 +25,7 @@ public class Async<T>
     /**
      * Creates a new instance.
      *
-     * @param id
-     *            A unique ID that is used to match this async and the expected data.
+     * @param id A unique ID that is used to match this async and the expected data.
      */
     public Async(String id)
     {
@@ -45,6 +44,7 @@ public class Async<T>
      */
     public T get() throws AsyncException
     {
+        Log.entry();
         Thread.currentThread().setName("Return " + this.id);
         this.thread = Thread.currentThread();
 
@@ -67,7 +67,11 @@ public class Async<T>
             throw new AsyncException("Async (" + this.id + ") was removed from the AsyncManager and will not receive any Data.");
         }
 
-        return this.data.get();
+        T ret = this.data.get();
+
+        Log.exit(ret);
+
+        return ret;
     }
 
     /**
@@ -77,12 +81,13 @@ public class Async<T>
      * This call blocks until the expected data is available or until <code>maxWait</code> milliseconds have passed.
      * </p>
      *
-     * @param maxWait
-     *            The amount of milliseconds to wait before throwing an {@link AsyncException}.
+     * @param maxWait The amount of milliseconds to wait before throwing an {@link AsyncException}.
+     *
      * @return
      */
     public T get(long maxWait) throws AsyncException
     {
+        Log.entry(maxWait);
         Thread.currentThread().setName("Return " + this.id);
         this.thread = Thread.currentThread();
 
@@ -110,27 +115,37 @@ public class Async<T>
             throw new AsyncException("Async (" + this.id + ") was removed from the AsyncManager and will not receive any Data.");
         }
 
-        return this.data.get();
+        T ret = this.data.get();
+
+        Log.exit(ret);
+
+        return ret;
     }
 
     public synchronized void onReceive(Consumer<T> dataConsumer)
     {
+        Log.entry(dataConsumer);
         this.dataConsumer = dataConsumer;
 
         if (this.data != null)
         {
             Null.checkConsume(this.dataConsumer, this.data.get());
         }
+
+        Log.exit();
     }
 
     public void removedFromManager()
     {
+        Log.entry();
         this.removedFromManager = true;
 
         if (this.thread != null)
         {
             this.thread.interrupt();
         }
+
+        Log.exit();
     }
 
     /**
@@ -140,6 +155,8 @@ public class Async<T>
      */
     public synchronized void set(Data<T> data)
     {
+        Log.entry(data);
+
         this.data = data;
 
         Null.checkConsume(this.dataConsumer, this.data.get());
@@ -148,6 +165,8 @@ public class Async<T>
         {
             this.lock.notifyAll();
         }
+
+        Log.exit();
     }
 
     /**
@@ -169,8 +188,7 @@ public class Async<T>
     }
 
     /**
-     * @param addTime
-     *            the addTime to set
+     * @param addTime the addTime to set
      */
     public void setAddTime(long addTime)
     {

@@ -1,8 +1,9 @@
 package bt.utils;
 
+import bt.log.Log;
+
 /**
  * @author &#8904
- *
  */
 public class Exceptions
 {
@@ -43,7 +44,8 @@ public class Exceptions
             run.run();
         }
         catch (Exception e)
-        {}
+        {
+        }
     }
 
     /**
@@ -63,7 +65,7 @@ public class Exceptions
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            Log.error("Failed execution", e);
         }
     }
 
@@ -98,7 +100,6 @@ public class Exceptions
      * </p>
      *
      * @param <T>
-     *
      * @param consumer
      */
     public static <T> void ignoreThrow(ThrowConsumer<T> consumer, T consumable)
@@ -108,7 +109,8 @@ public class Exceptions
             consumer.accept(consumable);
         }
         catch (Exception e)
-        {}
+        {
+        }
     }
 
     /**
@@ -120,7 +122,6 @@ public class Exceptions
      * </p>
      *
      * @param <T>
-     *
      * @param consumer
      */
     public static <T> void logThrow(ThrowConsumer<T> consumer, T consumable)
@@ -131,7 +132,7 @@ public class Exceptions
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            Log.error("Failed execution", e);
         }
     }
 
@@ -164,7 +165,6 @@ public class Exceptions
      * </p>
      *
      * @param <T>
-     *
      * @param supplier
      */
     public static <T> T ignoreThrowGet(ThrowSupplier<T> supplier)
@@ -174,7 +174,8 @@ public class Exceptions
             return supplier.get();
         }
         catch (Exception e)
-        {}
+        {
+        }
 
         return null;
     }
@@ -187,7 +188,6 @@ public class Exceptions
      * </p>
      *
      * @param <T>
-     *
      * @param supplier
      */
     public static <T> T logThrowGet(ThrowSupplier<T> supplier)
@@ -198,7 +198,7 @@ public class Exceptions
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            Log.error("Failed execution", e);
         }
 
         return null;
@@ -233,7 +233,6 @@ public class Exceptions
      * </p>
      *
      * @param <T>
-     *
      * @param function
      */
     public static <T, K> T ignoreThrowGet(ThrowFunction<T, K> function, K value)
@@ -243,7 +242,8 @@ public class Exceptions
             return function.apply(value);
         }
         catch (Exception e)
-        {}
+        {
+        }
 
         return null;
     }
@@ -256,7 +256,6 @@ public class Exceptions
      * </p>
      *
      * @param <T>
-     *
      * @param function
      */
     public static <T, K> T logThrowGet(ThrowFunction<T, K> function, K value)
@@ -267,7 +266,7 @@ public class Exceptions
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            Log.error("Failed execution", e);
         }
 
         return null;

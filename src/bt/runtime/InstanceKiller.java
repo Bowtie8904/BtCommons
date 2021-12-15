@@ -1,6 +1,6 @@
 package bt.runtime;
 
-import bt.log.Logger;
+import bt.log.Log;
 import bt.types.Killable;
 import bt.utils.Null;
 
@@ -66,15 +66,13 @@ public final class InstanceKiller
         {
             InstanceKiller.isActive = true;
 
-            System.out.println("Killing " + InstanceKiller.killables.size() + (InstanceKiller.killables.size() > 1 ? " instances." : " instance."));
+            Log.debug("Killing " + InstanceKiller.killables.size() + (InstanceKiller.killables.size() > 1 ? " instances." : " instance."));
             InstanceKiller.killables.sort(Comparator.comparing(Entry::getValue,
                                                                Comparator.reverseOrder()));
 
             for (Entry<Killable, Integer> killable : InstanceKiller.killables)
             {
-                Logger.global().setCallerStackIndex(0);
                 Null.checkKill(killable.getKey());
-                Logger.global().setCallerStackIndex(3);
             }
 
             InstanceKiller.isActive = false;
@@ -131,7 +129,7 @@ public final class InstanceKiller
 
             if (InstanceKiller.logActivity)
             {
-                System.out.println("Registered type " + killable.getClass().getName() + " for killing with a priority of " + priority + ".");
+                Log.debug("Registered type " + killable.getClass().getName() + " for killing with a priority of " + priority + ".");
             }
         }
     }
@@ -148,7 +146,7 @@ public final class InstanceKiller
 
         if (removed && InstanceKiller.logActivity)
         {
-            System.out.println("Unregistered type " + killable.getClass().getName() + " from killing.");
+            Log.debug("Unregistered type " + killable.getClass().getName() + " from killing.");
         }
     }
 
@@ -156,6 +154,7 @@ public final class InstanceKiller
      * Indicates whether the given killable is already registered for termination.
      *
      * @param killable
+     *
      * @return true if the killable is already registered.
      */
     public static synchronized boolean isRegistered(Killable killable)

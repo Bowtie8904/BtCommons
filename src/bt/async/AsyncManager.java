@@ -1,10 +1,11 @@
 package bt.async;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
-
+import bt.log.Log;
 import bt.scheduler.Threads;
 import bt.types.Singleton;
+
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Manages waiting {@link Async} and incoming {@link Data} to match them together.
@@ -37,6 +38,7 @@ public class AsyncManager
      */
     public synchronized void addData(Data data)
     {
+        Log.entry(data);
         data.setAddTime(System.currentTimeMillis());
         Async async = this.asyncs.get(data.getID());
 
@@ -49,6 +51,8 @@ public class AsyncManager
         {
             this.datapool.put(data.getID(), data);
         }
+
+        Log.exit();
     }
 
     /**
@@ -59,6 +63,8 @@ public class AsyncManager
      */
     public synchronized void addAsync(Async async)
     {
+        Log.entry(async);
+
         async.setAddTime(System.currentTimeMillis());
         Data data = this.datapool.get(async.getID());
 
@@ -71,10 +77,14 @@ public class AsyncManager
         {
             this.asyncs.put(async.getID(), async);
         }
+
+        Log.exit();
     }
 
     private synchronized void cleanUpUnsatisfiedEntries()
     {
+        Log.entry();
+
         for (var async : this.asyncs.values())
         {
             if (async.getAddTime() + this.timeBeforeCleanUp <= System.currentTimeMillis())
@@ -91,6 +101,8 @@ public class AsyncManager
                 this.datapool.remove(data.getID());
             }
         }
+
+        Log.exit();
     }
 
     /**
@@ -102,8 +114,7 @@ public class AsyncManager
     }
 
     /**
-     * @param timeBeforeCleanUp
-     *            the timeBeforeCleanUp to set
+     * @param timeBeforeCleanUp the timeBeforeCleanUp to set
      */
     public void setTimeBeforeCleanUp(long timeBeforeCleanUp)
     {
