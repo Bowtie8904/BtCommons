@@ -35,12 +35,7 @@
         <dependency>
             <groupId>com.github.Bowtie8904</groupId>
             <artifactId>BtConsole</artifactId>
-            <version>e6d0b88a</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.Bowtie8904</groupId>
-            <artifactId>BtLogging</artifactId>
-            <version>9c686c24</version>
+            <version>7ac38344</version>
         </dependency>
     </dependencies>
 </project>
